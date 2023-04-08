@@ -21,6 +21,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
   openFloatingPanel = false,
 }) => {
   const [actualSpot, setActualSpot] = useAtom(actualSpotAtom);
+
   return (
     <Card className="w-full h-full dark:bg-dark-300">
       <Flex
@@ -36,20 +37,37 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
           horizontalAlign="left"
           className="relative rounded-t-md"
         >
-          <CustomImage
-            src={getFirstItem(spot.image) || ''}
-            alt={spot.name || 'spot'}
-            fullWidth
-            height={200}
-            className={`${
-              orientation === 'vertical' ? 'rounded-t-md' : 'rounded-l-md'
-            }`}
-            style={{
-              objectFit: 'cover',
-            }}
-          />
+          {spot.image && spot.image.length > 0 ? (
+            <CustomImage
+              src={getFirstItem(spot.image) || ''}
+              alt={spot.name || 'spot'}
+              fullWidth
+              height={200}
+              className={`${
+                orientation === 'vertical' ? 'rounded-t-md' : 'rounded-l-md'
+              }`}
+              style={{
+                objectFit: 'cover',
+              }}
+            />
+          ) : (
+            <Flex
+              fullSize
+              direction="column"
+              verticalAlign="center"
+              horizontalAlign="center"
+              style={{
+                height: 100,
+              }}
+              className={'bg-white-300 dark:bg-dark-200 rounded-[5px]'}
+            >
+              <Text variant="caption" className="opacity-40">
+                No image
+              </Text>
+            </Flex>
+          )}
           <Link
-            href={`/dashboard/spot/${spot.id}`}
+            href={`/spot/${spot.id}?${window.location.search}`}
             target="_blank"
             className="absolute top-1 left-1"
           >

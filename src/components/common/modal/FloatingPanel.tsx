@@ -1,6 +1,6 @@
 'use client';
 import { useMountTransition, useToggle } from '@/hooks';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { Text } from '../text';
 import { DefaultFooter, DefaultHeader } from './DefaultElement';
 import { Modal } from './Modal';
@@ -44,6 +44,25 @@ export const FloatingPanel: FunctionComponent<TFloatingPanelProps> = ({
         return 'sm:w-5/6 md:w-2/3 lg:w-1/2 w-full';
     }
   };
+
+  // handle echap key press to close the modal
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      event.stopPropagation();
+      if (event.key === 'Escape') {
+        if (props.forceValidation) {
+          setConfirmationOpen(true);
+          return;
+        } else {
+          props.onClose();
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [props.forceValidation, props.onClose]);
 
   return hasTransitionedIn || props.isOpen ? (
     <>
@@ -106,7 +125,7 @@ export const FloatingPanel: FunctionComponent<TFloatingPanelProps> = ({
         }}
         title="Confirmation"
       >
-        <div className="text-center">
+        <div className="text-center p-3">
           <Text variant="caption">
             {props.forceValidationMessage ||
               'If you close the panel, you will lose all the data you have entered. Are you sure you want to close the panel?'}

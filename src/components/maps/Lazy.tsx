@@ -11,6 +11,13 @@ export const LazyMapContainer = dynamic(
   },
 );
 
+export const LazyLayersControl = dynamic(
+  async () => (await import('react-leaflet')).LayersControl,
+  {
+    ssr: false,
+  },
+);
+
 export const LazyTileLayer = dynamic(
   async () => (await import('react-leaflet')).TileLayer,
   {
@@ -34,6 +41,13 @@ export const LazyTooltip = dynamic(
 
 export const LazyPopup = dynamic(
   async () => (await import('react-leaflet')).Popup,
+  {
+    ssr: false,
+  },
+);
+
+export const LazyCircle = dynamic(
+  async () => (await import('react-leaflet')).Circle,
   {
     ssr: false,
   },

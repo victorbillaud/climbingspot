@@ -1,11 +1,15 @@
 export function exclude<User, Key extends keyof User>(
   user: User,
-  keys: Key[]
+  keys: Key[],
 ): Omit<User, Key> {
   for (let key of keys) {
     delete user[key];
   }
   return user;
+}
+
+export function getEnumValues<T extends string>(...values: T[]): readonly T[] {
+  return values;
 }
 
 export function getFirstItem<T>(value: T | T[]): T {

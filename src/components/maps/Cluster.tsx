@@ -14,11 +14,11 @@ export type TClusterProps = {
   onMarkerClick?: (spot: ISpotExtanded) => void;
 };
 
-export const getMarkerIcon = () => {
+export const getMarkerIcon = (color?: string) => {
   const marker = renderToStaticMarkup(
     <Icon
       name="pin"
-      color="text-brand-500"
+      color={color || 'text-brand-500'}
       fill
       className="z-10"
       scale={1.5}
@@ -29,7 +29,7 @@ export const getMarkerIcon = () => {
     html: marker,
     className: 'hidden',
     iconSize: [20, 20],
-    iconAnchor: [10, 10],
+    iconAnchor: [20, 20],
     popupAnchor: [0, 0],
   });
 };
@@ -43,9 +43,9 @@ export const getClusterIcon = (cluster: MarkerCluster) => {
     } else if (count < 100) {
       return 'bg-brand-300';
     } else if (count < 1000) {
-      return 'bg-brand-400';
+      return 'bg-brand-600';
     } else {
-      return 'bg-brand-100';
+      return 'bg-brand-800';
     }
   };
 
@@ -57,7 +57,7 @@ export const getClusterIcon = (cluster: MarkerCluster) => {
     >
       <Text
         variant="caption"
-        color="text-white-100 dark:text-dark-100"
+        color="text-white-100 dark:text-white-100"
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
       >
         {count}
@@ -88,7 +88,7 @@ const ForwardedLazyMarker = React.forwardRef<Marker, TForkedLazyMarker>(
         position={[spot.location.latitude, spot.location.longitude]}
         eventHandlers={{
           click: () => {
-            map.flyTo([spot.location.latitude, spot.location.longitude], 10, {
+            map.flyTo([spot.location.latitude, spot.location.longitude], 16, {
               animate: true,
               duration: 1,
             });
@@ -145,7 +145,7 @@ export default function Cluster({ spots, onMarkerClick }: TClusterProps) {
             marker.props.spot.location.latitude,
             marker.props.spot.location.longitude,
           ],
-          10,
+          16,
           {
             animate: true,
             duration: 1,
