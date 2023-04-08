@@ -35,8 +35,11 @@ jobs:
 
             const status = conclusion === 'success' ? 'success' : 'failure';
             const target_url = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
+            
+            const token = process.env.ACTIONS_STATUS_CHECK_TOKEN;
+            const octokit = github.getOctokit(token);
 
-            await github.rest.repos.createCommitStatus({
+            await octokit.rest.repos.createCommitStatus({
               owner,
               repo,
               sha,
@@ -45,4 +48,6 @@ jobs:
               description: 'Migrations deployed to production.',
               context: 'Deploy Migrations',
             });
+          env:
+            ACTIONS_STATUS_CHECK_TOKEN: ${{ secrets.ACTIONS_STATUS_CHECK_TOKEN }}
 
