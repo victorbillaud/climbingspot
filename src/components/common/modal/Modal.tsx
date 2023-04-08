@@ -1,5 +1,5 @@
 import { useMountTransition, useToggle } from '@/hooks';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import { DefaultFooter, DefaultHeader } from './DefaultElement';
 import { BackgroundOverlay } from './FloatingPanel';
 import './style.css';
@@ -9,6 +9,7 @@ export const Modal: FunctionComponent<TModalProps> = ({
   children,
   isOpen,
   size = 'medium',
+  fullHeight = false,
   ...props
 }) => {
   const [canClose, allowClose, preventClose] = useToggle();
@@ -17,13 +18,28 @@ export const Modal: FunctionComponent<TModalProps> = ({
   const getPanelWidth = () => {
     switch (size) {
       case 'medium':
-        return 'inset-x-1/3';
+        return 'sm:inset-x-6 md:inset-x-1/4 lg:inset-x-1/3 inset-x-3';
       case 'large':
-        return 'inset-x-1/4';
+        return 'sm:inset-x-6 md:inset-x-10 lg:inset-x-12 inset-x-3';
+      case 'xlarge':
+        return 'sm:inset-x-6 md:inset-x-12 lg:inset-x-16 inset-x-3';
       default:
-        return 'inset-x-1/3';
+        return 'sm:inset-x-6 md:inset-x-8 lg:inset-x-10 inset-x-3';
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      event.stopPropagation();
+      if (event.key === 'Escape') {
+        isOpen && props.onClose();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   return hasTransitionedIn || isOpen ? (
     <BackgroundOverlay
@@ -36,7 +52,9 @@ export const Modal: FunctionComponent<TModalProps> = ({
       <div
         className={`modal ${hasTransitionedIn && 'in'} ${
           isOpen && 'visible'
-        } absolute ${getPanelWidth()} top-1/2 transform -translate-y-1/2 z-10 flex justify-center`}
+        } absolute ${getPanelWidth()} z-10 flex justify-center p-3 ${
+          fullHeight ? `h-full p-3` : `top-1/2 transform -translate-y-1/2`
+        }`}
         onMouseDown={(e) => {
           e.stopPropagation();
           preventClose();
@@ -48,7 +66,7 @@ export const Modal: FunctionComponent<TModalProps> = ({
       >
         <div className="bg-white-200 dark:bg-dark-200 w-full h-full flex flex-col shadow-lg rounded-sm border border-gray-300 dark:border-dark-300">
           {props.customHeader || <DefaultHeader title={props.title} />}
-          <div className="grow p-3 text-center">{children}</div>
+          <div className={`h-full overflow-y-auto`}>{children}</div>
           {props.customFooter || (
             <DefaultFooter
               onCancel={props.onClose}

@@ -1,14 +1,21 @@
-import '@/styles/globals.css';
-import { ReactNode } from 'react';
-
+import { AnalyticsProvider } from '@/components/AnalyticsProvider';
 import SupabaseListener from '@/components/auth/SupabaseListener';
 import SupabaseProvider from '@/components/auth/SupabaseProvider';
 import { JobaiProvider } from '@/components/JobaiProvider';
 import type { Database } from '@/lib/db_types';
 import { createClient } from '@/lib/supabase/server';
+import '@/styles/globals.css';
 import { Barlow } from '@next/font/google';
 import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
+import dynamic from 'next/dynamic';
+import { ReactNode } from 'react';
 export type TypedSupabaseClient = SupabaseClient<Database>;
+
+const ColorSchemeProvider = dynamic(
+  async () =>
+    (await import('@/components/ColorSchemeProvider')).ColorSchemeProvider,
+  { ssr: false },
+);
 
 const barlow = Barlow({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -23,6 +30,11 @@ interface IProps {
   children: ReactNode;
 }
 
+export const metadata = {
+  title: `ClimbingSpot - Communauté d'escalade mondiale - Découvrez, connectez-vous et grimpez ensemble !`,
+  description: `Rejoignez ClimbingSpot, la communauté d'escalade en pleine croissance, pour explorer les meilleurs sites d'escalade, rencontrer d'autres grimpeurs et organiser des événements pour grimper ensemble. Commencez votre aventure d'escalade dès aujourd'hui !`,
+};
+
 export default async function RootLayout({ children }: IProps) {
   const supabase = createClient();
 
@@ -35,8 +47,11 @@ export default async function RootLayout({ children }: IProps) {
       <body className="w-screen h-screen flex justify-center items-center bg-white-200 dark:bg-dark-100">
         <SupabaseProvider session={session}>
           <SupabaseListener serverAccessToken={session?.access_token} />
+          <AnalyticsProvider />
           <JobaiProvider>
-            <div className="h-full w-full">{children}</div>
+            <ColorSchemeProvider>
+              <div className="h-full w-full">{children}</div>
+            </ColorSchemeProvider>
           </JobaiProvider>
         </SupabaseProvider>
       </body>

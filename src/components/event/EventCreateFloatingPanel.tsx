@@ -8,14 +8,14 @@ import {
   Text,
 } from '@/components/common';
 import { createEvent } from '@/features/events';
-import { getSpot, GetSpotResponseSuccess } from '@/features/spots';
+import { GetSpotResponseSuccess, getSpot } from '@/features/spots';
 import { useToggle } from '@/hooks';
 import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/browser';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { SearchBar } from '../sidebar/SearchBar';
+import { SearchBar } from '../navbar/SearchBar';
 import { SpotCardSmall } from '../spot';
 import { TEventCreateModalProps, TEventInsert } from './types';
 
@@ -180,6 +180,7 @@ export const EventCreateFloatingPanel = ({
                     setSpotSelected(spot);
                     closeSearchModal();
                   }}
+                  showMapLink={false}
                 />
               </Modal>
             </Flex>

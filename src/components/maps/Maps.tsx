@@ -5,11 +5,12 @@ import { useToggle } from '@/hooks';
 import { actualSpotAtom } from '@/hooks/jotai/maps/atom';
 import { useAtom } from 'jotai';
 import L from 'leaflet';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet/dist/leaflet.css';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useColorScheme } from '../ColorSchemeProvider';
 import { Button, Flex, FloatingPanel, Text } from '../common';
 import { SpotModal } from '../spot';
 import Cluster from './Cluster';
@@ -23,26 +24,38 @@ const DEFAULT_BOUNDS = new L.LatLngBounds(
   new L.LatLng(0, 0),
 );
 
-export const getBounds = (spots?: ISpotExtanded[]) => {
-  if (!spots || spots.length === 0) {
-    return DEFAULT_BOUNDS;
-  }
-  const bounds = spots.reduce(
-    (bounds, { location: { latitude, longitude } }) => {
-      return bounds.extend([latitude, longitude]);
-    },
-    new L.LatLngBounds(
-      new L.LatLng(spots[0].location.latitude, spots[0].location.longitude),
-      new L.LatLng(spots[0].location.latitude, spots[0].location.longitude),
-    ),
-  );
-  return bounds;
-};
-
 const GenericMap = ({ spots }: IMapProps) => {
+  const { colorScheme } = useColorScheme();
   const [spot, setSpot] = useAtom(actualSpotAtom);
   const [floatingPanelIsOpen, openFloatingPanel, closeFloatingPanel] =
     useToggle(false);
+
+  const tileLayerUrl = useMemo(() => {
+    switch (colorScheme) {
+      case 'light':
+        return 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+      case 'dark':
+        return 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+      default:
+        break;
+    }
+  }, [colorScheme]);
+
+  const getBounds = (spots?: ISpotExtanded[]) => {
+    if (!spots || spots.length === 0) {
+      return DEFAULT_BOUNDS;
+    }
+    const bounds = spots.reduce(
+      (bounds, { location: { latitude, longitude } }) => {
+        return bounds.extend([latitude, longitude]);
+      },
+      new L.LatLngBounds(
+        new L.LatLng(spots[0].location.latitude, spots[0].location.longitude),
+        new L.LatLng(spots[0].location.latitude, spots[0].location.longitude),
+      ),
+    );
+    return bounds;
+  };
 
   useEffect(() => {
     if (spot) {
@@ -59,12 +72,12 @@ const GenericMap = ({ spots }: IMapProps) => {
           bounds={getBounds(spots)}
           zoom={DEFAULT_ZOOM}
           scrollWheelZoom={true}
-          className="w-full h-full bg-black"
+          className="w-full h-full bg-black z-0"
           zoomControl={false}
         >
           <LazyTileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png"
+            url={tileLayerUrl}
           />
           {spots && <Cluster spots={spots} />}
         </LazyMapContainer>
@@ -114,7 +127,7 @@ const GenericMap = ({ spots }: IMapProps) => {
               horizontalAlign="right"
               className="h-16"
             >
-              <Link href={`/dashboard/spot/${spot?.id}`} target={'_blank'}>
+              <Link href={`/spot/${spot?.id}`} target={'_blank'}>
                 <Button
                   icon="eye"
                   text="View"
