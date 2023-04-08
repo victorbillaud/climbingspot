@@ -32,10 +32,11 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const { eventName, sha, runId } = context;
-            const { conclusion } = await github.rest.checks.getSuite({ owner, repo, check_suite_id: runId });
+            const run = await github.rest.actions.getWorkflowRun({ owner, repo, run_id: runId });
 
-            const status = conclusion === 'success' ? 'success' : 'failure';
+            const status = run.data.conclusion === 'success' ? 'success' : 'failure';
             const target_url = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
+
 
             await github.rest.repos.createCommitStatus({
               owner,
