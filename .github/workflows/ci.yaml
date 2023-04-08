@@ -28,6 +28,7 @@ jobs:
         if: always()
         uses: actions/github-script@v5
         with:
+          github-token: ${{ secrets.ACTIONS_STATUS_CHECK_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
             const { eventName, sha, runId } = context;
@@ -36,10 +37,7 @@ jobs:
             const status = conclusion === 'success' ? 'success' : 'failure';
             const target_url = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
 
-            const token = process.env.ACTIONS_STATUS_CHECK_TOKEN;
-            const octokit = github.getOctokit(token);
-
-            await octokit.rest.repos.createCommitStatus({
+            await github.rest.repos.createCommitStatus({
               owner,
               repo,
               sha,
@@ -48,5 +46,3 @@ jobs:
               description: 'CI tests passed.',
               context: 'CI',
             });
-        env:
-          ACTIONS_STATUS_CHECK_TOKEN: ${{ secrets.ACTIONS_STATUS_CHECK_TOKEN }}
