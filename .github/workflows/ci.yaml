@@ -23,3 +23,26 @@ jobs:
             git diff
             exit 1
           fi
+
+      - name: Report test results
+        if: always()
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { eventName, sha, runId } = context;
+            const { conclusion } = await github.rest.checks.getSuite({ owner, repo, check_suite_id: runId });
+
+            const status = conclusion === 'success' ? 'success' : 'failure';
+            const target_url = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
+
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha,
+              state: status,
+              target_url,
+              description: 'CI tests passed.',
+              context: 'CI',
+            });
+
