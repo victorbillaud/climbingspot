@@ -48,6 +48,5 @@ jobs:
               description: 'CI tests passed.',
               context: 'CI',
             });
-          env:
-            ACTIONS_STATUS_CHECK_TOKEN: ${{ secrets.ACTIONS_STATUS_CHECK_TOKEN }}
-
+        env:
+          ACTIONS_STATUS_CHECK_TOKEN: ${{ secrets.ACTIONS_STATUS_CHECK_TOKEN }}
