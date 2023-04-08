@@ -23,7 +23,7 @@ jobs:
       - run: |
           supabase link --project-ref $PRODUCTION_PROJECT_ID
           supabase db push
-      
+
       - name: Report deployment status
         if: always()
         uses: actions/github-script@v5
@@ -35,7 +35,7 @@ jobs:
 
             const status = conclusion === 'success' ? 'success' : 'failure';
             const target_url = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
-            
+
             const token = process.env.ACTIONS_STATUS_CHECK_TOKEN;
             const octokit = github.getOctokit(token);
 
@@ -48,6 +48,5 @@ jobs:
               description: 'Migrations deployed to production.',
               context: 'Deploy Migrations',
             });
-          env:
-            ACTIONS_STATUS_CHECK_TOKEN: ${{ secrets.ACTIONS_STATUS_CHECK_TOKEN }}
-
+        env:
+          ACTIONS_STATUS_CHECK_TOKEN: ${{ secrets.ACTIONS_STATUS_CHECK_TOKEN }}
