@@ -13,7 +13,7 @@ jobs:
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
-      PRODUCTION_PROJECT_ID: pbtxcelbykjcjukklxqk
+      PRODUCTION_PROJECT_ID: abcdefghijklmnopqrst
 
     steps:
       - uses: actions/checkout@v3
@@ -23,27 +23,3 @@ jobs:
       - run: |
           supabase link --project-ref $PRODUCTION_PROJECT_ID
           supabase db push
-
-      - name: Report test results
-        if: always()
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.ACTIONS_STATUS_CHECK_TOKEN }}
-          script: |
-            const { owner, repo } = context.repo;
-            const { eventName, sha, runId } = context;
-            const run = await github.rest.actions.getWorkflowRun({ owner, repo, run_id: runId });
-
-            const status = run.data.conclusion === 'success' ? 'success' : 'failure';
-            const target_url = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
-
-
-            await github.rest.repos.createCommitStatus({
-              owner,
-              repo,
-              sha,
-              state: status,
-              target_url,
-              description: 'Migrations deployed to production.',
-              context: 'Deploy Migrations',
-            });
