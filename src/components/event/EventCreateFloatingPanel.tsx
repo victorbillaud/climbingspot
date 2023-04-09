@@ -128,7 +128,7 @@ export const EventCreateFloatingPanel = ({
           direction="column"
           horizontalAlign="left"
           gap={0}
-          className="divide-y divide-white-300 dark:divide-dark-300"
+          className="divide-y overflow-y-auto divide-white-300 dark:divide-dark-300"
         >
           <Flex
             className="w-full p-6"

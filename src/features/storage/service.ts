@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { logger } from '@supabase/auth-helpers-nextjs';
-import { PUBLIC_STORAGE_URL } from './constants';
 import {
   deleteFilesParams,
   uploadFileParams,
@@ -9,7 +8,7 @@ import {
 } from './types';
 
 const buildPublicUrl = (bucketName: string, path: string, filename: string) => {
-  return `${PUBLIC_STORAGE_URL}${bucketName}/${path}/${filename}`;
+  return `${process.env.NEXT_PUBLIC_STORAGE_URL}/${bucketName}/${path}/${filename}`;
 };
 
 export const uploadFile = async (params: uploadFileParams) => {
