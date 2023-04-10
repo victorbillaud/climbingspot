@@ -168,19 +168,32 @@ WITH spot_locations AS (
         public.spots s
         JOIN public.locations l ON s.location = l.id
         JOIN public.countries c ON l.country = c.id
+),
+slug_candidates AS (
+    SELECT
+        id,
+        CONCAT(
+            '/spot/',
+            COALESCE(slugify(country_name) || '/', ''),
+            COALESCE(slugify(city_name) || '/', ''),
+            slugify(spot_name)
+        ) || '-' || num AS candidate_slug
+    FROM
+        spot_locations, generate_series(0, 100) AS num
 )
 UPDATE
     public.spots
 SET
-    slug = CONCAT(
-        '/spot/',
-        COALESCE(slugify(spot_locations.country_name) || '/', ''),
-        COALESCE(slugify(spot_locations.city_name) || '/', ''),
-        slugify(spot_locations.spot_name)
-    )
+    slug = slug_candidates.candidate_slug
 FROM
-    spot_locations
+    slug_candidates
 WHERE
-    public.spots.id = spot_locations.id;
+    public.spots.id = slug_candidates.id
+    AND NOT EXISTS (
+        SELECT 1
+        FROM public.spots
+        WHERE slug = slug_candidates.candidate_slug
+    );
+
 
 
