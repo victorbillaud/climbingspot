@@ -21,14 +21,6 @@ insert into storage.buckets (id, name, public)
 insert into storage.objects (bucket_id, name)
   values ('images', 'spots/.emptyFolderPlaceholder');
 
--- Set up access controls for storage.
--- See https://supabase.com/docs/guides/storage#policy-examples for more details.
-create policy "Avatar images are publicly accessible." on storage.objects
-  for select using (bucket_id = 'avatars');
-
-create policy "Anyone can upload an avatar." on storage.objects
-  for insert with check (bucket_id = 'avatars');
-
 comment on table countries is 'Full list of countries.';
 
 comment on column countries.name is 'Full country name.';
@@ -849,11 +841,6 @@ values
         'Al-Jazair/Algerie',
         'Africa'
     );
-
-CREATE POLICY "Insert 1ffg0oo_0" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'images');
-CREATE POLICY "Insert 1ffg0oo_1" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'images');
-CREATE POLICY "Insert 1ffg0oo_2" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'images');
-CREATE POLICY "Select 1ffg0oo_3" ON storage.objects FOR SELECT TO anon USING (bucket_id = 'images');
 
 insert into auth.users (instance_id, id, aud, role, email, encrypted_password, raw_app_meta_data, raw_user_meta_data, email_confirmed_at, created_at)
   values ('00000000-0000-0000-0000-000000000000', '9a51440b-313d-4a42-98df-3e5b14432793', 'authenticated', 'authenticated', 'admin@admin.com', '$2a$10$6gPtvpqCAiwavx1EOnjIgOykKMgzRdiBuejUQGIRRjvUi/ZgMh.9C', '{"provider":"email","providers":["email"]}', '{}', timezone('utc'::text, now()), timezone('utc'::text, now()));
