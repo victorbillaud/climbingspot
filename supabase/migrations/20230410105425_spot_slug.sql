@@ -1,6 +1,7 @@
 create extension if not exists "unaccent" with schema "public" version '1.1';
 
 drop view if exists "public"."spot_extanded_view";
+drop view if exists "public"."spot_extended_view";
 
 alter table "public"."spots" add column "slug" text;
 
