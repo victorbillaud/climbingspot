@@ -11,30 +11,6 @@ alter table "public"."spots" add constraint "spots_slug_key" UNIQUE using index 
 
 set check_function_bodies = off;
 
-CREATE OR REPLACE FUNCTION public.generate_spot_slug()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-DECLARE
-    country_name text;
-    city_name text;
-BEGIN
-    SELECT c.name, l.city INTO country_name, city_name
-    FROM locations l
-    JOIN countries c ON l.country = c.id
-    WHERE l.id = NEW.location;
-
-    IF country_name IS NULL OR city_name IS NULL THEN
-        NEW.slug := CONCAT('/spot/', slugify(NEW.name));
-    ELSE
-        NEW.slug := CONCAT('/spot/', slugify(country_name), '/', slugify(city_name), '/', slugify(NEW.name));
-    END IF;
-
-    RETURN NEW;
-END;
-$function$
-;
-
 CREATE OR REPLACE FUNCTION public.slugify(value text)
  RETURNS text
  LANGUAGE sql
@@ -156,8 +132,6 @@ to public
 using (true);
 
 
-CREATE TRIGGER spots_slug_generator BEFORE INSERT OR UPDATE ON public.spots FOR EACH ROW EXECUTE FUNCTION generate_spot_slug();
-
 CREATE OR REPLACE FUNCTION generate_unique_slug(base_slug text)
 RETURNS text AS $$
 DECLARE
@@ -181,6 +155,35 @@ BEGIN
     RETURN new_slug;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION public.generate_spot_slug()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    country_name text;
+    city_name text;
+    base_slug text;
+BEGIN
+    SELECT c.name, l.city INTO country_name, city_name
+    FROM locations l
+    JOIN countries c ON l.country = c.id
+    WHERE l.id = NEW.location;
+
+    IF country_name IS NULL OR city_name IS NULL THEN
+        base_slug := CONCAT('/spot/', slugify(NEW.name));
+    ELSE
+        base_slug := CONCAT('/spot/', slugify(country_name), '/', slugify(city_name), '/', slugify(NEW.name));
+    END IF;
+
+    NEW.slug := generate_unique_slug(base_slug);
+
+    RETURN NEW;
+END;
+$function$
+;
+
+CREATE TRIGGER spots_slug_generator BEFORE INSERT OR UPDATE ON public.spots FOR EACH ROW EXECUTE FUNCTION generate_spot_slug();
 
 WITH spot_locations AS (
     SELECT
