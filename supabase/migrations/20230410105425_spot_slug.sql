@@ -78,13 +78,10 @@ create or replace view "public"."spot_extended_view" as  SELECT spots.created_at
     spots.rock_type,
     spots.cliff_height,
     spots.slug,
-    countries.name AS country,
     (avg(reviews.note))::double precision AS note
-   FROM (((spots
-     JOIN locations ON ((spots.location = locations.id)))
-     JOIN countries ON ((locations.country = countries.id)))
+   FROM (spots
      LEFT JOIN reviews ON ((spots.id = reviews.spot_id)))
-  GROUP BY spots.id, countries.name;
+  GROUP BY spots.id;
 
 
 CREATE OR REPLACE FUNCTION public.search_spots(keyword text)
@@ -208,7 +205,6 @@ for select
 to anon
 using ((bucket_id = 'images'::text));
 
--- Execute script to fill slug column
 WITH spot_locations AS (
     SELECT
         s.id,
@@ -233,3 +229,5 @@ FROM
     spot_locations
 WHERE
     public.spots.id = spot_locations.id;
+
+
