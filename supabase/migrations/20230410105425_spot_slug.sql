@@ -158,7 +158,7 @@ using (true);
 
 CREATE TRIGGER spots_slug_generator BEFORE INSERT OR UPDATE ON public.spots FOR EACH ROW EXECUTE FUNCTION generate_spot_slug();
 
-CREATE OR REPLACE FUNCTION generate_unique_slug(base_slug text, table_name text, column_name text)
+CREATE OR REPLACE FUNCTION generate_unique_slug(base_slug text)
 RETURNS text AS $$
 DECLARE
     new_slug text := base_slug;
@@ -166,7 +166,7 @@ DECLARE
     slug_exists boolean := TRUE;
 BEGIN
     WHILE slug_exists LOOP
-        EXECUTE format('SELECT EXISTS(SELECT 1 FROM %I WHERE %I = $1)', table_name, column_name)
+        EXECUTE format('SELECT EXISTS(SELECT 1 FROM spots WHERE slug = $1)')
         USING new_slug
         INTO slug_exists;
 
@@ -208,7 +208,7 @@ base_slugs AS (
 UPDATE
     public.spots
 SET
-    slug = generate_unique_slug(base_slugs.base_slug, 'public.spots', 'slug')
+    slug = generate_unique_slug(base_slugs.base_slug)
 FROM
     base_slugs
 WHERE
