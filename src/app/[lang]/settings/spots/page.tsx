@@ -56,20 +56,26 @@ export default function Page() {
         />
       </Flex>
       {spots ? (
-        <VirtualizedTable
-          rows={spots}
-          headers={[
-            { title: 'name', width: 300 },
-            { title: 'created_at', width: 300 },
-            { title: 'description' },
-            { title: 'difficulty', width: 100 },
-            { title: 'rock_type', width: 100 },
-            {
-              title: 'cliff_height',
-              width: 150,
-            },
-          ]}
-        />
+        spots.length > 0 ? (
+          <VirtualizedTable
+            rows={spots}
+            headers={[
+              { title: 'name', width: 300 },
+              { title: 'created_at', width: 300 },
+              { title: 'description' },
+              { title: 'difficulty', width: 100 },
+              { title: 'rock_type', width: 100 },
+              {
+                title: 'cliff_height',
+                width: 150,
+              },
+            ]}
+          />
+        ) : (
+          <Flex fullSize verticalAlign="center" horizontalAlign="center">
+            <Text variant="caption">No spots found.</Text>
+          </Flex>
+        )
       ) : (
         <Flex fullSize verticalAlign="center" horizontalAlign="center">
           <Text variant="caption">Searching for spots...</Text>

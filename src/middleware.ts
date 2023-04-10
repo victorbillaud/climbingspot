@@ -11,6 +11,7 @@ import {
 import Negotiator from 'negotiator';
 import { Database } from './lib/db_types';
 
+
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   try {
@@ -49,17 +50,15 @@ function getLocaleFromReferer(request: NextRequest): string | undefined {
   return refererLocale;
 }
 
-export async function middleware(request: NextRequest) {
+async function handleInternationalization(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = getLocaleFromReferer(request) || getLocale(request);
 
-  // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
     (locale) =>
       !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   );
 
-  // Redirect if there is no locale
   if (pathnameIsMissingLocale) {
     return NextResponse.redirect(
       new URL(
@@ -69,7 +68,12 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  // Add the second part of the code
+  return null;
+}
+
+async function handleSupabaseSession(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  const locale = getLocaleFromReferer(request) || getLocale(request);
   const res = NextResponse.next();
 
   const supabase = createMiddlewareSupabaseClient<Database>({
@@ -81,7 +85,6 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  // if session is not found and the pathname begin with settings
   if (!session && pathname.startsWith(`/${locale}/settings`)) {
     const redirectUrl = new URL(
       `${getLocale(request)}/auth/login`,
@@ -91,10 +94,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  return res;
+  return null;
+}
+
+export async function middleware(request: NextRequest) {
+  const internationalizationResponse = await handleInternationalization(
+    request,
+  );
+  if (internationalizationResponse) return internationalizationResponse;
+
+  const supabaseSessionResponse = await handleSupabaseSession(request);
+  if (supabaseSessionResponse) return supabaseSessionResponse;
+
+  return NextResponse.next();
 }
 
 export const config = {
-  // Matcher ignoring `/api/`, `/_next/static/`, `/_next/image/`, `/favicon.ico`, and files with extensions (e.g., `.css`, `.js`)
-  matcher: '/((?!api|static|.*\\..*|_next).*)',
+  matcher: '/((?!api|_next).*)',
 };
