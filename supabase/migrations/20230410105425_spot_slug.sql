@@ -1,9 +1,7 @@
-CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_new_user();
-
-
 create extension if not exists "unaccent" with schema "public" version '1.1';
 
 drop view if exists "public"."spot_extanded_view";
+drop view if exists "public"."spot_extended_view";
 
 alter table "public"."spots" add column "slug" text;
 
@@ -12,30 +10,6 @@ CREATE UNIQUE INDEX spots_slug_key ON public.spots USING btree (slug);
 alter table "public"."spots" add constraint "spots_slug_key" UNIQUE using index "spots_slug_key";
 
 set check_function_bodies = off;
-
-CREATE OR REPLACE FUNCTION public.generate_spot_slug()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-DECLARE
-    country_name text;
-    city_name text;
-BEGIN
-    SELECT c.name, l.city INTO country_name, city_name
-    FROM locations l
-    JOIN countries c ON l.country = c.id
-    WHERE l.id = NEW.location;
-
-    IF country_name IS NULL OR city_name IS NULL THEN
-        NEW.slug := CONCAT('/spot/', slugify(NEW.name));
-    ELSE
-        NEW.slug := CONCAT('/spot/', slugify(country_name), '/', slugify(city_name), '/', slugify(NEW.name));
-    END IF;
-
-    RETURN NEW;
-END;
-$function$
-;
 
 CREATE OR REPLACE FUNCTION public.slugify(value text)
  RETURNS text
@@ -81,13 +55,10 @@ create or replace view "public"."spot_extended_view" as  SELECT spots.created_at
     spots.rock_type,
     spots.cliff_height,
     spots.slug,
-    countries.name AS country,
     (avg(reviews.note))::double precision AS note
-   FROM (((spots
-     JOIN locations ON ((spots.location = locations.id)))
-     JOIN countries ON ((locations.country = countries.id)))
+   FROM (spots
      LEFT JOIN reviews ON ((spots.id = reviews.spot_id)))
-  GROUP BY spots.id, countries.name;
+  GROUP BY spots.id;
 
 
 CREATE OR REPLACE FUNCTION public.search_spots(keyword text)
@@ -161,57 +132,59 @@ to public
 using (true);
 
 
+CREATE OR REPLACE FUNCTION generate_unique_slug(base_slug text)
+RETURNS text AS $$
+DECLARE
+    new_slug text := base_slug;
+    counter int := 1;
+    slug_exists boolean := TRUE;
+BEGIN
+    WHILE slug_exists LOOP
+        EXECUTE format('SELECT EXISTS(SELECT 1 FROM spots WHERE slug = $1)')
+        USING new_slug
+        INTO slug_exists;
+
+        IF slug_exists THEN
+            new_slug := base_slug || '-' || counter;
+            counter := counter + 1;
+        ELSE
+            EXIT;
+        END IF;
+    END LOOP;
+
+    RETURN new_slug;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION public.generate_spot_slug()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    country_name text;
+    city_name text;
+    base_slug text;
+BEGIN
+    SELECT c.name, l.city INTO country_name, city_name
+    FROM locations l
+    JOIN countries c ON l.country = c.id
+    WHERE l.id = NEW.location;
+
+    IF country_name IS NULL OR city_name IS NULL THEN
+        base_slug := CONCAT('/spot/', slugify(NEW.name));
+    ELSE
+        base_slug := CONCAT('/spot/', slugify(country_name), '/', slugify(city_name), '/', slugify(NEW.name));
+    END IF;
+
+    NEW.slug := generate_unique_slug(base_slug);
+
+    RETURN NEW;
+END;
+$function$
+;
+
 CREATE TRIGGER spots_slug_generator BEFORE INSERT OR UPDATE ON public.spots FOR EACH ROW EXECUTE FUNCTION generate_spot_slug();
 
-
-create policy "Anyone can upload an avatar."
-on "storage"."objects"
-as permissive
-for insert
-to public
-with check ((bucket_id = 'avatars'::text));
-
-
-create policy "Avatar images are publicly accessible."
-on "storage"."objects"
-as permissive
-for select
-to public
-using ((bucket_id = 'avatars'::text));
-
-
-create policy "Insert 1ffg0oo_0"
-on "storage"."objects"
-as permissive
-for insert
-to authenticated
-with check ((bucket_id = 'images'::text));
-
-
-create policy "Insert 1ffg0oo_1"
-on "storage"."objects"
-as permissive
-for update
-to authenticated
-using ((bucket_id = 'images'::text));
-
-
-create policy "Insert 1ffg0oo_2"
-on "storage"."objects"
-as permissive
-for delete
-to authenticated
-using ((bucket_id = 'images'::text));
-
-
-create policy "Select 1ffg0oo_3"
-on "storage"."objects"
-as permissive
-for select
-to anon
-using ((bucket_id = 'images'::text));
-
--- Execute script to fill slug column
 WITH spot_locations AS (
     SELECT
         s.id,
@@ -222,17 +195,27 @@ WITH spot_locations AS (
         public.spots s
         JOIN public.locations l ON s.location = l.id
         JOIN public.countries c ON l.country = c.id
+),
+base_slugs AS (
+    SELECT
+        id,
+        CONCAT(
+            '/spot/',
+            COALESCE(slugify(country_name) || '/', ''),
+            COALESCE(slugify(city_name) || '/', ''),
+            slugify(spot_name)
+        ) AS base_slug
+    FROM
+        spot_locations
 )
 UPDATE
     public.spots
 SET
-    slug = CONCAT(
-        '/spot/',
-        COALESCE(slugify(spot_locations.country_name) || '/', ''),
-        COALESCE(slugify(spot_locations.city_name) || '/', ''),
-        slugify(spot_locations.spot_name)
-    )
+    slug = generate_unique_slug(base_slugs.base_slug)
 FROM
-    spot_locations
+    base_slugs
 WHERE
-    public.spots.id = spot_locations.id;
+    public.spots.id = base_slugs.id;
+
+
+
