@@ -11,7 +11,6 @@ import {
 import Negotiator from 'negotiator';
 import { Database } from './lib/db_types';
 
-
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   try {
@@ -110,5 +109,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/((?!api|_next).*)',
+  matcher: '/((?!api|static|.*\\..*|_next).*)',
 };
