@@ -158,6 +158,30 @@ using (true);
 
 CREATE TRIGGER spots_slug_generator BEFORE INSERT OR UPDATE ON public.spots FOR EACH ROW EXECUTE FUNCTION generate_spot_slug();
 
+CREATE OR REPLACE FUNCTION generate_unique_slug(base_slug text, table_name text, column_name text)
+RETURNS text AS $$
+DECLARE
+    new_slug text := base_slug;
+    counter int := 1;
+    slug_exists boolean := TRUE;
+BEGIN
+    WHILE slug_exists LOOP
+        EXECUTE format('SELECT EXISTS(SELECT 1 FROM %I WHERE %I = $1)', table_name, column_name)
+        USING new_slug
+        INTO slug_exists;
+
+        IF slug_exists THEN
+            new_slug := base_slug || '-' || counter;
+            counter := counter + 1;
+        ELSE
+            EXIT;
+        END IF;
+    END LOOP;
+
+    RETURN new_slug;
+END;
+$$ LANGUAGE plpgsql;
+
 WITH spot_locations AS (
     SELECT
         s.id,
@@ -169,7 +193,7 @@ WITH spot_locations AS (
         JOIN public.locations l ON s.location = l.id
         JOIN public.countries c ON l.country = c.id
 ),
-slug_candidates AS (
+base_slugs AS (
     SELECT
         id,
         CONCAT(
@@ -177,23 +201,18 @@ slug_candidates AS (
             COALESCE(slugify(country_name) || '/', ''),
             COALESCE(slugify(city_name) || '/', ''),
             slugify(spot_name)
-        ) || '-' || num AS candidate_slug
+        ) AS base_slug
     FROM
-        spot_locations, generate_series(0, 100) AS num
+        spot_locations
 )
 UPDATE
     public.spots
 SET
-    slug = slug_candidates.candidate_slug
+    slug = generate_unique_slug(base_slugs.base_slug, 'public.spots', 'slug')
 FROM
-    slug_candidates
+    base_slugs
 WHERE
-    public.spots.id = slug_candidates.id
-    AND NOT EXISTS (
-        SELECT 1
-        FROM public.spots
-        WHERE slug = slug_candidates.candidate_slug
-    );
+    public.spots.id = base_slugs.id;
 
 
 
