@@ -241,6 +241,7 @@ export interface Database {
           orientation: Database["public"]["Enums"]["orientation"][] | null
           period: Database["public"]["Enums"]["month"][] | null
           rock_type: string | null
+          slug: string
           type: Database["public"]["Enums"]["type"]
           updated_at: string | null
         }
@@ -258,6 +259,7 @@ export interface Database {
           orientation?: Database["public"]["Enums"]["orientation"][] | null
           period?: Database["public"]["Enums"]["month"][] | null
           rock_type?: string | null
+          slug?: string
           type: Database["public"]["Enums"]["type"]
           updated_at?: string | null
         }
@@ -275,6 +277,7 @@ export interface Database {
           orientation?: Database["public"]["Enums"]["orientation"][] | null
           period?: Database["public"]["Enums"]["month"][] | null
           rock_type?: string | null
+          slug?: string
           type?: Database["public"]["Enums"]["type"]
           updated_at?: string | null
         }
@@ -306,10 +309,11 @@ export interface Database {
           updated_at: string | null
         }
       }
-      spot_extanded_view: {
+      spot_extended_view: {
         Row: {
           approach: string | null
           cliff_height: number | null
+          country: string | null
           created_at: string | null
           creator: string | null
           description: string | null
@@ -322,44 +326,9 @@ export interface Database {
           orientation: Database["public"]["Enums"]["orientation"][] | null
           period: Database["public"]["Enums"]["month"][] | null
           rock_type: string | null
+          slug: string | null
           type: Database["public"]["Enums"]["type"] | null
           updated_at: string | null
-        }
-        Insert: {
-          approach?: string | null
-          cliff_height?: number | null
-          created_at?: string | null
-          creator?: string | null
-          description?: string | null
-          difficulty?: Database["public"]["Enums"]["difficulty"] | null
-          id?: string | null
-          image?: string[] | null
-          location?: number | null
-          name?: string | null
-          note?: never
-          orientation?: Database["public"]["Enums"]["orientation"][] | null
-          period?: Database["public"]["Enums"]["month"][] | null
-          rock_type?: string | null
-          type?: Database["public"]["Enums"]["type"] | null
-          updated_at?: string | null
-        }
-        Update: {
-          approach?: string | null
-          cliff_height?: number | null
-          created_at?: string | null
-          creator?: string | null
-          description?: string | null
-          difficulty?: Database["public"]["Enums"]["difficulty"] | null
-          id?: string | null
-          image?: string[] | null
-          location?: number | null
-          name?: string | null
-          note?: never
-          orientation?: Database["public"]["Enums"]["orientation"][] | null
-          period?: Database["public"]["Enums"]["month"][] | null
-          rock_type?: string | null
-          type?: Database["public"]["Enums"]["type"] | null
-          updated_at?: string | null
         }
       }
       spot_search_view: {
@@ -373,6 +342,7 @@ export interface Database {
           location_id: number | null
           name: string | null
           note: number | null
+          slug: string | null
           type: Database["public"]["Enums"]["type"] | null
         }
       }
@@ -384,6 +354,14 @@ export interface Database {
           spot_id: number
         }
         Returns: boolean
+      }
+      generate_slug: {
+        Args: {
+          spot_name: string
+          country_id: number
+          city_name: string
+        }
+        Returns: string
       }
       get_clusters: {
         Args: {
@@ -446,6 +424,7 @@ export interface Database {
           location_id: number | null
           name: string | null
           note: number | null
+          slug: string | null
           type: Database["public"]["Enums"]["type"] | null
         }[]
       }
@@ -477,9 +456,24 @@ export interface Database {
         Args: {
           "": string
         }
-        Returns: unknown
+        Returns: string[]
+      }
+      slugify: {
+        Args: {
+          value: string
+        }
+        Returns: string
       }
       standardize_address:
+        | {
+            Args: {
+              lextab: string
+              gaztab: string
+              rultab: string
+              address: string
+            }
+            Returns: Database["public"]["CompositeTypes"]["stdaddr"]
+          }
         | {
             Args: {
               lextab: string
@@ -490,15 +484,18 @@ export interface Database {
             }
             Returns: Database["public"]["CompositeTypes"]["stdaddr"]
           }
-        | {
-            Args: {
-              lextab: string
-              gaztab: string
-              rultab: string
-              address: string
-            }
-            Returns: Database["public"]["CompositeTypes"]["stdaddr"]
-          }
+      unaccent: {
+        Args: {
+          "": string
+        }
+        Returns: string
+      }
+      unaccent_init: {
+        Args: {
+          "": unknown
+        }
+        Returns: unknown
+      }
     }
     Enums: {
       continents:
@@ -550,3 +547,4 @@ export interface Database {
     }
   }
 }
+

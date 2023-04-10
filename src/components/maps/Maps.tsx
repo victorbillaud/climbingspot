@@ -127,7 +127,7 @@ const GenericMap = ({ spots }: IMapProps) => {
               horizontalAlign="right"
               className="h-16"
             >
-              <Link href={`/spot/${spot?.id}`} target={'_blank'}>
+              <Link href={`${spot?.slug}`} target={'_blank'}>
                 <Button
                   icon="eye"
                   text="View"

@@ -11,7 +11,6 @@ import {
 import Negotiator from 'negotiator';
 import { Database } from './lib/db_types';
 
-import fs from 'fs';
 
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
@@ -49,36 +48,6 @@ function getLocaleFromReferer(request: NextRequest): string | undefined {
   // Get the locale from the referer
   const refererLocale = refererPath.split('/')[1];
   return refererLocale;
-}
-
-async function fileExists(filePath: string) {
-  try {
-    await fs.promises.access(filePath, fs.constants.F_OK);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
-async function handleStaticFiles(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
-  const fileExtensionRegex = /\.(?!\/)[\w\d]+$/;
-
-  if (fileExtensionRegex.test(pathname)) {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
-    const fileUrl = new URL(pathname, baseUrl);
-    try {
-      const response = await fetch(fileUrl.href, { method: 'HEAD' });
-      if (response.status === 404) {
-        return NextResponse.redirect('/');
-      }
-      return NextResponse.next();
-    } catch (error) {
-      return NextResponse.redirect('/');
-    }
-  }
-
-  return null;
 }
 
 async function handleInternationalization(request: NextRequest) {
@@ -129,9 +98,6 @@ async function handleSupabaseSession(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest) {
-  const staticFilesResponse = await handleStaticFiles(request);
-  if (staticFilesResponse) return staticFilesResponse;
-
   const internationalizationResponse = await handleInternationalization(
     request,
   );

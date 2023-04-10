@@ -19,22 +19,28 @@ import { createClient } from '@/lib/supabase/server';
 export default async function Page({
   params,
 }: {
-  params: { uuid: string; lang: Locale };
+  params: {
+    lang: Locale;
+    country: string;
+    city: string;
+    slug: string;
+  };
 }) {
+  const slugFormatted = `/spot/${params.country}/${params.city}/${params.slug}`;
   const supabase = createClient();
   const dictionary = await getDictionary(params.lang);
 
   const { spot } = await getSpot({
     client: supabase,
-    spotId: params.uuid,
+    slug: slugFormatted,
   });
   const { reviews } = await getSpotReviews({
     client: supabase,
-    spotId: params.uuid,
+    spotId: spot?.id as string,
   });
   const { events } = await getSpotEvents({
     client: supabase,
-    spotId: params.uuid,
+    spotId: spot?.id as string,
   });
 
   const {

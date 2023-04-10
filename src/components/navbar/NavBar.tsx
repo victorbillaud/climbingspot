@@ -42,7 +42,7 @@ export const NavBar: React.FC<INavBarProps> = () => {
       <Flex className="absolute w-8/12 md:w-1/2 lg:w-1/3 h-full left-1/2 z-30 transform -translate-x-1/2">
         <SearchBar
           onClickItem={(spot) => {
-            router.push(`/spot/${spot.id}?${params.toString()}`);
+            router.push(`${spot.slug}?${params.toString()}`);
           }}
         />
       </Flex>

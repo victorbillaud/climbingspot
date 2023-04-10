@@ -4,7 +4,7 @@ import { getSpot, listCreatorSpots, searchSpotsWithBounds } from './service';
 
 export type getSpotParams = {
   client: ReturnType<typeof createClient>;
-  spotId: string;
+  slug: string;
 };
 
 export type listSpotsParams = {
@@ -29,8 +29,7 @@ export type GetSpotResponseSuccess = Omit<
   GetSpotResponseSuccessLocation;
 
 export type Location = Database['public']['Tables']['locations']['Row'];
-export type SpotExtanded =
-  Database['public']['Views']['spot_extanded_view']['Row'];
+export type SpotExtanded = Database['public']['Views']['spot_extended_view']['Row'];
 export interface ISpotExtanded extends Omit<SpotExtanded, 'location'> {
   location: Location;
 }
