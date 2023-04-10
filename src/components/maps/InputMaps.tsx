@@ -277,7 +277,7 @@ export const InputMaps = ({
                 )}`}
               </Text>
               <Link
-                href={`/spot/${spot.id}`}
+                href={`${spot.slug}`}
                 className="opacity-60 hover:opacity-100"
                 target="_blank"
               >
