@@ -67,7 +67,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
             </Flex>
           )}
           <Link
-            href={`/spot/${spot.id}?${window.location.search}`}
+            href={`${spot.slug}?${window.location.search}`}
             target="_blank"
             className="absolute top-1 left-1"
           >

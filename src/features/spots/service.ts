@@ -9,21 +9,21 @@ import {
 } from './types';
 
 export const getSpot = async ({
-  spotId,
+  slug,
   client,
 }: getSpotParams): Promise<{
   spot: ISpotExtanded | null;
   error: PostgrestError | null;
 }> => {
   const { data: spot, error } = await client
-    .from('spot_extanded_view')
+    .from('spot_extended_view')
     .select(
       `
         *,
         location(*)
       `,
     )
-    .eq('id', spotId)
+    .eq('slug', slug)
     .single();
 
   if (error) {
@@ -45,7 +45,7 @@ export const listMapSpots = async ({
 
   if (limit) {
     const { data: spots, error: currentError } = await client
-      .from('spot_extanded_view')
+      .from('spot_extended_view')
       .select(
         `
           *,
@@ -67,7 +67,7 @@ export const listMapSpots = async ({
 
     while (hasNextPage) {
       const { data: spots, error: currentError } = await client
-        .from('spot_extanded_view')
+        .from('spot_extended_view')
         .select(
           `
             *,
@@ -148,6 +148,7 @@ export const searchSpotsWithBounds = async ({
     .select(
       `
       id,
+      slug,
       name,
       description,
       created_at,
