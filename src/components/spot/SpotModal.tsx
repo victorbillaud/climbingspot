@@ -10,9 +10,8 @@ import {
 import { ReviewContainer } from '@/components/review/ReviewContainer';
 import { ReviewCreateModal } from '@/components/review/ReviewCreateModal';
 import { EventsResponseSuccess, getSpotEvents } from '@/features/events';
-import { getSpotReviews, ReviewsResponseSuccess } from '@/features/reviews';
+import { ReviewsResponseSuccess, getSpotReviews } from '@/features/reviews';
 import { getFirstItem } from '@/lib';
-import { createClient } from '@/lib/supabase/browser';
 import { useEffect, useState } from 'react';
 import { useSupabase } from '../auth/SupabaseProvider';
 import { EventCreateFloatingPanel } from '../event';
@@ -21,8 +20,7 @@ import { SpotCard } from './SpotCard';
 import { TSpotModalProps } from './types';
 
 export const SpotModal = ({ spot }: TSpotModalProps) => {
-  const supabase = createClient();
-  const { session } = useSupabase();
+  const { supabase } = useSupabase();
 
   const [reviews, setReviews] = useState<ReviewsResponseSuccess>(null);
   const [isLoadingReviews, setIsLoadingReviews] = useState<boolean>(true);
@@ -114,16 +112,7 @@ export const SpotModal = ({ spot }: TSpotModalProps) => {
             {`Events associated `}
             <span className="opacity-70">({events?.length})</span>{' '}
           </Text>
-          {session ? (
-            <EventCreateFloatingPanel
-              spot={spot}
-              creatorId={session?.user?.id || ''}
-            />
-          ) : (
-            <Text variant="body" className="opacity-60">
-              {'Log in to add a review'}
-            </Text>
-          )}
+          <EventCreateFloatingPanel spot={spot} />
         </Flex>
         {isLoadingEvents ? (
           <Flex
@@ -152,21 +141,14 @@ export const SpotModal = ({ spot }: TSpotModalProps) => {
       <Flex verticalAlign="top" className="w-full">
         <Flex direction="row" horizontalAlign="stretch" className="w-full">
           <Text variant="title">{`Reviews (${reviews?.length})`}</Text>
-          {session ? (
-            <ReviewCreateModal
-              onConfirm={async (reviewCreated) => {
-                setReviews((prev) => {
-                  return [reviewCreated, ...prev];
-                });
-              }}
-              spotId={spot.id || ''}
-              creatorId={session?.user?.id || ''}
-            />
-          ) : (
-            <Text variant="body" className="opacity-60">
-              {'Log in to add a review'}
-            </Text>
-          )}
+          <ReviewCreateModal
+            onConfirm={async (reviewCreated) => {
+              setReviews((prev) => {
+                return [reviewCreated, ...prev];
+              });
+            }}
+            spotId={spot.id || ''}
+          />
         </Flex>
         {isLoadingReviews ? (
           <Flex

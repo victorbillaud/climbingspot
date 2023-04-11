@@ -1,9 +1,9 @@
 import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
-import { createClient } from '@/lib/supabase/browser';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { MouseEventHandler, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useSupabase } from '../auth/SupabaseProvider';
 import { Button, Card, Flex, Icon, InputText, Text } from '../common';
 
 export type ISpotSearch =
@@ -18,7 +18,7 @@ export const SearchBar = ({
   onClickItem,
   showMapLink = true,
 }: SearchBarProps) => {
-  const supabase = createClient();
+  const { supabase } = useSupabase();
   const params = useSearchParams();
   const router = useRouter();
 

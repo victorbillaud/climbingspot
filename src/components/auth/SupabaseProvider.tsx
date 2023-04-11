@@ -1,41 +1,86 @@
 'use client';
 
-import type { TypedSupabaseClient } from '@/app/layout';
-import { createClient } from '@/lib/supabase/browser';
-import { Session } from '@supabase/auth-helpers-nextjs';
-import React, { createContext, useContext, useState } from 'react';
-
-type MaybeSession = Session | null;
+import type { Database } from '@/lib/db_types';
+import {
+  Session,
+  SupabaseClient,
+  User,
+  createBrowserSupabaseClient,
+} from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 type SupabaseContext = {
-  supabase: TypedSupabaseClient;
-  session: MaybeSession;
+  supabase: SupabaseClient<Database>;
 };
 
-// @ts-ignore
-const Context = createContext<SupabaseContext>();
+const AuthContext = createContext<SupabaseContext | undefined>(undefined);
 
-export default function SupabaseProvider({
-  children,
-  session,
-}: {
+export default function SupabaseProvider(props: {
+  accessToken: string;
   children: React.ReactNode;
-  session: MaybeSession;
 }) {
-  const [supabase] = useState(() => createClient());
+  const [initial, setInitial] = useState(true);
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
-  return (
-    <Context.Provider value={{ supabase, session }}>
-      <>{children}</>
-    </Context.Provider>
-  );
+  const { accessToken, ...rest } = props;
+
+  useEffect(() => {
+    async function getActiveSession() {
+      const {
+        data: { session: activeSession },
+      } = await supabase.auth.getSession();
+      setSession(activeSession);
+      setUser(activeSession?.user ?? null);
+      setInitial(false);
+    }
+    getActiveSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.access_token !== accessToken) {
+        router.refresh();
+        return;
+      }
+
+      setSession(session);
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [router, supabase]);
+
+  const value = useMemo(() => {
+    return {
+      initial,
+      session,
+      user,
+      supabase,
+      signOut: () => supabase.auth.signOut(),
+    };
+  }, [initial, session, user]);
+
+  return <AuthContext.Provider value={value} {...rest} />;
 }
 
 export const useSupabase = () => {
-  let context = useContext(Context);
+  const context = useContext(AuthContext);
+
   if (context === undefined) {
     throw new Error('useSupabase must be used inside SupabaseProvider');
-  } else {
-    return context;
   }
+
+  return context;
 };

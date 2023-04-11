@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSupabase } from '../auth/SupabaseProvider';
 import { Button, Flex, FloatingPanel } from '../common';
 import LocaleSwitcher from '../footer/LocaleSwitcher';
@@ -13,9 +13,23 @@ import { SearchBar } from './SearchBar';
 interface INavBarProps {}
 
 export const NavBar: React.FC<INavBarProps> = () => {
-  const { session } = useSupabase();
+  const { supabase } = useSupabase();
   const router = useRouter();
   const params = useSearchParams();
+  const [userPicture, setUserPicture] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        const user = session?.user;
+        setUserPicture(user?.user_metadata.avatar_url);
+      },
+    );
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -124,9 +138,7 @@ export const NavBar: React.FC<INavBarProps> = () => {
             icon="cog"
             label="settings"
             to="/settings/user"
-            userImage={
-              session ? session.user.user_metadata?.avatar_url : undefined
-            }
+            userImage={userPicture}
           />
         </Flex>
       </Flex>

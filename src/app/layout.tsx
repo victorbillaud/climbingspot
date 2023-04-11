@@ -1,21 +1,15 @@
 import { AnalyticsProvider } from '@/components/AnalyticsProvider';
 import SupabaseListener from '@/components/auth/SupabaseListener';
 import SupabaseProvider from '@/components/auth/SupabaseProvider';
+import { ColorSchemeProvider } from '@/components/ColorSchemeProvider';
 import { JobaiProvider } from '@/components/JobaiProvider';
 import type { Database } from '@/lib/db_types';
 import { createClient } from '@/lib/supabase/server';
 import '@/styles/globals.css';
 import { Barlow } from '@next/font/google';
 import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
-import dynamic from 'next/dynamic';
 import { ReactNode } from 'react';
 export type TypedSupabaseClient = SupabaseClient<Database>;
-
-const ColorSchemeProvider = dynamic(
-  async () =>
-    (await import('@/components/ColorSchemeProvider')).ColorSchemeProvider,
-  { ssr: false },
-);
 
 const barlow = Barlow({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -24,7 +18,7 @@ const barlow = Barlow({
 });
 
 // do not cache this layout
-export const revalidate = 0;
+export const revalidate = 10;
 
 interface IProps {
   children: ReactNode;
@@ -42,10 +36,12 @@ export default async function RootLayout({ children }: IProps) {
     data: { session },
   } = await supabase.auth.getSession();
 
+  const accessToken = session?.access_token || null;
+
   return (
     <html lang="en" className={`${barlow.variable}`}>
       <body className="w-screen h-screen flex justify-center items-center bg-white-200 dark:bg-dark-100">
-        <SupabaseProvider session={session}>
+        <SupabaseProvider accessToken={accessToken as string}>
           <SupabaseListener serverAccessToken={session?.access_token} />
           <AnalyticsProvider />
           <JobaiProvider>
