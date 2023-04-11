@@ -31,7 +31,6 @@ import { useToggle } from '@/hooks';
 import { formatDateString } from '@/lib';
 import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
-import { createClient } from '@/lib/supabase/browser';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -49,8 +48,7 @@ export function SpotCreationPanel({
   onClose,
 }: SpotCreationPanelProps) {
   const dictionary = useDictionary();
-  const supabase = createClient();
-  const { session } = useSupabase();
+  const { supabase } = useSupabase();
 
   const [panelOpen, openPanel, closePanel] = useToggle(false);
 
@@ -125,6 +123,8 @@ export function SpotCreationPanel({
   };
 
   const handleSubmit = async () => {
+    const session = await supabase.auth.getSession();
+
     setSubmittingMessage(`${dictionary.spotsCreation.checking_data}...`);
 
     setErrors({
@@ -206,7 +206,7 @@ export function SpotCreationPanel({
         ...spotForm,
         location: locationId,
         image: publicImagesPaths,
-        creator: session?.user?.id as string,
+        creator: session.data.session?.user?.id as string,
       });
       if (!spotCreated) {
         throw new Error(dictionary.spotsCreation.error_creating_spot);
