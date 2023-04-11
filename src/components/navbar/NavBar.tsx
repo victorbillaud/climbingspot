@@ -19,17 +19,17 @@ export const NavBar: React.FC<INavBarProps> = () => {
   const [userPicture, setUserPicture] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        const user = session?.user;
-        setUserPicture(user?.user_metadata.avatar_url);
-      },
-    );
+    const getPicture = async () => {
+      const user = await supabase.auth.getUser();
+      setUserPicture(user?.data.user?.user_metadata?.avatar_url);
+    };
+
+    getPicture();
 
     return () => {
-      authListener?.subscription.unsubscribe();
+      setUserPicture(undefined);
     };
-  }, [supabase]);
+  }, []);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
