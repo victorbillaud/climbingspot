@@ -1,6 +1,6 @@
 import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { MouseEventHandler, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useSupabase } from '../auth/SupabaseProvider';
@@ -19,7 +19,6 @@ export const SearchBar = ({
   showMapLink = true,
 }: SearchBarProps) => {
   const { supabase } = useSupabase();
-  const params = useSearchParams();
   const router = useRouter();
 
   const [search, setSearch] = React.useState('');
@@ -63,35 +62,13 @@ export const SearchBar = ({
     }
   };
 
-  const updateUrl = (search: string) => {
-    const searchParams = new URLSearchParams(params.toString());
-    searchParams.set('q', search);
-    const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-    router.replace(newUrl);
-  };
-
   useEffect(() => {
-    updateUrl(search);
     if (search.length > 2) {
       handleSearch(search);
     } else {
       setResults(null);
     }
   }, [search]);
-
-  const paramsLoaded = React.useRef(false);
-
-  useEffect(() => {
-    if (paramsLoaded.current) {
-      return;
-    }
-    paramsLoaded.current = true;
-
-    if (params.has('q')) {
-      setSearch(params.get('q') as string);
-      setFocus(false);
-    }
-  }, [params]);
 
   return (
     <Flex className="relative w-full">
@@ -127,9 +104,7 @@ export const SearchBar = ({
                     e.stopPropagation();
                     if (showMapLink) {
                       setFocus(false);
-                      router.push(
-                        `/maps?spotId=${spot.id}&${params.toString()}`,
-                      );
+                      router.push(`/maps?spotId=${spot.id}`);
                     }
                   }}
                   showMapLink={showMapLink}

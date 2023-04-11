@@ -50,7 +50,6 @@ export const EventCreateFloatingPanel = ({
     }
 
     if (eventCreated) {
-      toast.success('Event created');
       return eventCreated;
     }
   };
@@ -120,8 +119,9 @@ export const EventCreateFloatingPanel = ({
         onConfirm={async () => {
           const eventCreated = await handleSubmit();
           if (eventCreated) {
-            closePanel();
+            toast.success('Event created');
             router.refresh();
+            closePanel();
           }
         }}
         forceValidation
