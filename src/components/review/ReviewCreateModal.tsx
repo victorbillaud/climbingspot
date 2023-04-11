@@ -12,7 +12,7 @@ export const ReviewCreateModal = ({
   onClose,
   onConfirm,
 }: TReviewCreateModalProps) => {
-  const { supabase } = useSupabase();
+  const { supabase, user } = useSupabase();
 
   const [creatingModalOpen, openCreatingModal, closeCreatingModal] =
     useToggle(false);
@@ -41,8 +41,6 @@ export const ReviewCreateModal = ({
   };
 
   const handleSubmit = async () => {
-    const user = await supabase.auth.getUser();
-
     if (!user) {
       toast.error('You must be logged in to create a review');
       return;
@@ -60,7 +58,7 @@ export const ReviewCreateModal = ({
 
     const reviewCreated = await handleCreateReview({
       spot_id: spotId,
-      creator_id: user.data.user?.id as string,
+      creator_id: user.id,
       note,
       title,
       content,

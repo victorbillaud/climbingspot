@@ -17,16 +17,14 @@ export type TReviewProps = {
 };
 
 export const Review = ({ review }: TReviewProps) => {
-  const { supabase } = useSupabase();
+  const { supabase, user } = useSupabase();
 
   const [likesCount, setLikesCount] = useState<number>(
     getFirstItem(review.like_count)?.count as number,
   );
 
   const handleLike = async () => {
-    const session = await supabase.auth.getSession();
-
-    if (!session) {
+    if (!user) {
       toast.error('You need to be logged in to like a review');
       return;
     }
@@ -35,7 +33,7 @@ export const Review = ({ review }: TReviewProps) => {
       .from('reviews_likes')
       .insert({
         review_id: review.id,
-        profile_id: session?.data.session?.user.id as string,
+        profile_id: user.id,
       })
       .select()
       .single();
