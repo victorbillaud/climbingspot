@@ -1,4 +1,4 @@
-import { Flex, Icon, Text, VirtualizedTable } from '@/components/common';
+import { Flex, Icon, Table, Text } from '@/components/common';
 import { SpotCreationPanel } from '@/components/spot/';
 import { listCreatorSpots } from '@/features/spots';
 import { createClient } from '@/lib/supabase/server';
@@ -31,20 +31,14 @@ export default async function Page() {
       </Flex>
       {spots ? (
         spots.length > 0 ? (
-          <VirtualizedTable
-            rows={spots}
-            headers={[
-              { title: 'name', width: 300 },
-              { title: 'created_at', width: 300 },
-              { title: 'description' },
-              { title: 'difficulty', width: 100 },
-              { title: 'rock_type', width: 100 },
-              {
-                title: 'cliff_height',
-                width: 150,
-              },
-            ]}
-          />
+          <Flex
+            fullSize={true}
+            verticalAlign="center"
+            horizontalAlign="center"
+            className="p-3 pt-0"
+          >
+            <Table rows={spots} />
+          </Flex>
         ) : (
           <Flex fullSize verticalAlign="center" horizontalAlign="center">
             <Text variant="caption">No spots found.</Text>
