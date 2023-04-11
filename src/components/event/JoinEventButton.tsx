@@ -1,7 +1,6 @@
 'use client';
 
 import { EventResponseSuccess, joinEvent } from '@/features/events';
-import { createClient } from '@/lib/supabase/browser';
 import React from 'react';
 import { toast } from 'react-toastify';
 import { useSupabase } from '../auth/SupabaseProvider';
@@ -12,11 +11,10 @@ export const JoinEventButton: React.FC<{
   // eslint-disable-next-line no-unused-vars
   onJoinEvent?: (participation: any) => void;
 }> = ({ event, onJoinEvent }) => {
-  const supabase = createClient();
-  const { session } = useSupabase();
+  const { supabase, user } = useSupabase();
 
   const handleJoinEvent = async () => {
-    if (!session) {
+    if (!user) {
       toast.error('You must be logged in to join an event');
       return;
     }
@@ -24,7 +22,7 @@ export const JoinEventButton: React.FC<{
     const { participation, error } = await joinEvent({
       client: supabase,
       eventId: event.id,
-      userId: session?.user.id,
+      userId: user.id,
     });
 
     if (error) {

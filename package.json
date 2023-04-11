@@ -33,7 +33,7 @@
     "loglevel": "^1.8.0",
     "loglevel-plugin-prefix": "^0.8.4",
     "negotiator": "^0.6.3",
-    "next": "^13.1.6",
+    "next": "^13.2.4",
     "next-intl": "2.12.0-beta.5",
     "react": "18.2.0",
     "react-base-table": "^1.13.4",
