@@ -1,3 +1,5 @@
+'use client';
+
 // useSystemPreferredColorScheme.ts
 import { useEffect, useState } from 'react';
 

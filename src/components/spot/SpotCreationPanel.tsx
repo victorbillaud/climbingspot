@@ -32,6 +32,7 @@ import { formatDateString } from '@/lib';
 import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useDictionary } from '../DictionaryProvider';
@@ -49,7 +50,7 @@ export function SpotCreationPanel({
 }: SpotCreationPanelProps) {
   const dictionary = useDictionary();
   const { supabase, user } = useSupabase();
-
+  const router = useRouter();
   const [panelOpen, openPanel, closePanel] = useToggle(false);
 
   const initialState: Database['public']['Tables']['spots']['Insert'] = {
@@ -470,7 +471,10 @@ export function SpotCreationPanel({
             onClose={() => closeConfirmModal()}
             onConfirm={async () => {
               closeConfirmModal();
-              (await handleSubmit()) && closePanel();
+              if (await handleSubmit()) {
+                router.refresh();
+                closePanel();
+              }
             }}
           >
             <Flex className="w-full p-3" horizontalAlign="left">

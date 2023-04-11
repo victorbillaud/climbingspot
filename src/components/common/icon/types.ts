@@ -8,4 +8,5 @@ export interface IIconProps extends React.HTMLAttributes<HTMLDivElement> {
   scale?: number;
   border?: boolean;
   fill?: boolean;
+  padding?: boolean;
 }
