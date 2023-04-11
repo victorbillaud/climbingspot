@@ -1,5 +1,4 @@
 import { AnalyticsProvider } from '@/components/AnalyticsProvider';
-import SupabaseListener from '@/components/auth/SupabaseListener';
 import SupabaseProvider from '@/components/auth/SupabaseProvider';
 import { ColorSchemeProvider } from '@/components/ColorSchemeProvider';
 import { JobaiProvider } from '@/components/JobaiProvider';
@@ -42,7 +41,6 @@ export default async function RootLayout({ children }: IProps) {
     <html lang="en" className={`${barlow.variable}`}>
       <body className="w-screen h-screen flex justify-center items-center bg-white-200 dark:bg-dark-100">
         <SupabaseProvider accessToken={accessToken as string}>
-          <SupabaseListener serverAccessToken={session?.access_token} />
           <AnalyticsProvider />
           <JobaiProvider>
             <ColorSchemeProvider>

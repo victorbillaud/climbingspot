@@ -24,7 +24,7 @@ export const EventCreateFloatingPanel = ({
   onClose,
   onConfirm,
 }: TEventCreateModalProps) => {
-  const { supabase } = useSupabase();
+  const { supabase, user } = useSupabase();
   const router = useRouter();
   const [spotSelected, setSpotSelected] =
     useState<GetSpotResponseSuccess | null>(spot || null);
@@ -56,8 +56,6 @@ export const EventCreateFloatingPanel = ({
   };
 
   const handleSubmit = async () => {
-    const user = await supabase.auth.getUser();
-
     if (!user) {
       toast.error('You must be logged in to create an event');
       return;
@@ -90,7 +88,7 @@ export const EventCreateFloatingPanel = ({
 
     const eventCreated = await handleCreateEvent({
       spot_id: spotSelected.id as string,
-      creator_id: user.data.user?.id as string,
+      creator_id: user.id,
       name,
       start_at: new Date(startAt).toISOString(),
       end_at: endAt ? new Date(endAt).toISOString() : null,

@@ -7,6 +7,7 @@ import {
   User,
   createBrowserSupabaseClient,
 } from '@supabase/auth-helpers-nextjs';
+import { AuthError } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import React, {
   createContext,
@@ -18,6 +19,12 @@ import React, {
 
 type SupabaseContext = {
   supabase: SupabaseClient<Database>;
+  user: User | null;
+  session: Session | null;
+  initial: boolean;
+  signOut: () => Promise<{
+    error: AuthError | null;
+  }>;
 };
 
 const AuthContext = createContext<SupabaseContext | undefined>(undefined);

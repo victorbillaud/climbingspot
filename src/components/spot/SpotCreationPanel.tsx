@@ -48,7 +48,7 @@ export function SpotCreationPanel({
   onClose,
 }: SpotCreationPanelProps) {
   const dictionary = useDictionary();
-  const { supabase } = useSupabase();
+  const { supabase, user } = useSupabase();
 
   const [panelOpen, openPanel, closePanel] = useToggle(false);
 
@@ -123,7 +123,10 @@ export function SpotCreationPanel({
   };
 
   const handleSubmit = async () => {
-    const session = await supabase.auth.getSession();
+    if (!user) {
+      toast.error('You must be logged in to create a spot');
+      return false;
+    }
 
     setSubmittingMessage(`${dictionary.spotsCreation.checking_data}...`);
 
@@ -206,7 +209,7 @@ export function SpotCreationPanel({
         ...spotForm,
         location: locationId,
         image: publicImagesPaths,
-        creator: session.data.session?.user?.id as string,
+        creator: user?.id,
       });
       if (!spotCreated) {
         throw new Error(dictionary.spotsCreation.error_creating_spot);

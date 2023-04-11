@@ -14,11 +14,11 @@ interface IProps {
 export const revalidate = 0;
 
 export default function RootLayout({ children }: IProps) {
-  const { supabase } = useSupabase();
+  const { signOut } = useSupabase();
   const pathname = usePathname();
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await signOut();
 
     if (error) {
       console.log({ error });

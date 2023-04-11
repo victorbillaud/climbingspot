@@ -12,13 +12,12 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function Page() {
-  const { supabase } = useSupabase();
+  const { supabase, user } = useSupabase();
 
   const [spots, setSpots] = useState<CreatorsSpotsResponseSuccess>(null);
   const spotsLoaded = useRef(false);
 
   const fetchSpots = async () => {
-    const user = await supabase.auth.getUser();
     if (!user) {
       toast.error('You must be logged in to create a spot');
       return;
@@ -26,7 +25,7 @@ export default function Page() {
 
     const { spots, error } = await listCreatorSpots({
       client: supabase,
-      creatorId: user?.data.user?.id as string,
+      creatorId: user.id,
     });
 
     if (error) {

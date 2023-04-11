@@ -11,12 +11,10 @@ export const JoinEventButton: React.FC<{
   // eslint-disable-next-line no-unused-vars
   onJoinEvent?: (participation: any) => void;
 }> = ({ event, onJoinEvent }) => {
-  const { supabase } = useSupabase();
+  const { supabase, user } = useSupabase();
 
   const handleJoinEvent = async () => {
-    const session = await supabase.auth.getSession();
-
-    if (!session) {
+    if (!user) {
       toast.error('You must be logged in to join an event');
       return;
     }
@@ -24,7 +22,7 @@ export const JoinEventButton: React.FC<{
     const { participation, error } = await joinEvent({
       client: supabase,
       eventId: event.id,
-      userId: session?.data.session?.user.id as string,
+      userId: user.id,
     });
 
     if (error) {
