@@ -8,7 +8,6 @@ import {
 } from '@/components/common';
 import { ReviewResponseSuccess } from '@/features/reviews';
 import { formatDateString, getFirstItem } from '@/lib';
-import { createClient } from '@/lib/supabase/browser';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSupabase } from '../auth/SupabaseProvider';
@@ -18,15 +17,14 @@ export type TReviewProps = {
 };
 
 export const Review = ({ review }: TReviewProps) => {
-  const supabase = createClient();
-  const { session } = useSupabase();
+  const { supabase, user } = useSupabase();
 
   const [likesCount, setLikesCount] = useState<number>(
     getFirstItem(review.like_count)?.count as number,
   );
 
   const handleLike = async () => {
-    if (!session) {
+    if (!user) {
       toast.error('You need to be logged in to like a review');
       return;
     }
@@ -35,7 +33,7 @@ export const Review = ({ review }: TReviewProps) => {
       .from('reviews_likes')
       .insert({
         review_id: review.id,
-        profile_id: session?.user?.id,
+        profile_id: user.id,
       })
       .select()
       .single();
@@ -134,7 +132,6 @@ export const Review = ({ review }: TReviewProps) => {
                   size="medium"
                   icon="hearth"
                   iconOnly
-                  disabled={session ? false : true}
                   iconFill={likesCount > 0 ? true : false}
                   onClick={handleLike}
                 />

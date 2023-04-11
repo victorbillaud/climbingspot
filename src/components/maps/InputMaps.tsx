@@ -9,7 +9,6 @@ import {
   spotsSearchWithBoundsResponseSuccess,
 } from '@/features/spots';
 import { formatDateString, getFirstItem } from '@/lib';
-import { createClient } from '@/lib/supabase/browser';
 import L from 'leaflet';
 import { debounce } from 'lodash';
 import Link from 'next/link';
@@ -18,6 +17,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { useMap } from 'react-leaflet';
 import { useColorScheme } from '../ColorSchemeProvider';
 import { useDictionary } from '../DictionaryProvider';
+import { useSupabase } from '../auth/SupabaseProvider';
 import { Card, Flex, Icon, InfoCard, Text } from '../common';
 import {
   LazyCircle,
@@ -97,7 +97,7 @@ export const InputMaps = ({
 }: InputMapsProps) => {
   const dictionary = useDictionary();
   const { colorScheme } = useColorScheme();
-  const supabase = createClient();
+  const { supabase } = useSupabase();
 
   const tileLayerUrl = useMemo(() => {
     switch (colorScheme) {

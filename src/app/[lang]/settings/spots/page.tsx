@@ -7,39 +7,40 @@ import {
   CreatorsSpotsResponseSuccess,
   listCreatorSpots,
 } from '@/features/spots';
-import { createClient } from '@/lib/supabase/browser';
 import { logger } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function Page() {
-  const supabase = createClient();
-  const { session } = useSupabase();
+  const { supabase, user } = useSupabase();
+
   const [spots, setSpots] = useState<CreatorsSpotsResponseSuccess>(null);
   const spotsLoaded = useRef(false);
 
-  const fetchSpots = async (userId: string) => {
+  const fetchSpots = async () => {
+    if (!user) {
+      toast.error('You must be logged in to create a spot');
+      return;
+    }
+
     const { spots, error } = await listCreatorSpots({
       client: supabase,
-      creatorId: userId,
+      creatorId: user.id,
     });
 
     if (error) {
       logger.error(error);
       return;
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     setSpots(spots);
   };
 
   useEffect(() => {
-    if (session && !spotsLoaded.current) {
+    if (!spotsLoaded.current) {
       spotsLoaded.current = true;
-      fetchSpots(session.user.id);
+      fetchSpots();
     }
-  }, [session]);
+  }, []);
 
   return (
     <>
@@ -51,7 +52,7 @@ export default function Page() {
         <SpotCreationPanel
           onSpotCreated={(spot) => {
             toast.success(`Spot ${spot.name} created!`);
-            session && fetchSpots(session.user.id);
+            fetchSpots();
           }}
         />
       </Flex>

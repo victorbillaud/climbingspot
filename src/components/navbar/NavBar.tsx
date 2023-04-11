@@ -13,7 +13,7 @@ import { SearchBar } from './SearchBar';
 interface INavBarProps {}
 
 export const NavBar: React.FC<INavBarProps> = () => {
-  const { session } = useSupabase();
+  const { user } = useSupabase();
   const router = useRouter();
   const params = useSearchParams();
 
@@ -124,9 +124,7 @@ export const NavBar: React.FC<INavBarProps> = () => {
             icon="cog"
             label="settings"
             to="/settings/user"
-            userImage={
-              session ? session.user.user_metadata?.avatar_url : undefined
-            }
+            userImage={user?.user_metadata?.avatar_url}
           />
         </Flex>
       </Flex>

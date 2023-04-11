@@ -1,19 +1,18 @@
 import { Button, InputText, InputTextArea, Modal } from '@/components/common';
 import { useToggle } from '@/hooks';
 import { logger } from '@/lib/logger';
-import { createClient } from '@/lib/supabase/browser';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useSupabase } from '../auth/SupabaseProvider';
 import NumberSelector from '../common/input/NumberSelector';
 import { TReviewCreateModalProps, TReviewInsert } from './types';
 
 export const ReviewCreateModal = ({
   spotId,
-  creatorId,
   onClose,
   onConfirm,
 }: TReviewCreateModalProps) => {
-  const supabase = createClient();
+  const { supabase, user } = useSupabase();
 
   const [creatingModalOpen, openCreatingModal, closeCreatingModal] =
     useToggle(false);
@@ -42,6 +41,11 @@ export const ReviewCreateModal = ({
   };
 
   const handleSubmit = async () => {
+    if (!user) {
+      toast.error('You must be logged in to create a review');
+      return;
+    }
+
     if (title === '') {
       toast.error('Title must not be empty');
       return;
@@ -54,7 +58,7 @@ export const ReviewCreateModal = ({
 
     const reviewCreated = await handleCreateReview({
       spot_id: spotId,
-      creator_id: creatorId,
+      creator_id: user.id,
       note,
       title,
       content,

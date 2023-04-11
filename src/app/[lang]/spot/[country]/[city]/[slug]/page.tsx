@@ -105,10 +105,7 @@ export default async function Page({
               <span className="ml-1 opacity-70">({events?.length})</span>{' '}
             </Text>
             {session ? (
-              <EventCreateFloatingPanel
-                spot={spot}
-                creatorId={session?.user?.id || ''}
-              />
+              <EventCreateFloatingPanel spot={spot} />
             ) : (
               <Text variant="body" className="opacity-60">
                 {dictionary.events.login_to_create}
@@ -128,10 +125,7 @@ export default async function Page({
               <span className="ml-1 opacity-70">({reviews?.length})</span>{' '}
             </Text>
             {session ? (
-              <ReviewCreateModal
-                spotId={spot.id || ''}
-                creatorId={session?.user?.id || ''}
-              />
+              <ReviewCreateModal spotId={spot.id || ''} />
             ) : (
               <Text variant="body" className="opacity-60">
                 {dictionary.reviews.login_to_review}

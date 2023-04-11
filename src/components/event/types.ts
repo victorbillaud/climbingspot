@@ -16,7 +16,6 @@ export type EventInvitationInsert =
 
 export type TEventCreateModalProps = {
   spot?: GetSpotResponseSuccess;
-  creatorId: Event['creator_id'];
   onClose?: () => void;
   // eslint-disable-next-line no-unused-vars
   onConfirm?: (event: Event) => void;

@@ -11,21 +11,20 @@ import { createEvent } from '@/features/events';
 import { GetSpotResponseSuccess, getSpot } from '@/features/spots';
 import { useToggle } from '@/hooks';
 import { logger } from '@/lib/logger';
-import { createClient } from '@/lib/supabase/browser';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useSupabase } from '../auth/SupabaseProvider';
 import { SearchBar } from '../navbar/SearchBar';
 import { SpotCardSmall } from '../spot';
 import { TEventCreateModalProps, TEventInsert } from './types';
 
 export const EventCreateFloatingPanel = ({
   spot,
-  creatorId,
   onClose,
   onConfirm,
 }: TEventCreateModalProps) => {
-  const supabase = createClient();
+  const { supabase, user } = useSupabase();
   const router = useRouter();
   const [spotSelected, setSpotSelected] =
     useState<GetSpotResponseSuccess | null>(spot || null);
@@ -51,12 +50,16 @@ export const EventCreateFloatingPanel = ({
     }
 
     if (eventCreated) {
-      toast.success('Event created');
       return eventCreated;
     }
   };
 
   const handleSubmit = async () => {
+    if (!user) {
+      toast.error('You must be logged in to create an event');
+      return;
+    }
+
     if (!spotSelected) {
       toast.error('Spot is required');
       return;
@@ -84,7 +87,7 @@ export const EventCreateFloatingPanel = ({
 
     const eventCreated = await handleCreateEvent({
       spot_id: spotSelected.id as string,
-      creator_id: creatorId,
+      creator_id: user.id,
       name,
       start_at: new Date(startAt).toISOString(),
       end_at: endAt ? new Date(endAt).toISOString() : null,
@@ -116,8 +119,9 @@ export const EventCreateFloatingPanel = ({
         onConfirm={async () => {
           const eventCreated = await handleSubmit();
           if (eventCreated) {
-            closePanel();
+            toast.success('Event created');
             router.refresh();
+            closePanel();
           }
         }}
         forceValidation
