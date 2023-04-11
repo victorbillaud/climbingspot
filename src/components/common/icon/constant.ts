@@ -2,8 +2,10 @@ import ArrowRight from './svg/arrow-right';
 import Bolt from './svg/bolt';
 import Chart from './svg/chart';
 import Check from './svg/check';
+import ChevronDown from './svg/chevron-down';
 import ChevronLeft from './svg/chevron-left';
 import ChevronRight from './svg/chevron-right';
+import ChevronUp from './svg/chevron-up';
 import Cog from './svg/cog';
 import Cross from './svg/cross';
 import Eye from './svg/eye';
@@ -48,6 +50,8 @@ export const icons = {
   map: Map,
   'chevron-left': ChevronLeft,
   'chevron-right': ChevronRight,
+  'chevron-up': ChevronUp,
+  'chevron-down': ChevronDown,
   star: Star,
   hearth: Hearth,
   loop: Loop,

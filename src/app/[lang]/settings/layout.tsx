@@ -68,19 +68,8 @@ export default function RootLayout({ children }: IProps) {
             direction="row"
             horizontalAlign="left"
           >
-            <Text variant="body">
-              {pathname &&
-                pathname
-                  .split('/')
-                  .slice(2)
-                  .map((item, index) => (
-                    <span
-                      key={item}
-                      className="opacity-70 capitalize last:opacity-100 last:text-brand-700"
-                    >
-                      {`${item} `}
-                    </span>
-                  ))}
+            <Text variant="body" weight={400} className="capitalize">
+              {pathname && pathname.split('/')[3]}
             </Text>
           </Flex>
           <Flex fullSize horizontalAlign="left">

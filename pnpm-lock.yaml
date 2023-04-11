@@ -21,7 +21,6 @@ specifiers:
   '@types/node': 18.13.0
   '@types/react': 18.0.27
   '@types/react-dom': 18.0.10
-  '@types/react-window': ^1.8.5
   '@types/sharp': ^0.31.1
   '@types/suncalc': ^1.9.0
   '@types/uuid': ^9.0.1
@@ -56,8 +55,6 @@ specifiers:
   react-leaflet: ^4.0.0
   react-leaflet-cluster: ^2.1.0
   react-toastify: ^9.1.1
-  react-virtualized-auto-sizer: ^1.0.11
-  react-window: ^1.8.8
   server-only: ^0.0.1
   sharp: ^0.31.3
   storybook: ^7.0.0-beta.44
@@ -99,8 +96,6 @@ dependencies:
   react-leaflet: 4.2.1_yydtlhsdonbqao6vgvkwhv2zki
   react-leaflet-cluster: 2.1.0_lrtyz7ybxyhuqjxwg5fu4zjt44
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
-  react-virtualized-auto-sizer: 1.0.11_biqbaboplfbrettd7655fr4n2y
-  react-window: 1.8.8_biqbaboplfbrettd7655fr4n2y
   server-only: 0.0.1
   sharp: 0.31.3
   supabase: 1.42.4
@@ -119,7 +114,6 @@ devDependencies:
   '@types/leaflet': 1.9.1
   '@types/lodash': 4.14.192
   '@types/negotiator': 0.6.1
-  '@types/react-window': 1.8.5
   '@types/sharp': 0.31.1
   '@types/suncalc': 1.9.0
   '@types/uuid': 9.0.1
@@ -4853,12 +4847,6 @@ packages:
     dependencies:
       '@types/react': 18.0.27
     dev: false
-
-  /@types/react-window/1.8.5:
-    resolution: {integrity: sha512-V9q3CvhC9Jk9bWBOysPGaWy/Z0lxYcTXLtLipkt2cnRj1JOSFNF7wqGpkScSXMgBwC+fnVRg/7shwgddBG5ICw==}
-    dependencies:
-      '@types/react': 18.0.27
-    dev: true
 
   /@types/react/18.0.27:
     resolution: {integrity: sha512-3vtRKHgVxu3Jp9t718R9BuzoD4NcQ8YJ5XRzsSKxNDiDonD2MXIT1TmSkenxuCycZJoQT5d2vE8LwWJxBC1gmA==}

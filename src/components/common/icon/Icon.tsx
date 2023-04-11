@@ -6,6 +6,7 @@ export const Icon: FunctionComponent<IIconProps> = ({
   scale = 1,
   color,
   className,
+  padding = true,
   ...props
 }) => {
   // scale without greater than 2
@@ -20,7 +21,7 @@ export const Icon: FunctionComponent<IIconProps> = ({
         color ? color : `text-black-100 dark:text-white-100`
       } h-fit w-fit inline-block ${
         props.border ? 'border-2 rounded-full border-current' : ''
-      } ${className}  p-1`}
+      } ${className} ${padding ? 'p-1' : ''}`}
     >
       <IconSvg
         width={width}
