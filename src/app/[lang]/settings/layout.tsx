@@ -68,7 +68,7 @@ export default function RootLayout({ children }: IProps) {
             direction="row"
             horizontalAlign="left"
           >
-            <Text variant="subtitle">
+            <Text variant="body">
               {pathname &&
                 pathname
                   .split('/')
