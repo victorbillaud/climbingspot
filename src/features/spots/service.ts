@@ -1,18 +1,19 @@
 import { logger } from '@/lib/logger';
 import { PostgrestError } from '@supabase/supabase-js';
 import {
-  ISpotExtanded,
-  getSpotParams,
+  ISpotExtended,
+  getSpotFromIdParams,
+  getSpotFromSlugParams,
   insertSpotParams,
   listSpotsParams,
   spotsSearchWithBoundsParams,
 } from './types';
 
-export const getSpot = async ({
+export const getSpotFromSlug = async ({
   slug,
   client,
-}: getSpotParams): Promise<{
-  spot: ISpotExtanded | null;
+}: getSpotFromSlugParams): Promise<{
+  spot: ISpotExtended | null;
   error: PostgrestError | null;
 }> => {
   const { data: spot, error } = await client
@@ -30,17 +31,42 @@ export const getSpot = async ({
     logger.error(error);
   }
 
-  return { spot: spot as unknown as ISpotExtanded, error };
+  return { spot: spot as unknown as ISpotExtended, error };
+};
+
+export const getSpotFromId = async ({
+  id,
+  client,
+}: getSpotFromIdParams): Promise<{
+  spot: ISpotExtended | null;
+  error: PostgrestError | null;
+}> => {
+  const { data: spot, error } = await client
+    .from('spot_extended_view')
+    .select(
+      `
+        *,
+        location(*)
+      `,
+    )
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    logger.error(error);
+  }
+
+  return { spot: spot as unknown as ISpotExtended, error };
 };
 
 export const listMapSpots = async ({
   client,
   limit,
 }: listSpotsParams): Promise<{
-  spots: ISpotExtanded[];
+  spots: ISpotExtended[];
   error: PostgrestError | null;
 }> => {
-  let allSpots: ISpotExtanded[] | null = [];
+  let allSpots: ISpotExtended[] | null = [];
   let error: PostgrestError | null = null;
 
   if (limit) {
@@ -59,7 +85,7 @@ export const listMapSpots = async ({
       error = currentError;
     }
 
-    allSpots = spots as unknown as ISpotExtanded[];
+    allSpots = spots as unknown as ISpotExtended[];
   } else {
     let hasNextPage = true;
     let pageIndex = 0;
@@ -96,7 +122,7 @@ export const listMapSpots = async ({
   }
 
   return {
-    spots: allSpots as unknown as ISpotExtanded[],
+    spots: allSpots as unknown as ISpotExtended[],
     error,
   };
 };

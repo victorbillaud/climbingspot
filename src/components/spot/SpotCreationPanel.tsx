@@ -14,9 +14,11 @@ import {
 } from '@/components/common';
 import { TLocationInsert, insertLocation } from '@/features/locations';
 import {
+  ISpotExtended,
   SPOT_PERIODS,
   TSpot,
   TSpotInsert,
+  createFiles,
   insertSpot,
   spotsSearchWithBoundsResponseSuccess,
 } from '@/features/spots';
@@ -29,7 +31,6 @@ import useCustomForm from '@/features/spots/hooks';
 import { deleteFiles, uploadFiles } from '@/features/storage';
 import { useToggle } from '@/hooks';
 import { formatDateString } from '@/lib';
-import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -42,18 +43,24 @@ import { InputMaps } from '../maps';
 export type SpotCreationPanelProps = {
   onSpotCreated?: (spot: TSpot) => void;
   onClose?: () => void;
+  initialSpot?: ISpotExtended;
+  initialPanelState?: boolean;
+  showButton?: boolean;
 };
 
 export function SpotCreationPanel({
   onSpotCreated,
   onClose,
+  initialSpot,
+  initialPanelState = false,
+  showButton = true,
 }: SpotCreationPanelProps) {
   const dictionary = useDictionary();
   const { supabase, user } = useSupabase();
   const router = useRouter();
-  const [panelOpen, openPanel, closePanel] = useToggle(false);
+  const [panelOpen, openPanel, closePanel] = useToggle(initialPanelState);
 
-  const initialState: Database['public']['Tables']['spots']['Insert'] = {
+  const initialState: TSpotInsert | ISpotExtended = initialSpot || {
     name: '',
     description: undefined,
     approach: undefined,
@@ -261,12 +268,14 @@ export function SpotCreationPanel({
 
   return (
     <>
-      <Button
-        text={dictionary.spots.create_spot}
-        icon="models"
-        variant="default"
-        onClick={() => openPanel()}
-      />
+      {showButton && (
+        <Button
+          text={dictionary.spots.create_spot}
+          icon="models"
+          variant="default"
+          onClick={() => openPanel()}
+        />
+      )}
       {panelOpen && (
         <FloatingPanel
           isOpen={panelOpen}
@@ -361,6 +370,7 @@ export function SpotCreationPanel({
               <InputImage
                 labelText={dictionary.spots.spot_images}
                 error={errors.image}
+                initialImages={createFiles(spotForm.image)}
                 onSelectedFilesChange={(images) => {
                   setImages(images);
                   setErrors({ image: undefined });

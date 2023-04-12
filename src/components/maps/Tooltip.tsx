@@ -1,9 +1,9 @@
-import { ISpotExtanded } from '@/features/spots';
+import { ISpotExtended } from '@/features/spots';
 import { Flex, Text } from '../common';
 import { LazyTooltip } from './Lazy';
 
 export type TTooltipProps = {
-  spot: ISpotExtanded;
+  spot: ISpotExtended;
 };
 
 export const Tooltip = ({ spot }: TTooltipProps) => {

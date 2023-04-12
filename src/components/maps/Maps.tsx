@@ -1,6 +1,6 @@
 'use client';
 
-import { ISpotExtanded } from '@/features/spots';
+import { ISpotExtended } from '@/features/spots';
 import { useToggle } from '@/hooks';
 import { actualSpotAtom } from '@/hooks/jotai/maps/atom';
 import { useAtom } from 'jotai';
@@ -41,7 +41,7 @@ const GenericMap = ({ spots }: IMapProps) => {
     }
   }, [colorScheme]);
 
-  const getBounds = (spots?: ISpotExtanded[]) => {
+  const getBounds = (spots?: ISpotExtended[]) => {
     if (!spots || spots.length === 0) {
       return DEFAULT_BOUNDS;
     }

@@ -4,12 +4,16 @@ import { InputText } from '../input';
 import { Flex } from '../layout';
 import { Text } from '../text';
 
-interface TableProps {
-  rows: Array<{ [key: string]: any }>;
+interface TableProps<T> {
+  rows: Array<T & { [key: string]: any }>;
+  onRowClick?: (row: T) => void;
 }
 
-export const Table: React.FC<TableProps> = (params) => {
-  const headers = params.rows.length > 0 ? Object.keys(params.rows[0]) : [];
+export const Table = <T,>({
+  rows,
+  onRowClick,
+}: TableProps<T>): React.ReactElement => {
+  const headers = rows.length > 0 ? Object.keys(rows[0]) : [];
 
   const [search, setSearch] = React.useState('');
   const [sort, setSort] = React.useState<string | null>(null);
@@ -44,20 +48,25 @@ export const Table: React.FC<TableProps> = (params) => {
   };
 
   const filteredAndSortedRows = useMemo(() => {
-    let filteredRows = params.rows;
+    let filteredRows = rows;
 
     if (search.length > 0) {
-      filteredRows = filterRows(params.rows, search);
+      filteredRows = filterRows(rows, search);
     }
     filteredRows = sortRows(filteredRows);
 
     return filteredRows;
-  }, [params.rows, search, sort]);
+  }, [rows, search, sort]);
 
   return (
-    <Flex fullSize={true} verticalAlign="center" horizontalAlign="center">
+    <Flex
+      fullSize={true}
+      verticalAlign="center"
+      horizontalAlign="center"
+      gap={0}
+    >
       <Flex
-        className="w-full"
+        className="w-full py-2"
         direction="row"
         verticalAlign="center"
         horizontalAlign="stretch"
@@ -71,14 +80,14 @@ export const Table: React.FC<TableProps> = (params) => {
         />
       </Flex>
       <div className="relative w-full h-full mx-auto px-4 md:px-8">
-        <div className="absolute w-full inset-0 shadow-sm rounded-lg overflow-x-auto overflow-y-auto border border-white-300 dark:border-dark-300">
+        <div className="absolute w-full inset-0 shadow-sm rounded-t-lg overflow-x-auto overflow-y-auto border-t border-x border-white-300 dark:border-dark-300">
           <table className="relative w-full table-auto text-sm text-left">
-            <thead className="sticky top-0 bg-white-300 dark:bg-dark-200 text-gray-600 dark:text-white-200 font-medium">
+            <thead className="sticky top-0 bg-gray-200 dark:bg-dark-200 text-gray-600 dark:text-white-200 font-medium ">
               <tr>
                 {headers.map((header, index) => (
                   <th
                     key={index}
-                    className="px-6 py-3 whitespace-nowrap capitalize cursor-pointer border-b border-white-300 dark:border-dark-300"
+                    className="px-6 py-3 whitespace-nowrap capitalize cursor-pointer border-b border-white-300 dark:border-dark-200"
                     onClick={() => {
                       if (sort === null) {
                         setSort(`${header}:asc`);
@@ -138,9 +147,11 @@ export const Table: React.FC<TableProps> = (params) => {
               {filteredAndSortedRows.map((row, index) => (
                 <tr
                   key={index}
-                  className="cursor-pointer border-y border-white-300/10 dark:divide-dark-300 hover:bg-white-300/30 dark:hover:bg-dark-300/50 transition-colors duration-200"
+                  className="cursor-pointer border-y border-white-300/30 dark:border-dark-300 hover:bg-white-300/30 dark:hover:bg-dark-300/50 transition-colors duration-200"
                   onClick={() => {
-                    console.log(row);
+                    if (onRowClick) {
+                      onRowClick(row);
+                    }
                   }}
                 >
                   {headers.map((header, cellIndex) => (
@@ -153,16 +164,16 @@ export const Table: React.FC<TableProps> = (params) => {
             </tbody>
           </table>
         </div>
-        <Flex
-          className="absolute bottom-0 left-0 right-0 backdrop-blur-sm bg-white-300 dark:bg-dark-200/80 rounded-b-lg border border-white-300 dark:border-dark-300"
-          verticalAlign="center"
-          horizontalAlign="center"
-        >
-          <Text variant="caption" className="w-full text-center p-2">
-            {filteredAndSortedRows.length} of {params.rows.length} rows
-          </Text>
-        </Flex>
       </div>
+      <Flex
+        className="w-full bottom-0 left-0 right-0 bg-gray-200 dark:bg-dark-200/80 rounded-b-lg border border-white-300 dark:border-dark-300"
+        verticalAlign="center"
+        horizontalAlign="center"
+      >
+        <Text variant="caption" className="w-full text-center p-2">
+          {filteredAndSortedRows.length} of {rows.length} rows
+        </Text>
+      </Flex>
     </Flex>
   );
 };
