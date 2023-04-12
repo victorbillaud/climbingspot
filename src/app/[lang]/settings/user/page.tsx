@@ -1,6 +1,7 @@
 import { Text } from '@/components/common';
 import { Flex } from '@/components/common/layout';
 import { createClient } from '@/lib/supabase/server';
+import { Logout } from './Logout';
 
 export default async function Page() {
   const {
@@ -18,6 +19,7 @@ export default async function Page() {
   return (
     <Flex fullSize>
       <Text variant="caption">{session.user.user_metadata.name}</Text>
+      <Logout />
     </Flex>
   );
 }
