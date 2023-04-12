@@ -66,7 +66,7 @@ export const Table = <T,>({
       gap={0}
     >
       <Flex
-        className="w-full py-2"
+        className="w-full pb-2"
         direction="row"
         verticalAlign="center"
         horizontalAlign="stretch"
