@@ -154,7 +154,7 @@ export default function Cluster({ spots, onMarkerClick }: TClusterProps) {
 
         map.once('moveend', function () {
           const popup = L.popup({
-            offset: L.point(10, -3),
+            offset: L.point([0, -10]),
           })
             .setLatLng([
               marker.props.spot.location.latitude,
