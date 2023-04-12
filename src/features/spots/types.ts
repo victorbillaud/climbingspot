@@ -1,10 +1,19 @@
 import { Database } from '@/lib/db_types';
 import { createClient } from '@/lib/supabase/server';
-import { getSpot, listCreatorSpots, searchSpotsWithBounds } from './service';
+import {
+  getSpotFromSlug,
+  listCreatorSpots,
+  searchSpotsWithBounds,
+} from './service';
 
-export type getSpotParams = {
+export type getSpotFromSlugParams = {
   client: ReturnType<typeof createClient>;
   slug: string;
+};
+
+export type getSpotFromIdParams = {
+  client: ReturnType<typeof createClient>;
+  id: string;
 };
 
 export type listSpotsParams = {
@@ -14,7 +23,7 @@ export type listSpotsParams = {
 
 export type TSpot = Database['public']['Tables']['spots']['Row'];
 
-type GetSpotResponse = Awaited<ReturnType<typeof getSpot>>;
+type GetSpotResponse = Awaited<ReturnType<typeof getSpotFromSlug>>;
 export type GetSpotResponseError = GetSpotResponse['error'];
 type GetSpotResponseSuccessTemp = GetSpotResponse['spot'];
 
@@ -29,8 +38,9 @@ export type GetSpotResponseSuccess = Omit<
   GetSpotResponseSuccessLocation;
 
 export type Location = Database['public']['Tables']['locations']['Row'];
-export type SpotExtanded = Database['public']['Views']['spot_extended_view']['Row'];
-export interface ISpotExtanded extends Omit<SpotExtanded, 'location'> {
+export type SpotExtended =
+  Database['public']['Views']['spot_extended_view']['Row'];
+export interface ISpotExtended extends Omit<SpotExtended, 'location'> {
   location: Location;
 }
 

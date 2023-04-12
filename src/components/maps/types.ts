@@ -1,10 +1,10 @@
-import { ISpotExtanded } from '@/features/spots';
+import { ISpotExtended } from '@/features/spots';
 
 export interface ICluster {
-  spots: ISpotExtanded[];
+  spots: ISpotExtended[];
   latitude: number;
   longitude: number;
 }
 export interface IMapProps {
-  spots?: ISpotExtanded[];
+  spots?: ISpotExtended[];
 }

@@ -1,11 +1,11 @@
-import { ISpotExtanded } from '@/features/spots';
+import { ISpotExtended } from '@/features/spots';
 import { Flex } from '../common';
 import { SpotCardSmall } from '../spot';
 import { LazyPopup } from './Lazy';
 import './popup.css';
 
 export type TPopupProps = {
-  spot: ISpotExtanded;
+  spot: ISpotExtended;
 };
 
 export const Popup = ({ spot }: TPopupProps) => {
