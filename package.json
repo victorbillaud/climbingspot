@@ -36,6 +36,7 @@
     "negotiator": "^0.6.3",
     "next": "^13.3.0",
     "next-intl": "2.12.0-beta.5",
+    "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-base-table": "^1.13.4",
     "react-dom": "18.2.0",

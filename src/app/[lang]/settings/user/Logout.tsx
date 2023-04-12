@@ -1,10 +1,12 @@
 'use client';
 
 import { useSupabase } from '@/components/auth/SupabaseProvider';
-import { Button } from '@/components/common';
+import { Button, Flex } from '@/components/common';
+import { useTheme } from 'next-themes';
 
 export const Logout = () => {
   const { signOut } = useSupabase();
+  const { resolvedTheme, setTheme } = useTheme();
 
   const handleLogout = async () => {
     const { error } = await signOut();
@@ -14,5 +16,14 @@ export const Logout = () => {
     }
   };
 
-  return <Button text="Logout" variant="alert" onClick={handleLogout} />;
+  return (
+    <Flex>
+      <Button
+        text="Toggle Theme"
+        variant="primary"
+        onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+      />
+      <Button text="Logout" variant="alert" onClick={handleLogout} />
+    </Flex>
+  );
 };
