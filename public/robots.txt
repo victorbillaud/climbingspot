@@ -1,6 +1,9 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /api/*
+Disallow: /settings/*
+Disallow: /auth/*
 
 # Host
 Host: https://climbingspot.eu
