@@ -21,6 +21,10 @@ export type listSpotsParams = {
   limit?: number;
 };
 
+export type listSpotsSlugsParams = {
+  client: ReturnType<typeof createClient>;
+};
+
 export type TSpot = Database['public']['Tables']['spots']['Row'];
 
 type GetSpotResponse = Awaited<ReturnType<typeof getSpotFromSlug>>;

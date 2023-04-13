@@ -206,3 +206,37 @@ export const insertSpot = async ({ client, spot }: insertSpotParams) => {
 
   return { spot: data, error };
 };
+
+export const listSpotsSlugs = async ({ client }: listSpotsParams) => {
+  const allSlugs = [];
+  let error: PostgrestError | null = null;
+
+  let hasNextPage = true;
+  let pageIndex = 0;
+
+  while (hasNextPage) {
+    const { data: spots, error: currentError } = await client
+      .from('spots')
+      .select('slug')
+      .range(pageIndex * 1000, (pageIndex + 1) * 1000 - 1);
+
+    if (currentError) {
+      logger.error(currentError);
+      error = currentError;
+      break;
+    }
+
+    allSlugs.push(...spots.map((spot) => spot.slug));
+
+    if (spots.length < 1000) {
+      hasNextPage = false;
+    } else {
+      pageIndex += 1;
+    }
+  }
+
+  return {
+    slugs: allSlugs,
+    error,
+  };
+};
