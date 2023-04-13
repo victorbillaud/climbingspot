@@ -44,6 +44,7 @@ specifiers:
   negotiator: ^0.6.3
   next: ^13.3.0
   next-intl: 2.12.0-beta.5
+  next-sitemap: ^4.0.7
   next-themes: ^0.2.1
   postcss: ^8.4.21
   postcss-loader: ^7.0.2
@@ -91,6 +92,7 @@ dependencies:
   negotiator: 0.6.3
   next: 13.3.0_biqbaboplfbrettd7655fr4n2y
   next-intl: 2.12.0-beta.5_next@13.3.0+react@18.2.0
+  next-sitemap: 4.0.7_next@13.3.0
   next-themes: 0.2.1_yucv4tfv7v7nrkw2uguegj6e7e
   react: 18.2.0
   react-base-table: 1.13.4_biqbaboplfbrettd7655fr4n2y
@@ -1511,6 +1513,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@corex/deepmerge/4.0.43:
+    resolution: {integrity: sha512-N8uEMrMPL0cu/bdboEWpQYb/0i2K5Qn8eCsxzOmxSggJbbQte7ljMRoXm917AbntqTGOzdTu+vP3KOOzoC70HQ==}
+    dev: false
 
   /@discoveryjs/json-ext/0.5.7:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -8919,6 +8925,19 @@ packages:
       react: 18.2.0
       server-only: 0.0.1
       use-intl: 2.12.0-alpha.1_react@18.2.0
+    dev: false
+
+  /next-sitemap/4.0.7_next@13.3.0:
+    resolution: {integrity: sha512-S2g5IwJeO0+ecmFq981fb+Mw9YWmntOuN/qTCxclSkUibOJ8qKIOye0vn6NEJ1S4tKhbY+MTYKgJpNdFZYxLoA==}
+    engines: {node: '>=14.18'}
+    hasBin: true
+    peerDependencies:
+      '@next/env': '*'
+      next: '*'
+    dependencies:
+      '@corex/deepmerge': 4.0.43
+      minimist: 1.2.8
+      next: 13.3.0_biqbaboplfbrettd7655fr4n2y
     dev: false
 
   /next-themes/0.2.1_yucv4tfv7v7nrkw2uguegj6e7e:
