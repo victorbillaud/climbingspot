@@ -1,5 +1,7 @@
+import { isSearchingAtom } from '@/hooks/jotai/maps/atom';
 import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
+import { useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import React, { MouseEventHandler, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -18,6 +20,8 @@ export const SearchBar = ({
   onClickItem,
   showMapLink = true,
 }: SearchBarProps) => {
+  const [isSearching, setIsSearching] = useAtom(isSearchingAtom);
+
   const { supabase } = useSupabase();
   const router = useRouter();
 
@@ -35,8 +39,10 @@ export const SearchBar = ({
           resultsRef?.current?.contains(event.target as Node)
         ) {
           setFocus(true);
+          setIsSearching(true);
         } else {
           setFocus(false);
+          setIsSearching(false);
         }
       }
     };
@@ -65,7 +71,9 @@ export const SearchBar = ({
   useEffect(() => {
     if (search.length > 2) {
       handleSearch(search);
+      setIsSearching(true);
     } else {
+      setIsSearching(false);
       setResults(null);
     }
   }, [search]);
@@ -80,43 +88,45 @@ export const SearchBar = ({
         ref={inputRef}
       />
       {results && focus && (
-        <Card
-          className="search-bar-results absolute top-12 w-full z-50"
-          ref={resultsRef}
-        >
-          {results.length > 0 ? (
-            <Flex
-              direction="column"
-              horizontalAlign="left"
-              className="divide-y divide-white-300 dark:divide-dark-300 max-h-80 overflow-y-auto"
-              gap={0}
-            >
-              {results.map((spot, index) => (
-                <SpotListItems
-                  key={index}
-                  spot={spot}
-                  setFocus={setFocus}
-                  onClickText={() => {
-                    setFocus(false);
-                    onClickItem && onClickItem(spot);
-                  }}
-                  onClickMaps={(e) => {
-                    e.stopPropagation();
-                    if (showMapLink) {
+        <>
+          <Card
+            className="search-bar-results absolute top-14 w-[97vw] md:w-auto md:-inset-x-20 z-50"
+            ref={resultsRef}
+          >
+            {results.length > 0 ? (
+              <Flex
+                direction="column"
+                horizontalAlign="left"
+                className="divide-y divide-white-300 dark:divide-dark-300 max-h-80 overflow-y-auto"
+                gap={0}
+              >
+                {results.map((spot, index) => (
+                  <SpotListItems
+                    key={index}
+                    spot={spot}
+                    setFocus={setFocus}
+                    onClickText={() => {
                       setFocus(false);
-                      router.push(`/maps?spotId=${spot.id}`);
-                    }
-                  }}
-                  showMapLink={showMapLink}
-                />
-              ))}
-            </Flex>
-          ) : (
-            <Flex fullSize verticalAlign="center" horizontalAlign="center">
-              <Text variant="body">No results</Text>
-            </Flex>
-          )}
-        </Card>
+                      onClickItem && onClickItem(spot);
+                    }}
+                    onClickMaps={(e) => {
+                      e.stopPropagation();
+                      if (showMapLink) {
+                        setFocus(false);
+                        router.push(`/maps?spotId=${spot.id}`);
+                      }
+                    }}
+                    showMapLink={showMapLink}
+                  />
+                ))}
+              </Flex>
+            ) : (
+              <Flex fullSize verticalAlign="center" horizontalAlign="center">
+                <Text variant="body">No results</Text>
+              </Flex>
+            )}
+          </Card>
+        </>
       )}
     </Flex>
   );
