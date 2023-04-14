@@ -11,6 +11,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   children?: React.ReactNode;
   icon?: IconNames;
+  initialImages?: File[];
   onSelectedFilesChange: (images: File[]) => void;
 }
 
@@ -22,6 +23,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, IProps>(
       labelText,
       type = 'file',
       error,
+      initialImages,
       onSelectedFilesChange,
       ...props
     },
@@ -29,8 +31,12 @@ export const InputImage = React.forwardRef<HTMLInputElement, IProps>(
   ) => {
     const dictionary = useDictionary();
 
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>(
+      initialImages || [],
+    );
     const inputRef = useRef<HTMLInputElement>(null);
+
+    console.log('initialImages', initialImages);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.files) {

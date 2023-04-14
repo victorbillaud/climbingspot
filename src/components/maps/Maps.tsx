@@ -1,6 +1,6 @@
 'use client';
 
-import { ISpotExtanded } from '@/features/spots';
+import { ISpotExtended } from '@/features/spots';
 import { useToggle } from '@/hooks';
 import { actualSpotAtom } from '@/hooks/jotai/maps/atom';
 import { useAtom } from 'jotai';
@@ -8,9 +8,9 @@ import L from 'leaflet';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet/dist/leaflet.css';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useEffect, useMemo } from 'react';
-import { useColorScheme } from '../ColorSchemeProvider';
 import { Button, Flex, FloatingPanel, Text } from '../common';
 import { SpotModal } from '../spot';
 import Cluster from './Cluster';
@@ -25,13 +25,13 @@ const DEFAULT_BOUNDS = new L.LatLngBounds(
 );
 
 const GenericMap = ({ spots }: IMapProps) => {
-  const { colorScheme } = useColorScheme();
+  const { resolvedTheme } = useTheme();
   const [spot, setSpot] = useAtom(actualSpotAtom);
   const [floatingPanelIsOpen, openFloatingPanel, closeFloatingPanel] =
     useToggle(false);
 
   const tileLayerUrl = useMemo(() => {
-    switch (colorScheme) {
+    switch (resolvedTheme) {
       case 'light':
         return 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
       case 'dark':
@@ -39,9 +39,9 @@ const GenericMap = ({ spots }: IMapProps) => {
       default:
         break;
     }
-  }, [colorScheme]);
+  }, [resolvedTheme]);
 
-  const getBounds = (spots?: ISpotExtanded[]) => {
+  const getBounds = (spots?: ISpotExtended[]) => {
     if (!spots || spots.length === 0) {
       return DEFAULT_BOUNDS;
     }

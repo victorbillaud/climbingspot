@@ -1,7 +1,8 @@
-import { Flex, Icon, Table, Text } from '@/components/common';
+import { Flex, Icon, Text } from '@/components/common';
 import { SpotCreationPanel } from '@/components/spot/';
 import { listCreatorSpots } from '@/features/spots';
 import { createClient } from '@/lib/supabase/server';
+import { SpotsTable } from './SpotsTable';
 
 export default async function Page() {
   const supabase = createClient();
@@ -31,14 +32,7 @@ export default async function Page() {
       </Flex>
       {spots ? (
         spots.length > 0 ? (
-          <Flex
-            fullSize={true}
-            verticalAlign="center"
-            horizontalAlign="center"
-            className="p-3 pt-0"
-          >
-            <Table rows={spots} />
-          </Flex>
+          <SpotsTable spots={spots} />
         ) : (
           <Flex fullSize verticalAlign="center" horizontalAlign="center">
             <Text variant="caption">No spots found.</Text>

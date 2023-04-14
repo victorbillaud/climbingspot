@@ -1,9 +1,9 @@
 import { DictionaryProvider } from '@/components/DictionaryProvider';
 import { NavBar } from '@/components/navbar';
+import { SearchBackground } from '@/components/SearchBackground';
 import { ToastProvider } from '@/components/ToastProvider';
 import { Locale } from '@/i18n';
 import { getDictionary } from '@/lib/get-dictionary';
-import { logger } from '@supabase/auth-helpers-nextjs';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,7 +18,6 @@ export default async function RootLayout({ children, params }: IProps) {
   try {
     dictionary = await getDictionary(params.lang);
   } catch (error) {
-    logger.error(error);
     notFound();
   }
 
@@ -26,8 +25,9 @@ export default async function RootLayout({ children, params }: IProps) {
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-white-200 dark:bg-dark-100">
       <DictionaryProvider dictionary={dictionary}>
         <NavBar />
-        <div className="w-full h-full overflow-auto">
-          <div className="h-full">{children}</div>
+        <div className="relative w-full h-full overflow-auto">
+          <SearchBackground />
+          {children}
         </div>
         <ToastProvider />
       </DictionaryProvider>

@@ -1,10 +1,13 @@
-# Host
-Host: https://climbingspot.victorbillaud.fr
-
-# Block all crawlers for /settings
-User-agent: *
-Disallow: /settings
-
-# Allow all crawlers
+# *
 User-agent: *
 Allow: /
+Disallow: /api/*
+Disallow: /settings/*
+Disallow: /auth/*
+
+# Host
+Host: https://climbingspot.eu
+
+# Sitemaps
+Sitemap: https://climbingspot.eu/sitemap.xml
+Sitemap: https://climbingspot.eu/server-sitemap.xml
