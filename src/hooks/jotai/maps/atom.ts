@@ -4,3 +4,5 @@ import { atom } from 'jotai';
 export const actualSpotAtom = atom<GetSpotResponseSuccess | undefined>(
   undefined,
 );
+
+export const isSearchingAtom = atom(false);

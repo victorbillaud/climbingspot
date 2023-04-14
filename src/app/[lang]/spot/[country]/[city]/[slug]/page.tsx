@@ -1,8 +1,8 @@
 import {
-  CustomImage,
-  Flex,
-  ImageCarouselController,
-  Text,
+    CustomImage,
+    Flex,
+    ImageCarouselController,
+    Text,
 } from '@/components/common';
 import { EventCreateFloatingPanel } from '@/components/event';
 import { EventContainer } from '@/components/event/EventContainer';
@@ -10,7 +10,7 @@ import { ReviewContainer, ReviewCreateModal } from '@/components/review';
 import { SpotCard } from '@/components/spot';
 import { getSpotEvents } from '@/features/events/service';
 import { getSpotReviews } from '@/features/reviews';
-import { getSpot } from '@/features/spots';
+import { getSpotFromSlug } from '@/features/spots';
 import { Locale } from '@/i18n';
 import { getFirstItem } from '@/lib';
 import { getDictionary } from '@/lib/get-dictionary';
@@ -30,7 +30,7 @@ export default async function Page({
   const supabase = createClient();
   const dictionary = await getDictionary(params.lang);
 
-  const { spot } = await getSpot({
+  const { spot } = await getSpotFromSlug({
     client: supabase,
     slug: slugFormatted,
   });

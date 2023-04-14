@@ -1,14 +1,14 @@
 import {
-  Button,
-  Flex,
-  FloatingPanel,
-  InputDate,
-  InputText,
-  Modal,
-  Text,
+    Button,
+    Flex,
+    FloatingPanel,
+    InputDate,
+    InputText,
+    Modal,
+    Text,
 } from '@/components/common';
 import { createEvent } from '@/features/events';
-import { GetSpotResponseSuccess, getSpot } from '@/features/spots';
+import { GetSpotResponseSuccess, getSpotFromSlug } from '@/features/spots';
 import { useToggle } from '@/hooks';
 import { logger } from '@/lib/logger';
 import { useRouter } from 'next/navigation';
@@ -177,7 +177,7 @@ export const EventCreateFloatingPanel = ({
               >
                 <SearchBar
                   onClickItem={async (spotSelected) => {
-                    const { spot } = await getSpot({
+                    const { spot } = await getSpotFromSlug({
                       client: supabase,
                       spotId: spotSelected.id as string,
                     });

@@ -11,11 +11,11 @@ import {
 import { formatDateString, getFirstItem } from '@/lib';
 import L from 'leaflet';
 import { debounce } from 'lodash';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { useMap } from 'react-leaflet';
-import { useColorScheme } from '../ColorSchemeProvider';
 import { useDictionary } from '../DictionaryProvider';
 import { useSupabase } from '../auth/SupabaseProvider';
 import { Card, Flex, Icon, InfoCard, Text } from '../common';
@@ -96,11 +96,11 @@ export const InputMaps = ({
   onSpotsFound,
 }: InputMapsProps) => {
   const dictionary = useDictionary();
-  const { colorScheme } = useColorScheme();
+  const { resolvedTheme } = useTheme();
   const { supabase } = useSupabase();
 
   const tileLayerUrl = useMemo(() => {
-    switch (colorScheme) {
+    switch (resolvedTheme) {
       case 'light':
         return 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
       case 'dark':
@@ -108,7 +108,7 @@ export const InputMaps = ({
       default:
         break;
     }
-  }, [colorScheme]);
+  }, [resolvedTheme]);
 
   const [location, setLocation] = useState({
     latitude: DEFAULT_LATITUDE,

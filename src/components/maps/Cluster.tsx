@@ -1,4 +1,4 @@
-import { ISpotExtanded } from '@/features/spots';
+import { ISpotExtended } from '@/features/spots';
 import L, { Marker, MarkerCluster } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useSearchParams } from 'next/navigation';
@@ -10,8 +10,8 @@ import { SpotCardSmall } from '../spot';
 import { LazyClusterGroup, LazyMarker } from './Lazy';
 import { Popup } from './Popup';
 export type TClusterProps = {
-  spots: ISpotExtanded[];
-  onMarkerClick?: (spot: ISpotExtanded) => void;
+  spots: ISpotExtended[];
+  onMarkerClick?: (spot: ISpotExtended) => void;
 };
 
 export const getMarkerIcon = (color?: string) => {
@@ -73,9 +73,9 @@ export const getClusterIcon = (cluster: MarkerCluster) => {
 };
 
 type TForkedLazyMarker = {
-  spot: ISpotExtanded;
+  spot: ISpotExtended;
   map: L.Map;
-  setActualSpot?: (spot: ISpotExtanded) => void;
+  setActualSpot?: (spot: ISpotExtended) => void;
 };
 
 const ForwardedLazyMarker = React.forwardRef<Marker, TForkedLazyMarker>(
@@ -154,7 +154,7 @@ export default function Cluster({ spots, onMarkerClick }: TClusterProps) {
 
         map.once('moveend', function () {
           const popup = L.popup({
-            offset: L.point(10, -3),
+            offset: L.point([0, -10]),
           })
             .setLatLng([
               marker.props.spot.location.latitude,
