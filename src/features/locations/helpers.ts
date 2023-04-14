@@ -2,7 +2,9 @@ import { toast } from 'react-toastify';
 import { COUNTRIES } from './constant';
 
 export const findCountryIdFromName = (name: string) => {
-  const country = COUNTRIES.find((country) => country.name === name);
+  const country = COUNTRIES.find(
+    (country) => country.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
+  );
   return country?.id;
 };
 

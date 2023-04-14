@@ -1,10 +1,12 @@
 import { logger } from '@/lib/logger';
 import { PostgrestError } from '@supabase/supabase-js';
+import { findCountryIdFromName } from '../locations';
 import {
   ISpotExtended,
   getSpotFromIdParams,
   getSpotFromSlugParams,
   insertSpotParams,
+  listSpotsFromLocationParams,
   listSpotsParams,
   spotsSearchWithBoundsParams,
 } from './types';
@@ -237,6 +239,36 @@ export const listSpotsSlugs = async ({ client }: listSpotsParams) => {
 
   return {
     slugs: allSlugs,
+    error,
+  };
+};
+
+export const listSpotsFromLocation = async ({
+  client,
+  country,
+  city,
+  limit = 100,
+  page = 0,
+}: listSpotsFromLocationParams) => {
+  logger.error(findCountryIdFromName(country || ''));
+  const { data: spots, error } = await client
+    .from('spot_extended_view')
+    .select(
+      `
+      *,
+      location(*)
+      `,
+    )
+    .eq('location.country', findCountryIdFromName(country))
+    .order('created_at', { ascending: false })
+    .range(page * limit, (page + 1) * limit - 1);
+
+  if (error) {
+    logger.error(error);
+  }
+
+  return {
+    spots: spots as unknown as ISpotExtended[],
     error,
   };
 };

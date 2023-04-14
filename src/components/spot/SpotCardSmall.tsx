@@ -23,7 +23,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
   const [actualSpot, setActualSpot] = useAtom(actualSpotAtom);
 
   return (
-    <Card className="w-full h-full dark:bg-dark-300">
+    <Card className="relative w-full h-full dark:bg-dark-300">
       <Flex
         fullSize
         direction={orientation === 'vertical' ? 'column' : 'row'}
@@ -57,7 +57,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
               verticalAlign="center"
               horizontalAlign="center"
               style={{
-                height: 100,
+                minHeight: 100,
               }}
               className={'bg-white-300 dark:bg-dark-200 rounded-[5px]'}
             >
@@ -87,13 +87,12 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
           )}
         </Flex>
         <Flex
-          fullSize
           direction={'column'}
           verticalAlign="center"
           gap={0}
           className={`${
             orientation === 'vertical' ? 'divide-y' : 'divide-x'
-          }  divide-white-300 dark:divide-gray-600`}
+          }  divide-white-300 dark:divide-gray-600 w-full rounded-t-md`}
         >
           <Flex
             fullSize
@@ -120,7 +119,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
             direction="row"
             verticalAlign="center"
             horizontalAlign="stretch"
-            className="px-2 py-1"
+            className="px-2 py-2"
           >
             {spot.type && (
               <Tag
