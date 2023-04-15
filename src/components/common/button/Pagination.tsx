@@ -25,13 +25,29 @@ const Pagination: React.FC<PaginationProps> = ({ count, batchSize }) => {
 
   const pageNumbers = useMemo(() => {
     const numbers = [];
-    for (let i = 1; i <= totalPages; i++) {
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+
+    // Handle cases with less than 5 pages
+    if (totalPages <= 5) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      // Adjust for cases where the first few or last few pages are shown
+      if (currentPage <= 3) {
+        endPage = 5;
+      } else if (currentPage >= totalPages - 2) {
+        startPage = totalPages - 4;
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
       numbers.push(
         <Link key={i} href={updateQueryParam('page', i.toString())}>
           <Text
             variant="caption"
             className={`cursor-pointer ${
-              currentPage === i ? 'font-bold text-brand-300' : ''
+              currentPage === i ? 'opacity-100 text-brand-500' : 'opacity-20'
             }`}
             weight={currentPage === i ? 500 : 400}
           >
@@ -51,19 +67,23 @@ const Pagination: React.FC<PaginationProps> = ({ count, batchSize }) => {
       horizontalAlign="stretch"
       gap={4}
     >
-      <Link
-        href={updateQueryParam(
-          'page',
-          (currentPage > 1 ? currentPage - 1 : 1).toString(),
-        )}
-      >
-        <Text
-          variant="caption"
-          className={`cursor-pointer ${currentPage === 1 ? 'opacity-50' : ''}`}
+      <Flex className="w-1/3" verticalAlign="top">
+        <Link
+          href={updateQueryParam(
+            'page',
+            (currentPage > 1 ? currentPage - 1 : 1).toString(),
+          )}
         >
-          Previous
-        </Text>
-      </Link>
+          <Text
+            variant="caption"
+            className={`cursor-pointer ${
+              currentPage === 1 ? 'opacity-50' : ''
+            }`}
+          >
+            Previous
+          </Text>
+        </Link>
+      </Flex>
 
       <Flex
         direction="row"
@@ -74,17 +94,19 @@ const Pagination: React.FC<PaginationProps> = ({ count, batchSize }) => {
         {pageNumbers}
       </Flex>
 
-      {currentPage < totalPages ? (
-        <Link href={updateQueryParam('page', (currentPage + 1).toString())}>
-          <Text variant="caption" className={`cursor-pointer`}>
+      <Flex className="w-1/3" verticalAlign="bottom">
+        {currentPage < totalPages ? (
+          <Link href={updateQueryParam('page', (currentPage + 1).toString())}>
+            <Text variant="caption" className={`cursor-pointer`}>
+              Next
+            </Text>
+          </Link>
+        ) : (
+          <Text variant="caption" className={`opacity-50`}>
             Next
           </Text>
-        </Link>
-      ) : (
-        <Text variant="caption" className={`opacity-50`}>
-          Next
-        </Text>
-      )}
+        )}
+      </Flex>
     </Flex>
   );
 };
