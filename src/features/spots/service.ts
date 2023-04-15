@@ -1,6 +1,5 @@
 import { logger } from '@/lib/logger';
 import { PostgrestError } from '@supabase/supabase-js';
-import { findCountryIdFromName } from '../locations';
 import {
   ISpotExtended,
   getSpotFromIdParams,
@@ -248,27 +247,31 @@ export const listSpotsFromLocation = async ({
   country,
   city,
   limit = 100,
-  page = 0,
+  page = 1,
 }: listSpotsFromLocationParams) => {
-  logger.error(findCountryIdFromName(country || ''));
-  const { data: spots, error } = await client
+  const slug = `/spot/${[country, city].filter(Boolean).join('/')}`;
+
+  const {
+    data: spots,
+    error,
+    count,
+  } = await client
     .from('spot_extended_view')
     .select(
       `
-      *,
-      location(*)
-      `,
+        *,
+        location(*)
+        `,
+      { count: 'exact', head: false },
     )
-    .eq('location.country', findCountryIdFromName(country))
-    .order('created_at', { ascending: false })
-    .range(page * limit, (page + 1) * limit - 1);
+    .ilike('slug', `%${slug}%`)
+    .range((page - 1) * limit, page * limit - 1);
 
-  if (error) {
-    logger.error(error);
-  }
+  logger.info(`Found ${count} spots for ${slug}`);
 
   return {
     spots: spots as unknown as ISpotExtended[],
+    count,
     error,
   };
 };

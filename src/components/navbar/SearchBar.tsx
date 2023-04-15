@@ -107,12 +107,14 @@ export const SearchBar = ({
                     setFocus={setFocus}
                     onClickText={() => {
                       setFocus(false);
+                      setIsSearching(false);
                       onClickItem && onClickItem(spot);
                     }}
                     onClickMaps={(e) => {
                       e.stopPropagation();
                       if (showMapLink) {
                         setFocus(false);
+                        setIsSearching(false);
                         router.push(`/maps?spotId=${spot.id}`);
                       }
                     }}
