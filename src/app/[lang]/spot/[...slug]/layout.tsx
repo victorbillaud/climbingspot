@@ -15,7 +15,7 @@ export default function RootLayout({
         direction="column"
         verticalAlign="center"
         horizontalAlign="stretch"
-        className="overflow-x-hidden pt-10"
+        className="overflow-x-hidden"
       >
         {children}
         <Footer />
