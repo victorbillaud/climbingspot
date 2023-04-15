@@ -58,6 +58,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
               horizontalAlign="center"
               style={{
                 minHeight: 100,
+                maxHeight: 200,
               }}
               className={'bg-white-300 dark:bg-dark-200 rounded-[5px]'}
             >
