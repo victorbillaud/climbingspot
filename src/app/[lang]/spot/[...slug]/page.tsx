@@ -31,11 +31,11 @@ export default async function Page({
     <Flex
       fullSize
       verticalAlign="center"
-      horizontalAlign="left"
-      className="sm md:w-11/12 lg:w-5/6 py-4"
+      horizontalAlign="stretch"
+      className="overflow-y-auto sm md:w-11/12 lg:w-5/6 py-4 px-3 md:px-3"
       gap={0}
     >
-      <Flex verticalAlign="top" className="w-full h-16">
+      <Flex verticalAlign="top" className="w-full py-3">
         <Text variant="subtitle" className="font-bold">
           Spots in {slug[1] || slug[0]}
         </Text>
@@ -44,10 +44,9 @@ export default async function Page({
         </Text>
       </Flex>
       <Flex
-        fullSize
         verticalAlign="center"
         horizontalAlign="center"
-        className="h-full overflow-y-auto py-3 pt-0"
+        className="w-full py-3 pt-0"
         gap={8}
       >
         {spots && spots.length > 0 ? (
