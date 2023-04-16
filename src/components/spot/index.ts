@@ -1,5 +1,6 @@
 'use client';
 
+export * from './SearchBar';
 export * from './SpotCard';
 export * from './SpotCardSmall';
 export * from './SpotCreationPanel';

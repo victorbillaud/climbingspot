@@ -7,8 +7,6 @@ import { INavIconProps } from './types';
 export const NavIcon = (props: INavIconProps) => {
   const pathname = usePathname();
 
-  console.log(pathname?.split('/'));
-
   return (
     <Link href={props.to} className={`relative flex h-min p-1`}>
       {props.userImage ? (
