@@ -1,8 +1,8 @@
 import {
-    CustomImage,
-    Flex,
-    ImageCarouselController,
-    Text,
+  CustomImage,
+  Flex,
+  ImageCarouselController,
+  Text,
 } from '@/components/common';
 import { EventCreateFloatingPanel } from '@/components/event';
 import { EventContainer } from '@/components/event/EventContainer';
@@ -15,17 +15,54 @@ import { Locale } from '@/i18n';
 import { getFirstItem } from '@/lib';
 import { getDictionary } from '@/lib/get-dictionary';
 import { createClient } from '@/lib/supabase/server';
+import { Metadata } from 'next';
 
-export default async function Page({
-  params,
-}: {
+type Props = {
   params: {
     lang: Locale;
     country: string;
     city: string;
     slug: string;
   };
-}) {
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const slugFormatted = `/spot/${params.country}/${params.city}/${params.slug}`;
+  const supabase = createClient();
+
+  const { spot } = await getSpotFromSlug({
+    client: supabase,
+    slug: slugFormatted,
+  });
+
+  return {
+    title: `${spot?.name} - ClimbingSpot`,
+    description: `Unlock the thrill of climbing at ${spot?.name} in ${spot?.location.city}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${spot?.location.city}'s climbing scene and boost your adventure at ${spot?.name} today!`,
+    openGraph: {
+      images: spot?.image?.map((image) => {
+        return {
+          url: image,
+          alt: spot.name || '',
+        };
+      }),
+    },
+    robots: {
+      index: false,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: true,
+        follow: false,
+        noimageindex: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    category: 'climbing',
+  };
+}
+
+export default async function Page({ params }: Props) {
   const slugFormatted = `/spot/${params.country}/${params.city}/${params.slug}`;
   const supabase = createClient();
   const dictionary = await getDictionary(params.lang);

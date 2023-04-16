@@ -1,11 +1,11 @@
 import {
-    Button,
-    Flex,
-    FloatingPanel,
-    InputDate,
-    InputText,
-    Modal,
-    Text,
+  Button,
+  Flex,
+  FloatingPanel,
+  InputDate,
+  InputText,
+  Modal,
+  Text,
 } from '@/components/common';
 import { createEvent } from '@/features/events';
 import { GetSpotResponseSuccess, getSpotFromSlug } from '@/features/spots';
@@ -135,7 +135,7 @@ export const EventCreateFloatingPanel = ({
           className="divide-y overflow-y-auto divide-white-300 dark:divide-dark-300"
         >
           <Flex
-            className="w-full p-6"
+            className="w-full p-3"
             direction="column"
             horizontalAlign="left"
             verticalAlign="top"
@@ -199,7 +199,7 @@ export const EventCreateFloatingPanel = ({
             )}
           </Flex>
           <Flex
-            className="w-full p-6"
+            className="w-full p-3"
             direction="column"
             horizontalAlign="left"
             gap={6}
@@ -228,7 +228,7 @@ export const EventCreateFloatingPanel = ({
           </Flex>
           <Flex
             fullSize
-            className="p-6"
+            className="p-3"
             direction="column"
             horizontalAlign="left"
             verticalAlign="top"

@@ -1,3 +1,5 @@
+'use client';
+
 import { isSearchingAtom } from '@/hooks/jotai/maps/atom';
 import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';

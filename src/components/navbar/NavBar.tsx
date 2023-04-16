@@ -87,6 +87,17 @@ export const NavBar: React.FC<INavBarProps> = () => {
         >
           <Flex className="p-2">
             <Button
+              text="Spots"
+              className="w-full"
+              variant="primary"
+              icon="flex"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                router.push('/spot');
+              }}
+            />
+
+            <Button
               text="Maps"
               className="w-full"
               variant="primary"
@@ -116,6 +127,9 @@ export const NavBar: React.FC<INavBarProps> = () => {
         horizontalAlign="right"
         gap={0}
       >
+        <Flex className="h-full px-3">
+          <NavIcon icon="flex" label="spots" to="/spot" />
+        </Flex>
         <Flex className="h-full px-3">
           <NavIcon icon="map" label="map" to="/maps" />
         </Flex>

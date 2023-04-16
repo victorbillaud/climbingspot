@@ -1,5 +1,4 @@
 import { Flex } from '@/components/common';
-import Footer from '@/components/footer/Footer';
 import React, { Suspense } from 'react';
 import Loading from './loading';
 
@@ -18,7 +17,6 @@ export default function RootLayout({
         className="overflow-x-hidden pt-10"
       >
         {children}
-        <Footer />
       </Flex>
     </Suspense>
   );

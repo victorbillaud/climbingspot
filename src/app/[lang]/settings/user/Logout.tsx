@@ -23,6 +23,11 @@ export const Logout = () => {
         variant="primary"
         onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
       />
+      <Button
+        text="System Theme"
+        variant="primary"
+        onClick={() => setTheme('system')}
+      />
       <Button text="Logout" variant="alert" onClick={handleLogout} />
     </Flex>
   );

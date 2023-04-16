@@ -11,6 +11,7 @@ import Cross from './svg/cross';
 import Eye from './svg/eye';
 import EyeClosed from './svg/eye-closed';
 import File from './svg/file';
+import Flex from './svg/flex';
 import Github from './svg/github';
 import GlobeAlt from './svg/globe-alt';
 import Google from './svg/google';
@@ -64,4 +65,5 @@ export const icons = {
   file: File,
   plus: Plus,
   check: Check,
+  flex: Flex,
 };

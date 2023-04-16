@@ -1,5 +1,7 @@
+import { IconNames } from '../common';
+
 export interface INavIconProps {
-  icon: string;
+  icon: IconNames;
   label: string;
   to: string;
   userImage?: string;
