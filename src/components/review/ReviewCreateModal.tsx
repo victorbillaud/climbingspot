@@ -1,6 +1,7 @@
 import { Button, InputText, InputTextArea, Modal } from '@/components/common';
 import { useToggle } from '@/hooks';
 import { logger } from '@/lib/logger';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSupabase } from '../auth/SupabaseProvider';
@@ -13,7 +14,7 @@ export const ReviewCreateModal = ({
   onConfirm,
 }: TReviewCreateModalProps) => {
   const { supabase, user } = useSupabase();
-
+  const router = useRouter();
   const [creatingModalOpen, openCreatingModal, closeCreatingModal] =
     useToggle(false);
 
@@ -65,6 +66,8 @@ export const ReviewCreateModal = ({
     });
 
     if (reviewCreated) {
+      toast.success('Review created');
+      router.refresh();
       onConfirm && onConfirm(reviewCreated);
     }
   };
@@ -83,7 +86,7 @@ export const ReviewCreateModal = ({
           closeCreatingModal();
           onClose && onClose();
         }}
-        size="large"
+        size="medium"
         onConfirm={async () => {
           await handleSubmit();
           closeCreatingModal();

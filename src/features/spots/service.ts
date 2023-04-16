@@ -265,6 +265,7 @@ export const listSpotsFromLocation = async ({
       { count: 'exact', head: false },
     )
     .ilike('slug', `%${slug}%`)
+    .order('image', { ascending: false })
     .range((page - 1) * limit, page * limit - 1);
 
   logger.info(`Found ${count} spots for ${slug}`);

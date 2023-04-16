@@ -1,14 +1,16 @@
 import { Icon } from '@/components/common/icon';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { INavIconProps } from './types';
 
 export const NavIcon = (props: INavIconProps) => {
+  const pathname = usePathname();
+
+  console.log(pathname?.split('/'));
+
   return (
-    <Link
-      href={props.to}
-      className="flex h-min p-1 hover:bg-white-300 hover:dark:bg-dark-200 rounded-[8px] cursor-pointer transition-colors duration-500"
-    >
+    <Link href={props.to} className={`relative flex h-min p-1`}>
       {props.userImage ? (
         <Image
           src={props.userImage}
@@ -20,8 +22,17 @@ export const NavIcon = (props: INavIconProps) => {
       ) : (
         <Icon
           name={props.icon}
-          color={'text-dark-400 dark:text-white-300'}
+          color={
+            `/${pathname?.split('/')[2]}` === props.to
+              ? 'text-brand-500'
+              : 'text-dark-400 dark:text-white-300 hover:text-brand-500 transition-colors duration-200'
+          }
           scale={1.2}
+        />
+      )}
+      {`/${pathname?.split('/')[2]}` === props.to && (
+        <div
+          className={`absolute w-[5px] h-[5px] rounded-full bg-brand-500 bottom-0 right-1/2 transform translate-x-1/2`}
         />
       )}
     </Link>

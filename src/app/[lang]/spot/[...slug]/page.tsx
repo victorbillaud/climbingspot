@@ -32,7 +32,7 @@ export default async function Page({
       fullSize
       verticalAlign="center"
       horizontalAlign="stretch"
-      className="overflow-y-auto sm md:w-11/12 lg:w-5/6 py-4 px-3 md:px-3"
+      className="sm md:w-11/12 lg:w-5/6 py-4 px-3 md:px-3"
       gap={0}
     >
       <Flex verticalAlign="top" className="w-full py-3">
@@ -50,7 +50,7 @@ export default async function Page({
         gap={8}
       >
         {spots && spots.length > 0 ? (
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {spots.map((spot) => (
               <SpotCardSmall key={spot.id} spot={spot} />
             ))}
