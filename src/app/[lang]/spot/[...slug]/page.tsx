@@ -1,7 +1,7 @@
 import { Flex, Text } from '@/components/common';
 import Pagination from '@/components/common/button/Pagination';
 import { SpotCardSmall } from '@/components/spot';
-import { listSpotsFromLocation } from '@/features/spots';
+import { listSpotsFromSlug } from '@/features/spots';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function Page({
@@ -19,7 +19,7 @@ export default async function Page({
   const supabase = createClient();
   const { slug } = params;
 
-  const { spots, count } = await listSpotsFromLocation({
+  const { spots, count } = await listSpotsFromSlug({
     client: supabase,
     country: slug[0],
     city: slug[1],

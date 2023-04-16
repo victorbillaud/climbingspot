@@ -5,8 +5,9 @@ import {
   getSpotFromIdParams,
   getSpotFromSlugParams,
   insertSpotParams,
-  listSpotsFromLocationParams,
+  listSpotsFromLocationParams as listSpotsFromSlugParams,
   listSpotsParams,
+  searchSpotsParams,
   spotsSearchWithBoundsParams,
 } from './types';
 
@@ -242,13 +243,13 @@ export const listSpotsSlugs = async ({ client }: listSpotsParams) => {
   };
 };
 
-export const listSpotsFromLocation = async ({
+export const listSpotsFromSlug = async ({
   client,
   country,
   city,
   limit = 100,
   page = 1,
-}: listSpotsFromLocationParams) => {
+}: listSpotsFromSlugParams) => {
   const slug = `/spot/${[country, city].filter(Boolean).join('/')}`;
 
   const {
@@ -269,6 +270,44 @@ export const listSpotsFromLocation = async ({
     .range((page - 1) * limit, page * limit - 1);
 
   logger.info(`Found ${count} spots for ${slug}`);
+
+  return {
+    spots: spots as unknown as ISpotExtended[],
+    count,
+    error,
+  };
+};
+
+export const searchSpots = async ({
+  client,
+  spotName,
+  location,
+  difficulty,
+  limit = 20,
+  page = 1,
+}: searchSpotsParams) => {
+  if (difficulty?.indexOf('All') !== -1) {
+    difficulty = ['Easy', 'Medium', 'Hard'];
+  }
+
+  const {
+    data: spots,
+    error,
+    count,
+  } = await client
+    .from('spot_extended_view')
+    .select(
+      `
+        *,
+        location!inner(*)
+      `,
+      { count: 'exact', head: false },
+    )
+    .ilike('name', `%${spotName}%`)
+    .ilike('location.city', `%${location}%`)
+    .in('difficulty', difficulty || [])
+    .order('image', { ascending: false })
+    .range((page - 1) * limit, page * limit - 1);
 
   return {
     spots: spots as unknown as ISpotExtended[],
