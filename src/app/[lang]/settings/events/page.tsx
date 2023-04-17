@@ -30,9 +30,11 @@ export default async function Page() {
     <>
       <Flex
         className="w-full p-3 pb-0"
-        verticalAlign="bottom"
-        horizontalAlign="center"
+        direction="row"
+        verticalAlign="center"
+        horizontalAlign="stretch"
       >
+        <Text variant="subtitle">Manage my events</Text>
         <EventCreatePanel ssrSpots={spots} />
       </Flex>
       {events ? (
