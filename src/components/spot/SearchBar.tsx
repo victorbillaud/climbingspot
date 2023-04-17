@@ -46,23 +46,23 @@ export const SearchBar: React.FC<TSearchBarProps> = () => {
 
   return (
     <Flex className="w-full py-3" direction="column">
-      <Flex className="w-full py-3" direction="row">
+      <div className="flex flex-col md:flex-row w-full items-center justify-center gap-3 py-3">
         <InputText
           icon="loop"
           placeholder="Spot name"
-          className="w-1/3"
+          className="w-full md:w-1/3"
           value={spotForm.name}
           onChange={(e) => setSpotForm.name(e.target.value)}
         />
         <InputText
           icon="loop"
           placeholder="Location"
-          className="w-1/3"
+          className="w-full md:w-1/3"
           value={spotForm.location}
           onChange={(e) => setSpotForm.location(e.target.value)}
         />
         <Select
-          className="h-full w-1/6"
+          className="h-full w-full md:w-1/6"
           icon="chart"
           value={spotForm.difficulty}
           onChange={(e) => {
@@ -80,7 +80,7 @@ export const SearchBar: React.FC<TSearchBarProps> = () => {
             ),
           )}
         </Select>
-      </Flex>
+      </div>
       <Button
         variant="default"
         className="h-full"
