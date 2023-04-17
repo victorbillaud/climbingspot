@@ -1,5 +1,5 @@
 import { Flex, Icon, Text } from '@/components/common';
-import { SpotCreationPanel } from '@/components/spot/';
+import { SpotCreationPanel } from '@/components/spot/SpotCreationPanel';
 import { listCreatorSpots } from '@/features/spots';
 import { createClient } from '@/lib/supabase/server';
 import { SpotsTable } from './SpotsTable';

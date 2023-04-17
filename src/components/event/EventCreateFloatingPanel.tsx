@@ -8,6 +8,7 @@ import {
 } from '@/components/common';
 import { createEvent } from '@/features/events';
 import { GetSpotResponseSuccess } from '@/features/spots';
+import useCustomForm from '@/features/spots/hooks';
 import { useToggle } from '@/hooks';
 import { logger } from '@/lib/logger';
 import { useRouter } from 'next/navigation';
@@ -18,6 +19,9 @@ import { SpotCardSmall, SpotSearchModal } from '../spot';
 import { TEventCreateModalProps, TEventInsert } from './types';
 
 export const EventCreateFloatingPanel = ({
+  initialEvent,
+  initialPanelState = false,
+  showButton = true,
   spot,
   ssrSpots,
   onClose,
@@ -28,13 +32,21 @@ export const EventCreateFloatingPanel = ({
   const [spotSelected, setSpotSelected] =
     useState<GetSpotResponseSuccess | null>(spot || null);
 
-  const [panelOpen, openPanel, closePanel] = useToggle(false);
+  const [panelOpen, openPanel, closePanel] = useToggle(initialPanelState);
   const [searchModalOpen, openSearchModal, closeSearchModal] = useToggle(false);
 
-  const [name, setName] = useState('');
-  const [startAt, setStartAt] = useState('');
-  const [endAt, setEndAt] = useState('');
-  const [numberOfPlaces, setNumberOfPlaces] = useState(5);
+  const initialValues = initialEvent || {
+    name: '',
+    start_at: '',
+    end_at: '',
+    places: 5,
+    spot_id: spotSelected?.id || '',
+    creator_id: user?.id || '',
+  };
+
+  logger.info(initialValues);
+
+  const [formEvent, setFormEvent] = useCustomForm<TEventInsert>(initialValues);
 
   const handleCreateEvent = async (event: TEventInsert) => {
     const { event: eventCreated, error } = await createEvent({
@@ -64,33 +76,39 @@ export const EventCreateFloatingPanel = ({
       return;
     }
 
-    if (name === '') {
+    if (formEvent.name === '') {
       toast.error('Event name is required');
       return;
     }
 
-    if (startAt === '') {
+    if (formEvent.start_at === '') {
       toast.error('Start date is required');
       return;
     }
 
-    if (startAt && endAt && new Date(startAt) > new Date(endAt)) {
+    if (
+      formEvent.start_at &&
+      formEvent.end_at &&
+      new Date(formEvent.start_at) > new Date(formEvent.end_at)
+    ) {
       toast.error('Start date must be before end date');
       return;
     }
 
-    if (startAt && new Date(startAt) < new Date()) {
+    if (formEvent.end_at && new Date(formEvent.end_at) < new Date()) {
       toast.error('Start date must be in the future');
       return;
     }
 
     const eventCreated = await handleCreateEvent({
-      spot_id: spotSelected.id as string,
-      creator_id: user.id,
-      name,
-      start_at: new Date(startAt).toISOString(),
-      end_at: endAt ? new Date(endAt).toISOString() : null,
-      places: numberOfPlaces,
+      spot_id: formEvent.spot_id,
+      creator_id: formEvent.creator_id,
+      name: formEvent.name,
+      start_at: new Date(formEvent.start_at).toISOString(),
+      end_at: formEvent.end_at
+        ? new Date(formEvent.end_at).toISOString()
+        : null,
+      places: formEvent.places,
     });
 
     if (eventCreated) {
@@ -101,11 +119,13 @@ export const EventCreateFloatingPanel = ({
 
   return (
     <>
-      <Button
-        text="Create a new event"
-        variant="default"
-        onClick={() => openPanel()}
-      />
+      {showButton && (
+        <Button
+          text="Create a new event"
+          variant="default"
+          onClick={() => openPanel()}
+        />
+      )}
       {panelOpen && (
         <FloatingPanel
           isOpen={panelOpen}
@@ -197,22 +217,25 @@ export const EventCreateFloatingPanel = ({
               <InputText
                 labelText="Event name"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={formEvent.name}
+                onChange={(e) => setFormEvent.name(e.target.value)}
                 className="w-full"
               />
               <InputText
                 labelText="Number of participants"
                 type="number"
-                value={numberOfPlaces}
-                onChange={(e) => setNumberOfPlaces(Number(e.target.value))}
+                value={formEvent.places}
+                onChange={(e) =>
+                  setFormEvent.places &&
+                  setFormEvent.places(Number(e.target.value))
+                }
                 className="w-full"
               />
               <InputDate
                 labelText="Start date"
                 type="datetime-local"
-                value={startAt}
-                onChange={(e) => setStartAt(e.target.value)}
+                value={formEvent.start_at}
+                onChange={(e) => setFormEvent.start_at(e.target.value)}
                 className="w-full"
               />
             </Flex>
@@ -230,8 +253,10 @@ export const EventCreateFloatingPanel = ({
               <InputDate
                 labelText="End date"
                 type="datetime-local"
-                value={endAt}
-                onChange={(e) => setEndAt(e.target.value)}
+                value={formEvent.end_at}
+                onChange={(e) =>
+                  setFormEvent.end_at && setFormEvent.end_at(e.target.value)
+                }
                 className="w-full"
               />
             </Flex>

@@ -2,7 +2,6 @@ import { Flex, Icon, Text } from '@/components/common';
 import { EventCreateFloatingPanel } from '@/components/event';
 import { listEventsFromCreator } from '@/features/events';
 import { listMapSpots } from '@/features/spots';
-import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/server';
 import { EventsTable } from './EventsTable';
 
@@ -27,8 +26,6 @@ export default async function Page() {
     client: supabase,
   });
 
-  logger.debug(JSON.stringify(events, null, 2));
-
   return (
     <>
       <Flex
@@ -40,7 +37,7 @@ export default async function Page() {
       </Flex>
       {events ? (
         events.length > 0 ? (
-          <EventsTable events={events} />
+          <EventsTable events={events} ssrSpots={spots} />
         ) : (
           <Flex fullSize verticalAlign="center" horizontalAlign="center">
             <Text variant="caption">No spots found.</Text>

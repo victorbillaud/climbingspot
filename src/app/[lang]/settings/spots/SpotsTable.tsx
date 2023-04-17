@@ -2,11 +2,11 @@
 
 import { useSupabase } from '@/components/auth/SupabaseProvider';
 import { Flex, Table } from '@/components/common';
-import { SpotCreationPanel } from '@/components/spot';
+import { SpotCreationPanel } from '@/components/spot/SpotCreationPanel';
 import {
-    CreatorsSpotsResponseSuccess,
-    ISpotExtended,
-    getSpotFromId
+  CreatorsSpotsResponseSuccess,
+  ISpotExtended,
+  getSpotFromId,
 } from '@/features/spots';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';

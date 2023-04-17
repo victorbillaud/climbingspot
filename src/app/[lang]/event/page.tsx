@@ -22,9 +22,11 @@ export default async function Page() {
 
   return (
     <Flex className="w-4/6 p-2" direction="row">
-      {events.map((event) => (
-        <EventCard event={event} key={event.id} />
-      ))}
+      <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {events.map((event) => (
+          <EventCard event={event} key={event.id} />
+        ))}
+      </div>
     </Flex>
   );
 }
