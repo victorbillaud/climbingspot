@@ -4,7 +4,7 @@ import { ITextProps, textConfig } from './index';
 export const Text: FunctionComponent<ITextProps> = ({
   children,
   weight,
-  variant: variant,
+  variant,
   color,
   className,
   ...props
@@ -23,12 +23,68 @@ export const Text: FunctionComponent<ITextProps> = ({
   };
 
   const weightVariantClass = {
+    h1: 'font-bold',
+    h2: 'font-bold',
+    h3: 'font-bold',
+    h4: 'font-bold',
     title: 'font-semibold',
     subtitle: 'font-semibold',
     body: 'font-normal',
     caption: 'font-normal',
     overline: 'font-normal',
   };
+
+  if (variant === 'h1') {
+    return (
+      <h1
+        className={`${color ? color : colorClass}  ${textConfig[variant]} ${
+          weight ? weightClass[weight] : weightVariantClass[variant]
+        } ${className}`}
+        {...props}
+      >
+        {children}
+      </h1>
+    );
+  }
+
+  if (variant === 'h2') {
+    return (
+      <h2
+        className={`${color ? color : colorClass}  ${textConfig[variant]} ${
+          weight ? weightClass[weight] : weightVariantClass[variant]
+        } ${className}`}
+        {...props}
+      >
+        {children}
+      </h2>
+    );
+  }
+
+  if (variant === 'h3') {
+    return (
+      <h3
+        className={`${color ? color : colorClass}  ${textConfig[variant]} ${
+          weight ? weightClass[weight] : weightVariantClass[variant]
+        } ${className}`}
+        {...props}
+      >
+        {children}
+      </h3>
+    );
+  }
+
+  if (variant === 'h4') {
+    return (
+      <h4
+        className={`${color ? color : colorClass}  ${textConfig[variant]} ${
+          weight ? weightClass[weight] : weightVariantClass[variant]
+        } ${className}`}
+        {...props}
+      >
+        {children}
+      </h4>
+    );
+  }
 
   return (
     <div
