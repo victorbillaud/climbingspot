@@ -17,7 +17,7 @@ export type EventInvitationInsert =
 export type TEventCreateModalProps = {
   showButton?: boolean;
   initialPanelState?: boolean;
-  initialEvent?: EventInsert;
+  initialEvent?: TEventInsert;
   spot?: GetSpotResponseSuccess;
   ssrSpots?: ISpotExtended[];
   onClose?: () => void;
@@ -25,4 +25,15 @@ export type TEventCreateModalProps = {
   onConfirm?: (event: Event) => void;
 };
 
+export type TEventUpdateModalProps = {
+  showButton?: boolean;
+  initialPanelState?: boolean;
+  initialEvent: TEventUpdate;
+  spot: GetSpotResponseSuccess;
+  ssrSpots?: ISpotExtended[];
+  onClose?: () => void;
+  onConfirm?: (event: Event) => void;
+};
+
 export type TEventInsert = Database['public']['Tables']['events']['Insert'];
+export type TEventUpdate = Database['public']['Tables']['events']['Update'];

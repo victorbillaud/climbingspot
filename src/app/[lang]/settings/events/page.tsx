@@ -1,5 +1,5 @@
 import { Flex, Icon, Text } from '@/components/common';
-import { EventCreateFloatingPanel } from '@/components/event';
+import { EventCreatePanel } from '@/components/event';
 import { listEventsFromCreator } from '@/features/events';
 import { listMapSpots } from '@/features/spots';
 import { createClient } from '@/lib/supabase/server';
@@ -33,7 +33,7 @@ export default async function Page() {
         verticalAlign="bottom"
         horizontalAlign="center"
       >
-        <EventCreateFloatingPanel ssrSpots={spots} />
+        <EventCreatePanel ssrSpots={spots} />
       </Flex>
       {events ? (
         events.length > 0 ? (

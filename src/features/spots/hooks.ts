@@ -3,15 +3,15 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-type CustomFormValues<T> = {
+export type CustomFormValues<T> = {
   [K in keyof T]: T[K];
 };
 
-type CustomFormSetters<T> = {
+export type CustomFormSetters<T> = {
   [K in keyof T]: React.Dispatch<React.SetStateAction<T[K]>>;
 };
 
-type CustomFormErrors<T> = {
+export type CustomFormErrors<T> = {
   [K in keyof T]: string;
 };
 

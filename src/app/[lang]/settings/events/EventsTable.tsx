@@ -1,7 +1,7 @@
 'use client';
 
 import { Flex, Table } from '@/components/common';
-import { EventCreateFloatingPanel, TEventInsert } from '@/components/event';
+import { EventUpdatePanel, TEventInsert } from '@/components/event';
 import { ListEventsFromCreatorResponseSuccess } from '@/features/events';
 import { GetSpotResponseSuccess, ISpotExtended } from '@/features/spots';
 import { useState } from 'react';
@@ -17,8 +17,10 @@ export const EventsTable = ({ events, ssrSpots }: TEventsTableProps) => {
     useState<GetSpotResponseSuccess | null>(null);
 
   const handleUpdateEvent = (event: TEventInsert) => {
+    console.log(event);
     const spot = ssrSpots?.find((spot) => spot.id === event.spot_id);
     if (spot) {
+      console.log(spot);
       setSpotAssociated(spot);
     }
 
@@ -34,7 +36,7 @@ export const EventsTable = ({ events, ssrSpots }: TEventsTableProps) => {
     >
       <Table rows={events} onRowClick={handleUpdateEvent} />
       {eventToUpdate && (
-        <EventCreateFloatingPanel
+        <EventUpdatePanel
           showButton={false}
           initialPanelState={true}
           ssrSpots={ssrSpots}
@@ -51,6 +53,7 @@ export const EventsTable = ({ events, ssrSpots }: TEventsTableProps) => {
           }}
           spot={spotAssociated}
           onClose={() => setEventToUpdate(null)}
+          onConfirm={() => setEventToUpdate(null)}
         />
       )}
     </Flex>

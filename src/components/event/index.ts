@@ -1,6 +1,7 @@
 'use client';
 
 export * from './EventCard';
-export * from './EventCreateFloatingPanel';
+export * from './EventCreatePanel';
+export * from './EventUpdatePanel';
 export * from './types';
 

@@ -4,7 +4,7 @@ import {
   ImageCarouselController,
   Text,
 } from '@/components/common';
-import { EventCreateFloatingPanel } from '@/components/event';
+import { EventCreatePanel } from '@/components/event';
 import { EventContainer } from '@/components/event/EventContainer';
 import { ReviewContainer, ReviewCreateModal } from '@/components/review';
 import { SpotCard } from '@/components/spot';
@@ -142,7 +142,7 @@ export default async function Page({ params }: Props) {
               <span className="ml-1 opacity-70">({events?.length})</span>{' '}
             </Text>
             {session ? (
-              <EventCreateFloatingPanel spot={spot} />
+              <EventCreatePanel spot={spot} />
             ) : (
               <Text variant="body" className="opacity-60">
                 {dictionary.events.login_to_create}
