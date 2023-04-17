@@ -88,6 +88,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
           )}
         </Flex>
         <Flex
+          fullSize
           direction={'column'}
           verticalAlign="center"
           gap={0}
@@ -116,11 +117,10 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
             </Flex>
           </Flex>
           <Flex
-            fullSize
             direction="row"
             verticalAlign="center"
             horizontalAlign="stretch"
-            className="px-2 py-2"
+            className="w-full px-2 py-2"
           >
             {spot.type && (
               <Tag

@@ -1,10 +1,10 @@
 import {
-    CustomImage,
-    Flex,
-    ImageCarouselController,
-    Text,
+  CustomImage,
+  Flex,
+  ImageCarouselController,
+  Text,
 } from '@/components/common';
-import { EventCreateFloatingPanel } from '@/components/event';
+import { EventCreatePanel } from '@/components/event';
 import { EventContainer } from '@/components/event/EventContainer';
 import { ReviewContainer, ReviewCreateModal } from '@/components/review';
 import { SpotCard } from '@/components/spot';
@@ -15,17 +15,54 @@ import { Locale } from '@/i18n';
 import { getFirstItem } from '@/lib';
 import { getDictionary } from '@/lib/get-dictionary';
 import { createClient } from '@/lib/supabase/server';
+import { Metadata } from 'next';
 
-export default async function Page({
-  params,
-}: {
+type Props = {
   params: {
     lang: Locale;
     country: string;
     city: string;
     slug: string;
   };
-}) {
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const slugFormatted = `/spot/${params.country}/${params.city}/${params.slug}`;
+  const supabase = createClient();
+
+  const { spot } = await getSpotFromSlug({
+    client: supabase,
+    slug: slugFormatted,
+  });
+
+  return {
+    title: `${spot?.name} - ClimbingSpot`,
+    description: `Unlock the thrill of climbing at ${spot?.name} in ${spot?.location.city}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${spot?.location.city}'s climbing scene and boost your adventure at ${spot?.name} today!`,
+    openGraph: {
+      images: spot?.image?.map((image) => {
+        return {
+          url: image,
+          alt: spot.name || '',
+        };
+      }),
+    },
+    robots: {
+      index: false,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: true,
+        follow: false,
+        noimageindex: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    category: 'climbing',
+  };
+}
+
+export default async function Page({ params }: Props) {
   const slugFormatted = `/spot/${params.country}/${params.city}/${params.slug}`;
   const supabase = createClient();
   const dictionary = await getDictionary(params.lang);
@@ -70,6 +107,7 @@ export default async function Page({
                   width: 400,
                 };
               })}
+              height={500}
             />
           ) : spot.image && spot.image.length == 1 ? (
             <CustomImage
@@ -77,7 +115,7 @@ export default async function Page({
               alt={spot.name || ''}
               loader={true}
               width={400}
-              height={300}
+              height={400}
               fullWidth={true}
               style={{
                 objectFit: 'cover',
@@ -105,7 +143,7 @@ export default async function Page({
               <span className="ml-1 opacity-70">({events?.length})</span>{' '}
             </Text>
             {session ? (
-              <EventCreateFloatingPanel spot={spot} />
+              <EventCreatePanel spot={spot} />
             ) : (
               <Text variant="body" className="opacity-60">
                 {dictionary.events.login_to_create}

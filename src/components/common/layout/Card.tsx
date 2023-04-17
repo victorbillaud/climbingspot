@@ -12,7 +12,7 @@ export const Card = React.forwardRef<HTMLDivElement, ILayoutProps>(
         {children}
       </div>
     );
-  }
+  },
 );
 
 Card.displayName = 'Card';

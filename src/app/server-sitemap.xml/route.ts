@@ -9,18 +9,18 @@ export async function GET(request: Request) {
   });
 
   const spotsPaths: ISitemapField[] = slugs.map((slug) => ({
-    loc: `https://climbingspot.eu${slug}`,
+    loc: `https://www.climbingspot.eu${slug}`,
     lastmod: new Date().toISOString(),
     changefreq: 'daily',
     priority: 0.7,
     alternateRefs: [
       {
         hreflang: 'en',
-        href: `https://climbingspot.eu/en${slug}`,
+        href: `https://www.climbingspot.eu/en${slug}`,
       },
       {
         hreflang: 'fr',
-        href: `https://climbingspot.eu/fr${slug}`,
+        href: `https://www.climbingspot.eu/fr${slug}`,
       },
     ],
   }));
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
   const paths: ISitemapField[] = [];
 
   spotsPaths.forEach((spotPath) => {
-    const path = spotPath.loc.split('https://climbingspot.eu')[1];
+    const path = spotPath.loc.split('https://www.climbingspot.eu')[1];
     const pathArray = path.split('/');
     const country = pathArray[2];
     const city = pathArray[3];
@@ -37,35 +37,35 @@ export async function GET(request: Request) {
     const cityPath = `/spot/${country}/${city}`;
 
     paths.push({
-      loc: `https://climbingspot.eu${countryPath}`,
+      loc: `https://www.climbingspot.eu${countryPath}`,
       lastmod: new Date().toISOString(),
       changefreq: 'daily',
       priority: 0.7,
       alternateRefs: [
         {
           hreflang: 'en',
-          href: `https://climbingspot.eu/en${countryPath}`,
+          href: `https://www.climbingspot.eu/en${countryPath}`,
         },
         {
           hreflang: 'fr',
-          href: `https://climbingspot.eu/fr${countryPath}`,
+          href: `https://www.climbingspot.eu/fr${countryPath}`,
         },
       ],
     });
 
     paths.push({
-      loc: `https://climbingspot.eu${cityPath}`,
+      loc: `https://www.climbingspot.eu${cityPath}`,
       lastmod: new Date().toISOString(),
       changefreq: 'daily',
       priority: 0.7,
       alternateRefs: [
         {
           hreflang: 'en',
-          href: `https://climbingspot.eu/en${cityPath}`,
+          href: `https://www.climbingspot.eu/en${cityPath}`,
         },
         {
           hreflang: 'fr',
-          href: `https://climbingspot.eu/fr${cityPath}`,
+          href: `https://www.climbingspot.eu/fr${cityPath}`,
         },
       ],
     });

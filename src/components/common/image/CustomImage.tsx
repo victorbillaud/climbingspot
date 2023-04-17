@@ -8,6 +8,7 @@ type ImageProps = {
   fullWidth?: boolean;
   width: number;
   height: number;
+  priority?: boolean;
   rounded?: 'sm' | 'md' | 'lg' | 'full';
 };
 
@@ -20,6 +21,7 @@ export function CustomImage({
   fullWidth = false,
   width,
   height,
+  priority = false,
   // eslint-disable-next-line no-unused-vars
   placeholder,
   className,
@@ -44,6 +46,7 @@ export function CustomImage({
         src={src}
         alt={alt}
         fill={true}
+        priority={priority}
         placeholder={loader ? 'blur' : 'empty'}
         blurDataURL={`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=`}
         className={`w-full h-full absolute top-0 left-0 ${
