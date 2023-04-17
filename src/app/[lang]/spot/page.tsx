@@ -28,7 +28,7 @@ export default async function Page({
     client: supabase,
     spotName: searchParams.name || '',
     location: searchParams.location || '',
-    difficulty: searchParams.difficulty.split(',') || [],
+    difficulty: searchParams.difficulty?.split(',') || ['All'],
     limit: 12,
     page: searchParams.page || 1,
   });
@@ -69,6 +69,7 @@ export default async function Page({
           </Flex>
         </Flex>
       </Flex>
+
       <Flex className="w-full mt-[700px] z-50 p-6" direction="column" gap={0}>
         {spots && spots.length > 0 ? (
           <>
