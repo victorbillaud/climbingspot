@@ -136,7 +136,7 @@ export const SearchBar = ({
   );
 };
 
-const SpotListItems = ({
+export const SpotListItems = ({
   spot,
   setFocus,
   showMapLink = true,

@@ -1,6 +1,13 @@
 import { TEventInsert } from '@/components/event';
 import { createClient } from '@/lib/supabase/server';
-import { createEvent, getEvent, getSpotEvents, joinEvent } from './service';
+import {
+  createEvent,
+  getEvent,
+  getSpotEvents,
+  joinEvent,
+  listEvents,
+  listEventsFromCreator,
+} from './service';
 
 export type getEventParams = {
   client: ReturnType<typeof createClient>;
@@ -38,3 +45,26 @@ export type createEventParams = {
 type CreateEventResponse = Awaited<ReturnType<typeof createEvent>>;
 export type CreateEventResponseSuccess = CreateEventResponse['event'];
 export type CreateEventResponseError = CreateEventResponse['error'];
+
+export type listEventsParams = {
+  client: ReturnType<typeof createClient>;
+  limit?: number;
+  page?: number;
+};
+
+type ListEventsResponse = Awaited<ReturnType<typeof listEvents>>;
+export type ListEventsResponseSuccess = ListEventsResponse['events'];
+export type ListEventsResponseError = ListEventsResponse['error'];
+
+export type listEventsFromCreatorParams = {
+  client: ReturnType<typeof createClient>;
+  creatorId: string;
+};
+
+type ListEventsFromCreatorResponse = Awaited<
+  ReturnType<typeof listEventsFromCreator>
+>;
+export type ListEventsFromCreatorResponseSuccess =
+  ListEventsFromCreatorResponse['events'];
+export type ListEventsFromCreatorResponseError =
+  ListEventsFromCreatorResponse['error'];

@@ -137,6 +137,8 @@ export const listCreatorSpots = async ({
 }: listSpotsParams & { creatorId: string; page?: number }) => {
   let error: PostgrestError | null = null;
 
+  logger.info('listCreatorSpots', { creatorId, limit, page });
+
   const { data: spots, error: currentError } = await client
     .from('spots')
     .select(
@@ -158,6 +160,8 @@ export const listCreatorSpots = async ({
     logger.error(currentError);
     error = currentError;
   }
+
+  logger.info('listCreatorSpots', { spots });
 
   return {
     spots,

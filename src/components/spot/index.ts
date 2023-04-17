@@ -5,5 +5,6 @@ export * from './SpotCard';
 export * from './SpotCardSmall';
 export * from './SpotCreationPanel';
 export * from './SpotModal';
+export * from './SpotSearchModal';
 export * from './types';
 
