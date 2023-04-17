@@ -126,7 +126,7 @@ export const NavBar: React.FC<INavBarProps> = () => {
               icon="cog"
               onClick={() => {
                 setMobileMenuOpen(false);
-                router.push('/settings/user');
+                router.push('/settings');
               }}
             />
           </Flex>
@@ -144,7 +144,6 @@ export const NavBar: React.FC<INavBarProps> = () => {
         <Flex className="h-full px-3">
           <NavIcon icon="flex" label="spots" to="/spot" />
         </Flex>
-
         <Flex className="h-full px-3">
           <NavIcon icon="calendar" label="calendar" to="/event" />
         </Flex>
@@ -152,7 +151,7 @@ export const NavBar: React.FC<INavBarProps> = () => {
           <NavIcon
             icon="cog"
             label="settings"
-            to="/settings/user"
+            to="/settings"
             userImage={user?.user_metadata?.avatar_url}
           />
         </Flex>
