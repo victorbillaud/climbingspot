@@ -9,7 +9,7 @@ import { Button, Flex, InputText, Select } from '../common';
 type TSearchBarProps = {
   name?: string;
   location?: string;
-  difficulty?: SpotExtended['difficulty'][];
+  difficulty?: SpotExtended['difficulty'][] | 'All'[];
 };
 
 export const SearchBar: React.FC<TSearchBarProps> = () => {
@@ -26,7 +26,9 @@ export const SearchBar: React.FC<TSearchBarProps> = () => {
   const [spotForm, setSpotForm] = useCustomForm<TSearchBarProps>({
     name: currentSpotName || '',
     location: currentLocation || '',
-    difficulty: [currentDifficulty as SpotExtended['difficulty']],
+    difficulty: currentDifficulty
+      ? [currentDifficulty as SpotExtended['difficulty']]
+      : ['All'],
   });
 
   useEffect(() => {
@@ -52,14 +54,16 @@ export const SearchBar: React.FC<TSearchBarProps> = () => {
           placeholder="Spot name"
           className="w-full md:w-1/3"
           value={spotForm.name}
-          onChange={(e) => setSpotForm.name(e.target.value)}
+          onChange={(e) => setSpotForm.name && setSpotForm.name(e.target.value)}
         />
         <InputText
           icon="loop"
           placeholder="Location"
           className="w-full md:w-1/3"
           value={spotForm.location}
-          onChange={(e) => setSpotForm.location(e.target.value)}
+          onChange={(e) =>
+            setSpotForm.location && setSpotForm.location(e.target.value)
+          }
         />
         <Select
           className="h-full w-full md:w-1/6"

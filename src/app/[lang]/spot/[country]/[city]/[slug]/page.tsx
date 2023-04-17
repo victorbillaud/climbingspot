@@ -107,6 +107,7 @@ export default async function Page({ params }: Props) {
                   width: 400,
                 };
               })}
+              height={500}
             />
           ) : spot.image && spot.image.length == 1 ? (
             <CustomImage
@@ -114,7 +115,7 @@ export default async function Page({ params }: Props) {
               alt={spot.name || ''}
               loader={true}
               width={400}
-              height={300}
+              height={400}
               fullWidth={true}
               style={{
                 objectFit: 'cover',
