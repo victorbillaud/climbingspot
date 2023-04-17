@@ -6,6 +6,7 @@ import {
   joinEventParams,
   listEventsFromCreatorParams,
   listEventsParams,
+  updateEventParams,
 } from './types';
 
 export const getEvent = async ({ eventId, client }: getEventParams) => {
@@ -46,6 +47,40 @@ export const createEvent = async ({ client, event }: createEventParams) => {
   }
 
   return { event: createdEvent, error };
+};
+
+export const updateEvent = async ({ client, event }: updateEventParams) => {
+  console.log({
+    name: event.name,
+    start_at: event.start_at,
+    end_at: event.end_at,
+    places: event.places,
+    spot_id: event.spot_id,
+  });
+  const { data: updatedEvent, error } = await client
+    .from('events')
+    .update({
+      name: event.name,
+      start_at: event.start_at,
+      end_at: event.end_at,
+      places: event.places,
+      spot_id: event.spot_id,
+    })
+    .eq('id', event.id)
+    .select(
+      `
+        *,
+        creator:profiles(avatar_url, username),
+        participations:events_participations(*, user:profiles(avatar_url, username))
+      `,
+    )
+    .single();
+
+  if (error) {
+    logger.error(error);
+  }
+
+  return { event: updatedEvent, error };
 };
 
 export const getSpotEvents = async ({
@@ -133,12 +168,14 @@ export const listEventsFromCreator = async ({
     .from('events')
     .select(
       `
+        id,
         name,
         start_at,
         end_at,
         places,
         participations:events_participations(count),
-        spot_id
+        spot_id,
+        creator_id
       `,
     )
     .order('start_at', { ascending: true })
