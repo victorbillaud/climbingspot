@@ -1,5 +1,6 @@
 import ArrowRight from './svg/arrow-right';
 import Bolt from './svg/bolt';
+import Calendar from './svg/calendar';
 import Chart from './svg/chart';
 import Check from './svg/check';
 import ChevronDown from './svg/chevron-down';
@@ -11,6 +12,7 @@ import Cross from './svg/cross';
 import Eye from './svg/eye';
 import EyeClosed from './svg/eye-closed';
 import File from './svg/file';
+import Flex from './svg/flex';
 import Github from './svg/github';
 import GlobeAlt from './svg/globe-alt';
 import Google from './svg/google';
@@ -64,4 +66,6 @@ export const icons = {
   file: File,
   plus: Plus,
   check: Check,
+  flex: Flex,
+  calendar: Calendar,
 };

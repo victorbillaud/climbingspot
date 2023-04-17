@@ -16,12 +16,12 @@ export const SpotCard = ({ spot }: TSpotCardProps) => {
 
   return (
     <Flex className="w-full" verticalAlign="top" gap={5}>
-      <div className="w-full h-full flex flex-col md:flex-row justify-stretch items-stretch">
+      <div className="w-full h-full flex flex-col md:flex-row justify-stretch items-stretch gap-5">
         <Flex
           direction="row"
           verticalAlign="center"
           horizontalAlign="center"
-          className="w-full md:w-3/4 py-4"
+          className="w-full md:w-full py-4"
         >
           <Flex
             fullSize
@@ -75,7 +75,7 @@ export const SpotCard = ({ spot }: TSpotCardProps) => {
           </Flex>
         </Flex>
         <Flex
-          className="w-full md:w-1/4 h-full"
+          className="w-full md:w-auto h-full"
           direction="row"
           horizontalAlign="right"
           gap={8}

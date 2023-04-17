@@ -1,4 +1,4 @@
-import { GetSpotResponseSuccess } from '@/features/spots';
+import { GetSpotResponseSuccess, ISpotExtended } from '@/features/spots';
 import { Database } from '@/lib/db_types';
 
 export type Event = Database['public']['Tables']['events']['Row'];
@@ -15,10 +15,25 @@ export type EventInvitationInsert =
   Database['public']['Tables']['events_invitations']['Insert'];
 
 export type TEventCreateModalProps = {
+  showButton?: boolean;
+  initialPanelState?: boolean;
+  initialEvent?: TEventInsert;
   spot?: GetSpotResponseSuccess;
+  ssrSpots?: ISpotExtended[];
   onClose?: () => void;
   // eslint-disable-next-line no-unused-vars
   onConfirm?: (event: Event) => void;
 };
 
+export type TEventUpdateModalProps = {
+  showButton?: boolean;
+  initialPanelState?: boolean;
+  initialEvent: TEventUpdate;
+  spot: GetSpotResponseSuccess;
+  ssrSpots?: ISpotExtended[];
+  onClose?: () => void;
+  onConfirm?: (event: Event) => void;
+};
+
 export type TEventInsert = Database['public']['Tables']['events']['Insert'];
+export type TEventUpdate = Database['public']['Tables']['events']['Update'];

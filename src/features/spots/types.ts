@@ -33,6 +33,15 @@ export type listSpotsFromLocationParams = {
   page?: number;
 };
 
+export type searchSpotsParams = {
+  client: ReturnType<typeof createClient>;
+  spotName?: string;
+  location?: string;
+  difficulty?: SpotExtended['difficulty'][];
+  limit?: number;
+  page?: number;
+};
+
 export type TSpot = Database['public']['Tables']['spots']['Row'];
 
 type GetSpotResponse = Awaited<ReturnType<typeof getSpotFromSlug>>;

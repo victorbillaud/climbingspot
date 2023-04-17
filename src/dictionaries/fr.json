@@ -107,6 +107,7 @@
             "Indoor": "Intérieur"
         },
         "difficulty": {
+            "All": "Tous",
             "Easy": "Facile",
             "Medium": "Moyen",
             "Hard": "Difficile"

@@ -1,8 +1,9 @@
 import { Flex, Icon, Text } from '@/components/common';
-import { SpotCreationPanel } from '@/components/spot/SpotCreationPanel';
-import { listCreatorSpots } from '@/features/spots';
+import { EventCreatePanel } from '@/components/event';
+import { listEventsFromCreator } from '@/features/events';
+import { listMapSpots } from '@/features/spots';
 import { createClient } from '@/lib/supabase/server';
-import { SpotsTable } from './SpotsTable';
+import { EventsTable } from './EventsTable';
 
 export default async function Page() {
   const supabase = createClient();
@@ -16,9 +17,13 @@ export default async function Page() {
     );
   }
 
-  const { spots, error } = await listCreatorSpots({
+  const { events } = await listEventsFromCreator({
     client: supabase,
     creatorId: user.data.user?.id as string,
+  });
+
+  const { spots } = await listMapSpots({
+    client: supabase,
   });
 
   return (
@@ -29,12 +34,12 @@ export default async function Page() {
         verticalAlign="center"
         horizontalAlign="stretch"
       >
-        <Text variant="subtitle">Manage my spots</Text>
-        <SpotCreationPanel />
+        <Text variant="subtitle">Manage my events</Text>
+        <EventCreatePanel ssrSpots={spots} />
       </Flex>
-      {spots ? (
-        spots.length > 0 ? (
-          <SpotsTable spots={spots} />
+      {events ? (
+        events.length > 0 ? (
+          <EventsTable events={events} ssrSpots={spots} />
         ) : (
           <Flex fullSize verticalAlign="center" horizontalAlign="center">
             <Text variant="caption">No spots found.</Text>

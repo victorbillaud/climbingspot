@@ -14,7 +14,7 @@ import { ReviewsResponseSuccess, getSpotReviews } from '@/features/reviews';
 import { getFirstItem } from '@/lib';
 import { useEffect, useState } from 'react';
 import { useSupabase } from '../auth/SupabaseProvider';
-import { EventCreateFloatingPanel } from '../event';
+import { EventCreatePanel } from '../event';
 import { EventContainer } from '../event/EventContainer';
 import { SpotCard } from './SpotCard';
 import { TSpotModalProps } from './types';
@@ -112,7 +112,7 @@ export const SpotModal = ({ spot }: TSpotModalProps) => {
             {`Events associated `}
             <span className="opacity-70">({events?.length})</span>{' '}
           </Text>
-          <EventCreateFloatingPanel spot={spot} />
+          <EventCreatePanel spot={spot} />
         </Flex>
         {isLoadingEvents ? (
           <Flex

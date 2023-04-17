@@ -8,11 +8,12 @@ interface ImageCarouselControllerProps {
     alt: string;
     width?: number;
   }[];
+  height?: number;
 }
 
 export const ImageCarouselController: React.FC<
   ImageCarouselControllerProps
-> = ({ images }) => {
+> = ({ images, height }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = React.useState(false);
   const [showRightArrow, setShowRightArrow] = React.useState(true);
@@ -64,7 +65,7 @@ export const ImageCarouselController: React.FC<
               alt={image.alt}
               loader={true}
               width={image.width || 400}
-              height={300}
+              height={height || 300}
               fullWidth={true}
               style={{
                 objectFit: 'cover',

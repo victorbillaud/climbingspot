@@ -1,6 +1,10 @@
 import { HTMLAttributes } from 'react';
 
 export type TTextStyles =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
   | 'title'
   | 'subtitle'
   | 'body'
