@@ -98,6 +98,17 @@ export const NavBar: React.FC<INavBarProps> = () => {
             />
 
             <Button
+              text="Events"
+              className="w-full"
+              variant="primary"
+              icon="calendar"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                router.push('/event');
+              }}
+            />
+
+            <Button
               text="Maps"
               className="w-full"
               variant="primary"
@@ -128,10 +139,14 @@ export const NavBar: React.FC<INavBarProps> = () => {
         gap={0}
       >
         <Flex className="h-full px-3">
-          <NavIcon icon="flex" label="spots" to="/spot" />
+          <NavIcon icon="map" label="map" to="/maps" />
         </Flex>
         <Flex className="h-full px-3">
-          <NavIcon icon="map" label="map" to="/maps" />
+          <NavIcon icon="flex" label="spots" to="/spot" />
+        </Flex>
+
+        <Flex className="h-full px-3">
+          <NavIcon icon="calendar" label="calendar" to="/event" />
         </Flex>
         <Flex className="h-full px-3">
           <NavIcon

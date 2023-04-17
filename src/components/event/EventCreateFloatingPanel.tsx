@@ -4,23 +4,22 @@ import {
   FloatingPanel,
   InputDate,
   InputText,
-  Modal,
   Text,
 } from '@/components/common';
 import { createEvent } from '@/features/events';
-import { GetSpotResponseSuccess, getSpotFromSlug } from '@/features/spots';
+import { GetSpotResponseSuccess } from '@/features/spots';
 import { useToggle } from '@/hooks';
 import { logger } from '@/lib/logger';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSupabase } from '../auth/SupabaseProvider';
-import { SearchBar } from '../navbar/SearchBar';
-import { SpotCardSmall } from '../spot';
+import { SpotCardSmall, SpotSearchModal } from '../spot';
 import { TEventCreateModalProps, TEventInsert } from './types';
 
 export const EventCreateFloatingPanel = ({
   spot,
+  ssrSpots,
   onClose,
   onConfirm,
 }: TEventCreateModalProps) => {
@@ -107,146 +106,138 @@ export const EventCreateFloatingPanel = ({
         variant="default"
         onClick={() => openPanel()}
       />
-      <FloatingPanel
-        isOpen={panelOpen}
-        title="Create a new event"
-        onClose={() => {
-          logger.info('Closing panel');
-          closePanel();
-          onClose && onClose();
-        }}
-        size="medium"
-        onConfirm={async () => {
-          const eventCreated = await handleSubmit();
-          if (eventCreated) {
-            toast.success('Event created');
-            router.refresh();
+      {panelOpen && (
+        <FloatingPanel
+          isOpen={panelOpen}
+          title="Create a new event"
+          onClose={() => {
+            logger.info('Closing panel');
             closePanel();
-          }
-        }}
-        forceValidation
-        forceValidationMessage="If you close the panel, you will lose all the data you have entered. Are you sure you want to close the panel?"
-      >
-        <Flex
-          fullSize
-          direction="column"
-          horizontalAlign="left"
-          gap={0}
-          className="divide-y overflow-y-auto divide-white-300 dark:divide-dark-300"
+            onClose && onClose();
+          }}
+          size="medium"
+          onConfirm={async () => {
+            const eventCreated = await handleSubmit();
+            if (eventCreated) {
+              toast.success('Event created');
+              router.refresh();
+              closePanel();
+            }
+          }}
+          forceValidation
+          forceValidationMessage="If you close the panel, you will lose all the data you have entered. Are you sure you want to close the panel?"
         >
           <Flex
-            className="w-full p-3"
+            fullSize
             direction="column"
             horizontalAlign="left"
-            verticalAlign="top"
+            gap={0}
+            className="divide-y overflow-y-auto divide-white-300 dark:divide-dark-300"
           >
             <Flex
-              fullSize
-              direction="row"
-              horizontalAlign="stretch"
-              verticalAlign="center"
+              className="w-full p-3"
+              direction="column"
+              horizontalAlign="left"
+              verticalAlign="top"
             >
-              <Text variant="body" className="py-0 px-3">
-                Event details
-              </Text>
               <Flex
+                fullSize
                 direction="row"
-                horizontalAlign="right"
+                horizontalAlign="stretch"
                 verticalAlign="center"
               >
-                <Button
-                  text="Reset spot"
-                  variant="primary"
-                  onClick={() => setSpotSelected(spot || null)}
-                />
-                <Button
-                  text="Change spot"
-                  variant="default"
-                  icon="loop"
-                  onClick={() => openSearchModal()}
-                />
-              </Flex>
-              <Modal
-                title="Change spot"
-                size="large"
-                isOpen={searchModalOpen}
-                onClose={() => closeSearchModal()}
-                onConfirm={() => {
-                  closeSearchModal();
-                }}
-              >
-                <SearchBar
-                  onClickItem={async (spotSelected) => {
-                    const { spot } = await getSpotFromSlug({
-                      client: supabase,
-                      spotId: spotSelected.id as string,
-                    });
-                    setSpotSelected(spot);
-                    closeSearchModal();
-                  }}
-                  showMapLink={false}
-                />
-              </Modal>
-            </Flex>
-            {spotSelected ? (
-              <SpotCardSmall spot={spotSelected} />
-            ) : (
-              <Flex className="w-full">
-                <Text variant="body" className="py-0 px-3 opacity-80">
-                  You must select a spot
+                <Text variant="body" className="py-0 px-3">
+                  Event details
                 </Text>
+                <Flex
+                  direction="row"
+                  horizontalAlign="right"
+                  verticalAlign="center"
+                >
+                  <Button
+                    text="Reset spot"
+                    variant="primary"
+                    onClick={() => setSpotSelected(spot || null)}
+                  />
+                  <Button
+                    text="Change spot"
+                    variant="default"
+                    icon="loop"
+                    onClick={() => openSearchModal()}
+                  />
+                </Flex>
+                {searchModalOpen && (
+                  <SpotSearchModal
+                    ssrSpots={ssrSpots}
+                    isOpen={searchModalOpen}
+                    onClose={() => closeSearchModal()}
+                    onConfirm={(spot) => {
+                      setSpotSelected(spot);
+                      closeSearchModal();
+                    }}
+                  />
+                )}
               </Flex>
-            )}
+              {spotSelected ? (
+                <SpotCardSmall spot={spotSelected} />
+              ) : (
+                <Flex className="w-full">
+                  <Text variant="body" className="py-0 px-3 opacity-80">
+                    You must select a spot
+                  </Text>
+                </Flex>
+              )}
+            </Flex>
+            <Flex
+              className="w-full p-3"
+              direction="column"
+              horizontalAlign="left"
+              gap={6}
+            >
+              <InputText
+                labelText="Event name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full"
+              />
+              <InputText
+                labelText="Number of participants"
+                type="number"
+                value={numberOfPlaces}
+                onChange={(e) => setNumberOfPlaces(Number(e.target.value))}
+                className="w-full"
+              />
+              <InputDate
+                labelText="Start date"
+                type="datetime-local"
+                value={startAt}
+                onChange={(e) => setStartAt(e.target.value)}
+                className="w-full"
+              />
+            </Flex>
+            <Flex
+              fullSize
+              className="p-3"
+              direction="column"
+              horizontalAlign="left"
+              verticalAlign="top"
+              gap={6}
+            >
+              <Text variant="body" className="py-0 px-3">
+                Optional fields
+              </Text>
+              <InputDate
+                labelText="End date"
+                type="datetime-local"
+                value={endAt}
+                onChange={(e) => setEndAt(e.target.value)}
+                className="w-full"
+              />
+            </Flex>
           </Flex>
-          <Flex
-            className="w-full p-3"
-            direction="column"
-            horizontalAlign="left"
-            gap={6}
-          >
-            <InputText
-              labelText="Event name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full"
-            />
-            <InputText
-              labelText="Number of participants"
-              type="number"
-              value={numberOfPlaces}
-              onChange={(e) => setNumberOfPlaces(Number(e.target.value))}
-              className="w-full"
-            />
-            <InputDate
-              labelText="Start date"
-              type="datetime-local"
-              value={startAt}
-              onChange={(e) => setStartAt(e.target.value)}
-              className="w-full"
-            />
-          </Flex>
-          <Flex
-            fullSize
-            className="p-3"
-            direction="column"
-            horizontalAlign="left"
-            verticalAlign="top"
-            gap={6}
-          >
-            <Text variant="body" className="py-0 px-3">
-              Optional fields
-            </Text>
-            <InputDate
-              labelText="End date"
-              type="datetime-local"
-              value={endAt}
-              onChange={(e) => setEndAt(e.target.value)}
-              className="w-full"
-            />
-          </Flex>
-        </Flex>
-      </FloatingPanel>
+        </FloatingPanel>
+      )}
     </>
   );
 };

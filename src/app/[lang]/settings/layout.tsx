@@ -29,6 +29,11 @@ export default function RootLayout({ children }: IProps) {
                 icon: 'models',
                 to: '/settings/spots',
               },
+              {
+                label: 'Events',
+                icon: 'calendar',
+                to: '/settings/events',
+              },
             ]}
           />
         </Flex>

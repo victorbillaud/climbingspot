@@ -1,5 +1,6 @@
 import ArrowRight from './svg/arrow-right';
 import Bolt from './svg/bolt';
+import Calendar from './svg/calendar';
 import Chart from './svg/chart';
 import Check from './svg/check';
 import ChevronDown from './svg/chevron-down';
@@ -66,4 +67,5 @@ export const icons = {
   plus: Plus,
   check: Check,
   flex: Flex,
+  calendar: Calendar,
 };
