@@ -4,10 +4,7 @@ import { NextResponse } from 'next/server';
 import { i18n } from './i18n';
 
 import { match as matchLocale } from '@formatjs/intl-localematcher';
-import {
-  createMiddlewareSupabaseClient,
-  logger,
-} from '@supabase/auth-helpers-nextjs';
+import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import Negotiator from 'negotiator';
 import { Database } from './lib/db_types';
 
@@ -23,7 +20,6 @@ function getLocale(request: NextRequest): string | undefined {
     const locales: string[] = i18n.locales;
     return matchLocale(languages, locales, i18n.defaultLocale);
   } catch (error) {
-    logger.error('getLocale', error);
     return undefined;
   }
 }
