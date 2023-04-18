@@ -75,7 +75,9 @@ export default function SupabaseProvider(props: {
       session,
       user,
       supabase,
-      signOut: () => supabase.auth.signOut(),
+      signOut: () => {
+        return supabase.auth.signOut();
+      },
     };
   }, [initial, session, user]);
 

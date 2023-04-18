@@ -1,15 +1,15 @@
 'use client';
 
 import {
-  CustomImage,
-  Flex,
-  Icon,
-  ImageCarouselController,
-  Text,
+    CustomImage,
+    Flex,
+    Icon,
+    ImageCarouselController,
+    Text,
 } from '@/components/common';
 import { ReviewContainer } from '@/components/review/ReviewContainer';
 import { ReviewCreateModal } from '@/components/review/ReviewCreateModal';
-import { EventsResponseSuccess, getSpotEvents } from '@/features/events';
+import { SpotEventsResponseSuccess, getSpotEvents } from '@/features/events';
 import { ReviewsResponseSuccess, getSpotReviews } from '@/features/reviews';
 import { getFirstItem } from '@/lib';
 import { useEffect, useState } from 'react';
@@ -39,7 +39,7 @@ export const SpotModal = ({ spot }: TSpotModalProps) => {
     setReviews(reviews || []);
   };
 
-  const [events, setEvents] = useState<EventsResponseSuccess>(null);
+  const [events, setEvents] = useState<SpotEventsResponseSuccess>(null);
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(true);
 
   const fetchEvents = async () => {

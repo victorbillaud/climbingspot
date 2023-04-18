@@ -16,7 +16,8 @@ export const getEvent = async ({ eventId, client }: getEventParams) => {
       `
         *,
         creator:profiles(avatar_url, username),
-        participations:events_participations(*, user:profiles(avatar_url, username))
+        participations:events_participations(*, user:profiles(avatar_url, username)),
+        spot:spots(*)
       `,
     )
     .eq('id', eventId)
@@ -130,6 +131,24 @@ export const joinEvent = async ({
   return { participation, error };
 };
 
+export const leaveEvent = async ({
+  eventId,
+  userId,
+  client,
+}: joinEventParams) => {
+  const { error, status } = await client
+    .from('events_participations')
+    .delete()
+    .eq('event_id', eventId)
+    .eq('user_id', userId);
+
+  if (error) {
+    logger.error(error);
+  }
+
+  return { status, error };
+};
+
 export const listEvents = async ({
   client,
   limit = 20,
@@ -145,7 +164,8 @@ export const listEvents = async ({
       `
         *,
         creator:profiles(avatar_url, username),
-        participations:events_participations(*, user:profiles(avatar_url, username))
+        participations:events_participations(*, user:profiles(avatar_url, username)),
+        spot:spots(*)
       `,
       { count: 'exact' },
     )

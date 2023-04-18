@@ -7,7 +7,8 @@ import {
 import { getFirstItem } from '@/lib';
 import { formatDate } from '@/lib/tsUtils';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 import {
   Button,
   Card,
@@ -27,18 +28,22 @@ export const EventCard: React.FC<TEventCardProps> = ({
   event,
   showImage = true,
 }) => {
+  const router = useRouter();
+
   const [startDay, startHours] = formatDate(new Date(event.start_at)).split(
     '#',
   );
-
   const [participations, setParticipations] = React.useState<
     JoinEventResponseSuccess[]
   >(event.participations);
 
-  const handleJoinEvent = (participation: JoinEventResponseSuccess) => {
-    const newParticipations = [...participations, participation];
-    setParticipations(newParticipations);
+  const handleEventParticipationButtonClick = () => {
+    router.refresh();
   };
+
+  useEffect(() => {
+    setParticipations(event.participations);
+  }, [event.participations]);
 
   return (
     <Card className="w-full">
@@ -68,7 +73,10 @@ export const EventCard: React.FC<TEventCardProps> = ({
                 objectPosition: 'top -20px left 50%',
               }}
             />
-            <JoinEventButton event={event} onJoinEvent={handleJoinEvent} />
+            <JoinEventButton
+              event={event}
+              onClick={handleEventParticipationButtonClick}
+            />
             <Link
               className="absolute top-0 left-0"
               href={`/events/${event.id}`}

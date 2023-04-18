@@ -3,8 +3,10 @@
 import { useSupabase } from '@/components/auth/SupabaseProvider';
 import { Button, Flex } from '@/components/common';
 import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
 
 export const Logout = () => {
+  const router = useRouter();
   const { signOut } = useSupabase();
   const { resolvedTheme, setTheme } = useTheme();
 
@@ -13,6 +15,8 @@ export const Logout = () => {
 
     if (error) {
       console.log({ error });
+    } else {
+      router.refresh();
     }
   };
 
