@@ -46,8 +46,8 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
   }, [event.participations]);
 
   return (
-    <Flex className="w-full" direction="row">
-      <Card className="w-full relative">
+    <Flex className="w-full h-full" direction="row">
+      <Card className="w-full h-full relative">
         <Flex
           fullSize
           direction="row"
@@ -66,7 +66,7 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
                 src={event.spot.image[0]}
                 alt="hiking"
                 fullWidth
-                height={150}
+                height={170}
                 className="rounded-l-md"
                 style={{
                   objectFit: 'cover',
@@ -83,7 +83,7 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
             </Flex>
           )}
           <Flex
-            className="h-full"
+            className="h-full w-7/12"
             direction="column"
             gap={0}
             horizontalAlign="stretch"
