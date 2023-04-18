@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   });
 
   const spotsPaths: ISitemapField[] = slugs.map((slug) => ({
-    loc: `https://www.climbingspot.eu${slug}`,
+    loc: `https://www.climbingspot.eu/fr${slug}`,
     lastmod: new Date().toISOString(),
     changefreq: 'daily',
     priority: 0.7,
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
   const paths: ISitemapField[] = [];
 
   spotsPaths.forEach((spotPath) => {
-    const path = spotPath.loc.split('https://www.climbingspot.eu')[1];
+    const path = spotPath.loc.split('https://www.climbingspot.eu/fr')[1];
     const pathArray = path.split('/');
     const country = pathArray[2];
     const city = pathArray[3];
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     const cityPath = `/spot/${country}/${city}`;
 
     paths.push({
-      loc: `https://www.climbingspot.eu${countryPath}`,
+      loc: `https://www.climbingspot.eu/fr${countryPath}`,
       lastmod: new Date().toISOString(),
       changefreq: 'daily',
       priority: 0.7,
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     });
 
     paths.push({
-      loc: `https://www.climbingspot.eu${cityPath}`,
+      loc: `https://www.climbingspot.eu/fr${cityPath}`,
       lastmod: new Date().toISOString(),
       changefreq: 'daily',
       priority: 0.7,
