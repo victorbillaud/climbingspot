@@ -47,7 +47,7 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
 
   return (
     <Flex className="w-full p-1" direction="row">
-      <Card className="w-full h-full relative">
+      <Card className="w-full relative">
         <Flex
           fullSize
           direction="row"
