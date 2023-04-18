@@ -19,11 +19,11 @@ export default async function Page() {
 
   return (
     <Flex
-      className="h-full w-full p-3"
+      className="h-full w-full p-3 pr-0"
       direction="column"
       horizontalAlign="left"
     >
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-1">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
         {events.map((event) => (
           <EventDetailedCard event={event} key={event.id} />
         ))}

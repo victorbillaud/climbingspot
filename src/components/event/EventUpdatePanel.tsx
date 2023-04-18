@@ -1,4 +1,4 @@
-import { Button, FloatingPanel } from '@/components/common';
+import { Button, Flex, FloatingPanel, Text } from '@/components/common';
 import { updateEvent } from '@/features/events';
 import { GetSpotResponseSuccess } from '@/features/spots';
 import useCustomForm from '@/features/spots/hooks';
@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSupabase } from '../auth/SupabaseProvider';
 import { EventForm } from './EventForm';
+import { EventParticipations } from './EventParticipations';
 import { TEventUpdate, TEventUpdateModalProps } from './types';
 
 export const EventUpdatePanel = ({
@@ -27,7 +28,9 @@ export const EventUpdatePanel = ({
 
   const [panelOpen, openPanel, closePanel] = useToggle(initialPanelState);
 
-  const [formEvent, setFormEvent] = useCustomForm<TEventUpdate>(initialEvent);
+  const [formEvent, setFormEvent] = useCustomForm<TEventUpdate>(
+    initialEvent as TEventUpdate,
+  );
 
   const handleCreateEvent = async (event: TEventUpdate) => {
     const { event: eventUpdated, error } = await updateEvent({
@@ -116,14 +119,37 @@ export const EventUpdatePanel = ({
           forceValidation
           forceValidationMessage="If you close the panel, you will lose all the data you have entered. Are you sure you want to close the panel?"
         >
-          <EventForm
-            form={formEvent}
-            setForm={setFormEvent}
-            spotSelected={spotSelected}
-            setSpotSelected={setSpotSelected}
-            ssrSpots={ssrSpots}
-            initialSpot={spot}
-          />
+          <Flex
+            className="w-full h-full overflow-y-auto divide-y divide-white-300 dark:divide-dark-300"
+            gap={0}
+          >
+            <EventForm
+              form={formEvent}
+              setForm={setFormEvent}
+              spotSelected={spotSelected}
+              setSpotSelected={setSpotSelected}
+              ssrSpots={ssrSpots}
+              initialSpot={spot}
+            />
+            {initialEvent && (
+              <Flex
+                className="w-full p-3"
+                direction="column"
+                verticalAlign="top"
+              >
+                <Text variant="body" className="p-3" color="text-brand-500">
+                  Participations
+                </Text>
+                <Flex
+                  className="w-full p-3"
+                  direction="column"
+                  verticalAlign="top"
+                >
+                  <EventParticipations event={initialEvent} />
+                </Flex>
+              </Flex>
+            )}
+          </Flex>
         </FloatingPanel>
       )}
     </>

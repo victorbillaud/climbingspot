@@ -8,6 +8,7 @@ import {
   listEventsParams,
   updateEventParams,
 } from './types';
+// TODO: CHANGE FULL_NAME TO USERNAME
 
 export const getEvent = async ({ eventId, client }: getEventParams) => {
   const { data: event, error } = await client
@@ -16,7 +17,7 @@ export const getEvent = async ({ eventId, client }: getEventParams) => {
       `
         *,
         creator:profiles(avatar_url, username),
-        participations:events_participations(*, user:profiles(avatar_url, username)),
+        participations:events_participations(*, user:profiles(avatar_url, full_name)),
         spot:spots(*)
       `,
     )
@@ -38,7 +39,7 @@ export const createEvent = async ({ client, event }: createEventParams) => {
       `
         *,
         creator:profiles(avatar_url, username),
-        participations:events_participations(*, user:profiles(avatar_url, username))
+        participations:events_participations(*, user:profiles(avatar_url, full_name))
       `,
     )
     .single();
@@ -72,7 +73,7 @@ export const updateEvent = async ({ client, event }: updateEventParams) => {
       `
         *,
         creator:profiles(avatar_url, username),
-        participations:events_participations(*, user:profiles(avatar_url, username))
+        participations:events_participations(*, user:profiles(avatar_url, full_name))
       `,
     )
     .single();
@@ -94,7 +95,7 @@ export const getSpotEvents = async ({
       `
         *,
         creator:profiles(avatar_url, username),
-        participations:events_participations(*, user:profiles(avatar_url, username))
+        participations:events_participations(*, user:profiles(avatar_url, full_name))
       `,
     )
     .limit(10)
@@ -164,7 +165,7 @@ export const listEvents = async ({
       `
         *,
         creator:profiles(avatar_url, username),
-        participations:events_participations(*, user:profiles(avatar_url, username)),
+        participations:events_participations(*, user:profiles(avatar_url, full_name)),
         spot:spots(*)
       `,
       { count: 'exact' },
@@ -193,21 +194,13 @@ export const listEventsFromCreator = async ({
         start_at,
         end_at,
         places,
-        participations:events_participations(count),
+        participations:events_participations(*, user:profiles(avatar_url, full_name)),
         spot_id,
         creator_id
       `,
     )
     .order('start_at', { ascending: true })
     .eq('creator_id', creatorId);
-
-  // replace participations with count
-  events &&
-    events.forEach((event) => {
-      if (event.participations) {
-        event.participations = event.participations[0].count;
-      }
-    });
 
   if (error) {
     logger.error(error);

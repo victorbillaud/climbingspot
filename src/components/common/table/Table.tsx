@@ -156,7 +156,7 @@ export const Table = <T,>({
                 >
                   {headers.map((header, cellIndex) => (
                     <td key={cellIndex} className="px-6 py-4 whitespace-nowrap">
-                      {row[header]}
+                      {row[header]?.toString()}
                     </td>
                   ))}
                 </tr>

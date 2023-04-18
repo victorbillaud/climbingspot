@@ -82,7 +82,7 @@ export const SpotCard = ({ spot }: TSpotCardProps) => {
         >
           <Card className="w-full md:w-auto">
             <table className="w-full">
-              <tbody className="divide-y divide-white-300 dark:divide-dark-300">
+              <tbody className="w-full divide-y divide-white-300 dark:divide-dark-300">
                 {spot.type && (
                   <tr>
                     <th className="py-2 px-3 text-left">
