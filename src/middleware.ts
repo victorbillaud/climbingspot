@@ -7,7 +7,6 @@ import { match as matchLocale } from '@formatjs/intl-localematcher';
 import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import Negotiator from 'negotiator';
 import { Database } from './lib/db_types';
-import { logger } from './lib/logger';
 
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
@@ -21,7 +20,6 @@ function getLocale(request: NextRequest): string | undefined {
     const locales: string[] = i18n.locales;
     return matchLocale(languages, locales, i18n.defaultLocale);
   } catch (error) {
-    logger.error('getLocale', error);
     return undefined;
   }
 }
