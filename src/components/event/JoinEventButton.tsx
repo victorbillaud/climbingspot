@@ -2,6 +2,7 @@
 
 import { EventResponseSuccess, joinEvent, leaveEvent } from '@/features/events';
 import { useToggle } from '@/hooks';
+import { useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useSupabase } from '../auth/SupabaseProvider';
@@ -18,6 +19,7 @@ export const JoinEventButton: React.FC<{
   className = 'absolute bottom-[-20px] right-0 m-2',
 }) => {
   const { supabase, user } = useSupabase();
+  const router = useRouter();
   const [confirmModalOpen, openConfirmModal, closeConfirmModal] =
     useToggle(false);
 
@@ -81,16 +83,37 @@ export const JoinEventButton: React.FC<{
     }
   }, [event, user]);
 
+  const userIsHost = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+
+    return event.creator_id === user.id;
+  }, [event, user]);
+
   return (
     <>
-      <Button
-        text={userIsParticipating ? 'Joined' : 'Join'}
-        className={className}
-        variant={userIsParticipating ? 'default' : 'secondary'}
-        size="small"
-        icon={userIsParticipating ? 'check' : 'plus'}
-        onClick={userIsParticipating ? openConfirmModal : handleJoinEvent}
-      />
+      {userIsHost ? (
+        <Button
+          text="Manage"
+          className={className}
+          variant="primary"
+          size="small"
+          icon="cog"
+          onClick={() => {
+            router.push(`/settings/events?event_id=${event.id}`);
+          }}
+        />
+      ) : (
+        <Button
+          text={userIsParticipating ? 'Joined' : 'Join'}
+          className={className}
+          variant={userIsParticipating ? 'default' : 'secondary'}
+          size="small"
+          icon={userIsParticipating ? 'check' : 'plus'}
+          onClick={userIsParticipating ? openConfirmModal : handleJoinEvent}
+        />
+      )}
       <Modal
         isOpen={confirmModalOpen}
         title="Are you sure?"
