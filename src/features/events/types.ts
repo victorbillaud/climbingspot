@@ -24,9 +24,9 @@ export type getSpotEventsParams = {
   spotId: string;
 };
 
-type EventsResponse = Awaited<ReturnType<typeof getSpotEvents>>;
-export type EventsResponseSuccess = EventsResponse['events'];
-export type EventsResponseError = EventsResponse['error'];
+type SpotEventsResponse = Awaited<ReturnType<typeof getSpotEvents>>;
+export type SpotEventsResponseSuccess = SpotEventsResponse['events'];
+export type SpotEventsResponseError = SpotEventsResponse['error'];
 
 export type joinEventParams = {
   client: ReturnType<typeof createClient>;
