@@ -34,14 +34,13 @@ export const Text: FunctionComponent<ITextProps> = ({
     overline: 'font-normal',
   };
 
+  const classNameString = `${color ? color : colorClass}  ${
+    textConfig[variant]
+  } ${weight ? weightClass[weight] : weightVariantClass[variant]} ${className}`;
+
   if (variant === 'h1') {
     return (
-      <h1
-        className={`${color ? color : colorClass}  ${textConfig[variant]} ${
-          weight ? weightClass[weight] : weightVariantClass[variant]
-        } ${className}`}
-        {...props}
-      >
+      <h1 className={classNameString} {...props}>
         {children}
       </h1>
     );
@@ -49,12 +48,7 @@ export const Text: FunctionComponent<ITextProps> = ({
 
   if (variant === 'h2') {
     return (
-      <h2
-        className={`${color ? color : colorClass}  ${textConfig[variant]} ${
-          weight ? weightClass[weight] : weightVariantClass[variant]
-        } ${className}`}
-        {...props}
-      >
+      <h2 className={classNameString} {...props}>
         {children}
       </h2>
     );
@@ -62,12 +56,7 @@ export const Text: FunctionComponent<ITextProps> = ({
 
   if (variant === 'h3') {
     return (
-      <h3
-        className={`${color ? color : colorClass}  ${textConfig[variant]} ${
-          weight ? weightClass[weight] : weightVariantClass[variant]
-        } ${className}`}
-        {...props}
-      >
+      <h3 className={classNameString} {...props}>
         {children}
       </h3>
     );
@@ -75,24 +64,14 @@ export const Text: FunctionComponent<ITextProps> = ({
 
   if (variant === 'h4') {
     return (
-      <h4
-        className={`${color ? color : colorClass}  ${textConfig[variant]} ${
-          weight ? weightClass[weight] : weightVariantClass[variant]
-        } ${className}`}
-        {...props}
-      >
+      <h4 className={classNameString} {...props}>
         {children}
       </h4>
     );
   }
 
   return (
-    <div
-      className={`${color ? color : colorClass}  ${textConfig[variant]} ${
-        weight ? weightClass[weight] : weightVariantClass[variant]
-      } ${className}`}
-      {...props}
-    >
+    <div className={classNameString} {...props}>
       {children}
     </div>
   );

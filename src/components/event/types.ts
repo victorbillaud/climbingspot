@@ -1,3 +1,4 @@
+import { EventResponseSuccess } from '@/features/events';
 import { GetSpotResponseSuccess, ISpotExtended } from '@/features/spots';
 import { Database } from '@/lib/db_types';
 
@@ -28,7 +29,7 @@ export type TEventCreateModalProps = {
 export type TEventUpdateModalProps = {
   showButton?: boolean;
   initialPanelState?: boolean;
-  initialEvent: TEventUpdate;
+  initialEvent: EventResponseSuccess;
   spot: GetSpotResponseSuccess;
   ssrSpots?: ISpotExtended[];
   onClose?: () => void;

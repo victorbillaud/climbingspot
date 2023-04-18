@@ -4,7 +4,8 @@ import { Flex, Table } from '@/components/common';
 import { EventUpdatePanel, TEventInsert } from '@/components/event';
 import { ListEventsFromCreatorResponseSuccess } from '@/features/events';
 import { GetSpotResponseSuccess, ISpotExtended } from '@/features/spots';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export type TEventsTableProps = {
   events: NonNullable<ListEventsFromCreatorResponseSuccess>;
@@ -12,6 +13,7 @@ export type TEventsTableProps = {
 };
 
 export const EventsTable = ({ events, ssrSpots }: TEventsTableProps) => {
+  const queryParams = useSearchParams();
   const [eventToUpdate, setEventToUpdate] = useState<TEventInsert | null>(null);
   const [spotAssociated, setSpotAssociated] =
     useState<GetSpotResponseSuccess | null>(null);
@@ -26,6 +28,17 @@ export const EventsTable = ({ events, ssrSpots }: TEventsTableProps) => {
 
     setEventToUpdate(event);
   };
+
+  useEffect(() => {
+    if (queryParams?.get('event_id')) {
+      const event = events.find(
+        (event) => event.id === queryParams.get('event_id'),
+      );
+      if (event) {
+        handleUpdateEvent(event);
+      }
+    }
+  }, [queryParams]);
 
   return (
     <Flex

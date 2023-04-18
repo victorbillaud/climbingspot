@@ -1,8 +1,8 @@
 'use client';
 
 import {
-    EventResponseSuccess,
-    JoinEventResponseSuccess,
+  EventResponseSuccess,
+  JoinEventResponseSuccess,
 } from '@/features/events';
 import { getFirstItem } from '@/lib';
 import { formatDate } from '@/lib/tsUtils';
@@ -10,12 +10,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import {
-    Button,
-    Card,
-    CustomImage,
-    Flex,
-    ImageHorizontalContainer,
-    Text,
+  Button,
+  Card,
+  CustomImage,
+  Flex,
+  ImageHorizontalContainer,
+  Text,
 } from '../common';
 import { JoinEventButton } from './JoinEventButton';
 
@@ -46,8 +46,8 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
   }, [event.participations]);
 
   return (
-    <Flex className="w-full p-1" direction="row">
-      <Card className="w-full relative">
+    <Flex className="w-full h-full" direction="row">
+      <Card className="w-full h-full relative">
         <Flex
           fullSize
           direction="row"
@@ -60,13 +60,13 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
               direction="row"
               verticalAlign="center"
               horizontalAlign="left"
-              className="h-full w-2/3 relative rounded-t-md"
+              className="h-full w-full relative rounded-t-md"
             >
               <CustomImage
                 src={event.spot.image[0]}
                 alt="hiking"
                 fullWidth
-                height={150}
+                height={170}
                 className="rounded-l-md"
                 style={{
                   objectFit: 'cover',
@@ -82,7 +82,12 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
               </Link>
             </Flex>
           )}
-          <Flex fullSize direction="column" gap={0} horizontalAlign="stretch">
+          <Flex
+            className="h-full w-7/12"
+            direction="column"
+            gap={0}
+            horizontalAlign="stretch"
+          >
             <Flex
               fullSize
               direction="row"
@@ -106,6 +111,7 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
                 </Flex>
                 <Text
                   variant="subtitle"
+                  className="truncate"
                   color="text-brand-300 dark:text-brand-100"
                 >
                   {event.name}
