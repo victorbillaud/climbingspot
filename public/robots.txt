@@ -6,8 +6,8 @@ Disallow: /settings/*
 Disallow: /auth/*
 
 # Host
-Host: https://climbingspot.eu
+Host: https://www.climbingspot.eu
 
 # Sitemaps
-Sitemap: https://climbingspot.eu/sitemap.xml
+Sitemap: https://www.climbingspot.eu/sitemap.xml
 Sitemap: https://climbingspot.eu/server-sitemap.xml
