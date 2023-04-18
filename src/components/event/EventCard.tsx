@@ -108,7 +108,11 @@ export const EventCard: React.FC<TEventCardProps> = ({
                 {startHours}
               </Text>
             </Flex>
-            <Text variant="subtitle" color="text-brand-300 dark:text-brand-100">
+            <Text
+              variant="subtitle"
+              className="w-full"
+              color="text-brand-300 dark:text-brand-100 truncate"
+            >
               {event.name}
             </Text>
           </Flex>

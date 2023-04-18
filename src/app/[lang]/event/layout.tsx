@@ -9,25 +9,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Suspense fallback={<Loading />}>
+    <Flex
+      fullSize
+      direction="column"
+      verticalAlign="center"
+      horizontalAlign="stretch"
+      className="overflow-x-hidden overflow-y-auto"
+      gap={0}
+    >
       <Flex
         fullSize
-        direction="column"
-        verticalAlign="center"
+        direction="row"
         horizontalAlign="stretch"
-        className="overflow-x-hidden overflow-y-auto"
         gap={0}
+        className="relative"
       >
-        <Flex fullSize direction="row" horizontalAlign="stretch" gap={0}>
-          {children}
-          <Flex className="h-full w-1/4 p-3">
-            <Card className="h-full w-full p-3">
-              <Text variant="caption">This is a card</Text>
-            </Card>
-          </Flex>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+        <Flex className="h-full w-1/4 p-3">
+          <Card className="h-full w-full p-3 shadow-lg">
+            <Text variant="caption">This is a card</Text>
+          </Card>
         </Flex>
-        <Footer />
       </Flex>
-    </Suspense>
+
+      <Footer />
+    </Flex>
   );
 }

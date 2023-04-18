@@ -1,8 +1,8 @@
 import {
-    CustomFormSetters,
-    CustomFormValues,
-    GetSpotResponseSuccess,
-    ISpotExtended,
+  CustomFormSetters,
+  CustomFormValues,
+  GetSpotResponseSuccess,
+  ISpotExtended,
 } from '@/features/spots';
 import { useToggle } from '@/hooks';
 import { Button, Flex, InputDate, InputText, Text } from '../common';
@@ -47,7 +47,7 @@ export const EventForm = ({
           horizontalAlign="stretch"
           verticalAlign="center"
         >
-          <Text variant="body" className="py-0 px-3">
+          <Text variant="body" color="text-brand-500" className="py-0 px-3">
             Event details
           </Text>
           <Flex direction="row" horizontalAlign="right" verticalAlign="center">
@@ -123,7 +123,7 @@ export const EventForm = ({
         verticalAlign="top"
         gap={6}
       >
-        <Text variant="body" className="py-0 px-3">
+        <Text variant="body" className="py-0 px-3" color="text-brand-500">
           Optional fields
         </Text>
         <InputDate
