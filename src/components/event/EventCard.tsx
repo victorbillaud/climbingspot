@@ -79,7 +79,7 @@ export const EventCard: React.FC<TEventCardProps> = ({
             />
             <Link
               className="absolute top-0 left-0"
-              href={`/events/${event.id}`}
+              href={`/event/${event.id}`}
               target="_blank"
             >
               <Button text="see event" icon="eye" iconOnly />

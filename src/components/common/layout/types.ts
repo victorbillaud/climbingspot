@@ -9,7 +9,7 @@ export interface ILayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export interface IFlexProps extends ILayoutProps {
   fullSize?: boolean;
-  direction?: 'row' | 'column';
+  direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   verticalAlign?: 'top' | 'center' | 'bottom' | 'stretch';
   horizontalAlign?: 'left' | 'center' | 'right' | 'stretch';
   gap?: number;
