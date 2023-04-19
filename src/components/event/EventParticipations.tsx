@@ -98,7 +98,7 @@ export const EventParticipations = ({ event }: TEventParticipationsProps) => {
               horizontalAlign="right"
             >
               <Tag
-                color={participation.status == 'Accepted' ? 'green' : 'orange'}
+                color={participation.status == 'Accepted' ? 'green' : 'blue'}
                 icon={participation.status == 'Accepted' ? 'check' : 'warning'}
                 text={participation.status as string}
               />

@@ -32,6 +32,7 @@ export const Tag: FunctionComponent<ITag> = ({
           padding={false}
           scale={iconConfig[size]}
           name={icon}
+          color={tagsConfig[color].iconColor}
           className="mr-1"
         />
       )}
