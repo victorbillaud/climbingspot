@@ -52,3 +52,28 @@ export const formatDate = (date: Date): string => {
     return `${dayOfWeek}#${formattedHours}:${formattedMinutes} ${ampm}`;
   }
 };
+
+export function formatMessageDate(inputDate: Date): string {
+  const now = new Date();
+  const inputDateDay = inputDate.getDate();
+  const inputDateMonth = inputDate.getMonth();
+  const inputDateYear = inputDate.getFullYear();
+  const sameDay =
+    inputDateDay === now.getDate() &&
+    inputDateMonth === now.getMonth() &&
+    inputDateYear === now.getFullYear();
+
+  if (sameDay) {
+    // Return hours and minutes
+    const hours = inputDate.getHours().toString().padStart(2, '0');
+    const minutes = inputDate.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  } else {
+    // Return date in MM/DD format and hours and minutes
+    const month = (inputDateMonth + 1).toString().padStart(2, '0');
+    const day = inputDateDay.toString().padStart(2, '0');
+    const hours = inputDate.getHours().toString().padStart(2, '0');
+    const minutes = inputDate.getMinutes().toString().padStart(2, '0');
+    return `${month}/${day} ${hours}:${minutes}`;
+  }
+}
