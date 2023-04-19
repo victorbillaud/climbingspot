@@ -14,6 +14,8 @@ export const Flex: FunctionComponent<IFlexProps> = ({
   const directionClass = {
     row: 'flex-row',
     column: 'flex-col',
+    'row-reverse': 'flex-row-reverse',
+    'column-reverse': 'flex-col-reverse',
   };
 
   const verticalAlignClass = {
