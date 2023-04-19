@@ -42,7 +42,7 @@ export default async function Page() {
           <EventsTable events={events} ssrSpots={spots} />
         ) : (
           <Flex fullSize verticalAlign="center" horizontalAlign="center">
-            <Text variant="caption">No spots found.</Text>
+            <Text variant="caption">No events found.</Text>
           </Flex>
         )
       ) : (

@@ -2,6 +2,7 @@ import ArrowRight from './svg/arrow-right';
 import Bolt from './svg/bolt';
 import Calendar from './svg/calendar';
 import Chart from './svg/chart';
+import Chat from './svg/chat';
 import Check from './svg/check';
 import ChevronDown from './svg/chevron-down';
 import ChevronLeft from './svg/chevron-left';
@@ -26,6 +27,7 @@ import Pin from './svg/pin';
 import Plus from './svg/plus';
 import Puzzle from './svg/puzzle';
 import Refresh from './svg/refresh';
+import Send from './svg/send';
 import Servers from './svg/servers';
 import Spin from './svg/spin';
 import Star from './svg/star';
@@ -68,4 +70,6 @@ export const icons = {
   check: Check,
   flex: Flex,
   calendar: Calendar,
+  send: Send,
+  chat: Chat,
 };
