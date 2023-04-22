@@ -19,6 +19,7 @@ import GlobeAlt from './svg/globe-alt';
 import Google from './svg/google';
 import Hamburger from './svg/hamburger';
 import Hearth from './svg/hearth';
+import Link from './svg/link';
 import Loop from './svg/loop';
 import Map from './svg/map';
 import Models from './svg/models';
@@ -35,7 +36,6 @@ import Swatch from './svg/swatch';
 import UserCircle from './svg/user-circle';
 import UserGroup from './svg/user-group';
 import Warning from './svg/warning';
-
 export const icons = {
   'arrow-right': ArrowRight,
   bolt: Bolt,
@@ -74,4 +74,5 @@ export const icons = {
   send: Send,
   chat: Chat,
   'user-group': UserGroup,
+  link: Link,
 };

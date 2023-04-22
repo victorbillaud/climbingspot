@@ -49,21 +49,20 @@ export default async function RootLayout({ params, children }: Props) {
 
   return (
     <Flex
-      fullSize
       direction="row"
       horizontalAlign="stretch"
       gap={0}
-      className="relative"
+      className="w-full min-h-full mx-auto md:w-11/12 lg:w-5/6 p-3 relative"
     >
       <Flex
         fullSize
         verticalAlign="center"
         horizontalAlign="left"
-        className="p-6 mx-3 sm:mx-20 md:mr-0"
+        className="p-3"
       >
         <div className="w-full flex flex-col md:flex-row items-top justify-center gap-3">
           <Flex
-            className="w-full"
+            className="w-full py-3"
             direction="column"
             verticalAlign="top"
             horizontalAlign="center"
