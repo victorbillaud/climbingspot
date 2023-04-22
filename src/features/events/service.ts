@@ -52,17 +52,11 @@ export const createEvent = async ({ client, event }: createEventParams) => {
 };
 
 export const updateEvent = async ({ client, event }: updateEventParams) => {
-  console.log({
-    name: event.name,
-    start_at: event.start_at,
-    end_at: event.end_at,
-    places: event.places,
-    spot_id: event.spot_id,
-  });
   const { data: updatedEvent, error } = await client
     .from('events')
     .update({
       name: event.name,
+      description: event.description,
       start_at: event.start_at,
       end_at: event.end_at,
       places: event.places,
@@ -191,6 +185,7 @@ export const listEventsFromCreator = async ({
       `
         id,
         name,
+        description,
         start_at,
         end_at,
         places,

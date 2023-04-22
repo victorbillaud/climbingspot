@@ -126,6 +126,15 @@ export const EventForm = ({
         <Text variant="body" className="py-0 px-3" color="text-brand-500">
           Optional fields
         </Text>
+        <InputText
+          labelText="Description"
+          type="text"
+          value={form.description}
+          onChange={(e) =>
+            setForm.description && setForm.description(e.target.value)
+          }
+          className="w-full"
+        />
         <InputDate
           labelText="End date"
           type="datetime-local"

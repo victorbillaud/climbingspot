@@ -32,7 +32,7 @@ export const EventUpdatePanel = ({
     initialEvent as TEventUpdate,
   );
 
-  const handleCreateEvent = async (event: TEventUpdate) => {
+  const handleUpdateEvent = async (event: TEventUpdate) => {
     const { event: eventUpdated, error } = await updateEvent({
       client: supabase,
       event,
@@ -72,8 +72,9 @@ export const EventUpdatePanel = ({
       return;
     }
 
-    const eventUpdated = await handleCreateEvent({
+    const eventUpdated = await handleUpdateEvent({
       id: formEvent.id,
+      description: formEvent.description,
       spot_id: spotSelected?.id || formEvent.spot_id,
       name: formEvent.name,
       start_at: new Date(formEvent.start_at).toISOString(),
