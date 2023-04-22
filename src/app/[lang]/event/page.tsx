@@ -30,7 +30,7 @@ export default async function Page() {
         horizontalAlign="left"
       >
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
-          {[...events, ...events, ...events].map((event) => (
+          {events.map((event) => (
             <EventDetailedCard event={event} key={event.id} />
           ))}
         </div>
