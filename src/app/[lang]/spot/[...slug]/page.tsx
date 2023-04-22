@@ -23,16 +23,15 @@ export default async function Page({
     client: supabase,
     country: slug[0],
     city: slug[1],
-    limit: 8,
+    limit: 20,
     page: searchParams.page || 1,
   });
 
   return (
     <Flex
-      fullSize
       verticalAlign="center"
       horizontalAlign="stretch"
-      className="sm md:w-11/12 lg:w-5/6 py-4 px-3 md:px-3"
+      className="w-full md:w-11/12 lg:w-5/6 mx-auto pb-4 px-3 md:px-3"
       gap={0}
     >
       <Flex verticalAlign="top" className="w-full py-3">

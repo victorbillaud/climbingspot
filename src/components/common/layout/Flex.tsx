@@ -42,6 +42,10 @@ export const Flex: FunctionComponent<IFlexProps> = ({
     6: 'gap-6',
     7: 'gap-7',
     8: 'gap-8',
+    12: 'gap-12',
+    16: 'gap-16',
+    20: 'gap-20',
+    24: 'gap-24',
   };
 
   return (
