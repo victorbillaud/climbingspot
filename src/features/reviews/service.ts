@@ -3,13 +3,12 @@ import { getReviewParams, getSpotReviewsParams } from './types';
 
 export const getReview = async ({ reviewId, client }: getReviewParams) => {
   const { data: review, error } = await client
-    .from('reviews')
+    .from('reviews_with_like_count')
     .select(
       `
-        *,
-        creator:profiles(avatar_url, username),
-        like_count:reviews_likes(count)
-      `
+      *,
+      creator:profiles(avatar_url, username)
+    `,
     )
     .eq('id', reviewId)
     .single();
@@ -26,15 +25,15 @@ export const getSpotReviews = async ({
   client,
 }: getSpotReviewsParams) => {
   const { data: reviews, error } = await client
-    .from('reviews')
+    .from('reviews_with_like_count')
     .select(
       `
         *,
-        creator:profiles(avatar_url, username),
-        like_count:reviews_likes(count)
-      `
+        creator:profiles(avatar_url, username)
+      `,
     )
     .limit(10)
+    .order('like_count', { ascending: false })
     .order('created_at', { ascending: false })
     .eq('spot_id', spotId);
 

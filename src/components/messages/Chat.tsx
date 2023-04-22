@@ -13,24 +13,28 @@ export type TChatProps = {
 
 export const Chat: React.FC<TChatProps> = ({ eventId }) => {
   const { supabase, user } = useSupabase();
-  const [messages, sendMessage] = useChat({
+  const [messages, sendMessage, messageLoaded] = useChat({
     client: supabase,
     event_id: eventId,
   });
 
   const handleSendMessage = async (event) => {
     event.preventDefault();
-    if (!user) {
+    if (!user || text === '') {
       return;
     }
     await sendMessage(text, user.id);
+    setText('');
   };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollBy({
+        top: messagesEndRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
     }
   }, [messages]);
 
@@ -45,7 +49,7 @@ export const Chat: React.FC<TChatProps> = ({ eventId }) => {
         gap={0}
       >
         <Flex
-          className="w-full bg-white-400 dark:bg-dark-300 px-4"
+          className="hidden md:flex w-full rounded-t-md bg-gray-200 dark:bg-dark-300 px-4"
           direction="row"
           horizontalAlign="stretch"
           gap={1}
@@ -55,25 +59,34 @@ export const Chat: React.FC<TChatProps> = ({ eventId }) => {
             Chat
           </Text>
         </Flex>
-        {messages.length > 0 ? (
-          <div className="flex flex-col relative w-full h-full overflow-y-auto">
+        {!messageLoaded ? (
+          <Flex fullSize>
+            <Icon name="spin" className="animate-spin" />
+          </Flex>
+        ) : messages.length == 0 ? (
+          <Flex fullSize>
+            <Text variant="caption" className="opacity-40 p-3">
+              No messages yet
+            </Text>
+          </Flex>
+        ) : (
+          <div
+            className="flex flex-col relative w-full h-full overflow-y-auto"
+            ref={messagesEndRef}
+          >
             <div className="absolute bottom-0 w-full h-full p-3">
-              {messages.map((message) => (
+              {messages.map((message, index) => (
                 <Message
                   key={message.id}
                   content={message.content}
                   created_at={message.created_at as string}
                   user={getFirstItem(message.user)}
+                  showUser={messages[index + 1]?.user_id !== message.user_id}
                   isOwnMessage={message.user_id === user?.id}
                 />
               ))}
-              <div ref={messagesEndRef}></div>
             </div>
           </div>
-        ) : (
-          <Flex fullSize>
-            <Icon name="spin" className="animate-spin" />
-          </Flex>
         )}
 
         <form className="w-full" onSubmit={handleSendMessage}>

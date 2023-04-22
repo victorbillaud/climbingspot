@@ -12,6 +12,7 @@ import { Button, Card, Tag } from '../common';
 export type TSpotCardSmallProps = {
   spot: NonNullable<GetSpotResponseSuccess>;
   orientation?: 'horizontal' | 'vertical';
+  imageHeight?: number;
   openFloatingPanel?: boolean;
 };
 
@@ -19,6 +20,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
   spot,
   orientation = 'vertical',
   openFloatingPanel = false,
+  imageHeight = 200,
 }) => {
   const [actualSpot, setActualSpot] = useAtom(actualSpotAtom);
 
@@ -42,7 +44,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
               src={getFirstItem(spot.image) || ''}
               alt={spot.name || 'spot'}
               fullWidth
-              height={200}
+              height={imageHeight}
               className={`${
                 orientation === 'vertical' ? 'rounded-t-md' : 'rounded-l-md'
               }`}

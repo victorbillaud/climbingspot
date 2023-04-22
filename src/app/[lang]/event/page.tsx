@@ -19,11 +19,10 @@ export default async function Page() {
 
   return (
     <Flex
-      fullSize
       direction="row"
       horizontalAlign="stretch"
       gap={0}
-      className="relative"
+      className="w-full mx-auto md:w-11/12 lg:w-5/6 relative"
     >
       <Flex
         className="h-full w-full p-3 pr-0"
@@ -31,13 +30,13 @@ export default async function Page() {
         horizontalAlign="left"
       >
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
-          {events.map((event) => (
+          {[...events, ...events, ...events].map((event) => (
             <EventDetailedCard event={event} key={event.id} />
           ))}
         </div>
       </Flex>
-      <Flex className="h-full w-1/4 p-3">
-        <Card className="h-full w-full p-3 shadow-lg">
+      <Flex className="h-full w-1/4 p-3" horizontalAlign="left">
+        <Card className="sticky top-3 w-full p-3 shadow-lg">
           <Text variant="caption">This is a card</Text>
         </Card>
       </Flex>

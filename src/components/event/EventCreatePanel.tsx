@@ -28,6 +28,7 @@ export const EventCreatePanel = ({
 
   const initialValues = {
     name: '',
+    description: '',
     start_at: new Date().toISOString().replace('Z', ''),
     end_at: '',
     places: 5,
@@ -94,6 +95,7 @@ export const EventCreatePanel = ({
       spot_id: spotSelected.id,
       creator_id: user.id,
       name: formEvent.name,
+      description: formEvent.description,
       start_at: new Date(formEvent.start_at).toISOString(),
       end_at: formEvent.end_at
         ? new Date(formEvent.end_at).toISOString()

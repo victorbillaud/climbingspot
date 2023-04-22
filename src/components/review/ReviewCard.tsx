@@ -19,8 +19,8 @@ export type TReviewProps = {
 export const Review = ({ review }: TReviewProps) => {
   const { supabase, user } = useSupabase();
 
-  const [likesCount, setLikesCount] = useState<number>(
-    getFirstItem(review.like_count)?.count as number,
+  const [likesCount, setLikesCount] = useState<unknown | number>(
+    review.like_count,
   );
 
   const handleLike = async () => {
@@ -75,6 +75,7 @@ export const Review = ({ review }: TReviewProps) => {
               horizontalAlign="center"
               verticalAlign="center"
               gap={2}
+              className="py-1"
             >
               <CustomImage
                 src={getFirstItem(review.creator)?.avatar_url || ''}
@@ -85,7 +86,6 @@ export const Review = ({ review }: TReviewProps) => {
                 style={{
                   objectFit: 'cover',
                 }}
-                className="border border-gray-200"
               />
               <Flex
                 direction="row"
@@ -94,52 +94,34 @@ export const Review = ({ review }: TReviewProps) => {
                 gap={0}
                 className="py-2"
               >
-                <Text
-                  variant="body"
-                  className="px-1"
-                  color="text-brand-300 dark:text-brand-100"
-                >
+                <Text variant="body" className="px-1">
                   <strong>{review.title}</strong>
                 </Text>
-                <Flex direction="row" horizontalAlign="left" gap={0}>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Icon
-                      key={i}
-                      name="star"
-                      color="text-yellow-500"
-                      className="p-0"
-                      scale={0.7}
-                      fill={review.note && review.note > i ? true : false}
-                    />
-                  ))}
-                </Flex>
               </Flex>
             </Flex>
-            <Card className="absolute right-3 -bottom-2 pl-2">
-              <Flex
-                direction="row"
-                horizontalAlign="center"
-                verticalAlign="center"
-                gap={0}
-              >
-                <Text variant="body" className="opacity-80">
-                  {likesCount}
-                </Text>
-                <Button
-                  text={'Like'}
-                  className="text-red-500"
-                  variant="none"
-                  size="medium"
-                  icon="hearth"
-                  iconOnly
-                  iconFill={likesCount > 0 ? true : false}
-                  onClick={handleLike}
-                />
-              </Flex>
-            </Card>
+            <Flex
+              direction="row"
+              horizontalAlign="center"
+              verticalAlign="center"
+              gap={0}
+            >
+              <Button
+                text={'Like'}
+                className="text-red-500"
+                variant="none"
+                size="medium"
+                icon="hearth"
+                iconOnly
+                iconFill={likesCount > 0 ? true : false}
+                onClick={handleLike}
+              />
+              <Text variant="body" className="opacity-80">
+                {likesCount}
+              </Text>
+            </Flex>
           </Flex>
           <Flex
-            direction="row"
+            direction="column"
             horizontalAlign="stretch"
             verticalAlign="stretch"
             className="h-full w-full px-2 py-2"
@@ -147,7 +129,24 @@ export const Review = ({ review }: TReviewProps) => {
             <Text variant="body" className="w-full px-1">
               {review.content}
             </Text>
-            <Flex className="h-full" horizontalAlign="right">
+            <Flex className="w-full" direction="row" horizontalAlign="stretch">
+              <Flex direction="row" horizontalAlign="left" gap={0}>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Icon
+                    key={i}
+                    name="star"
+                    color="text-yellow-500"
+                    className={`${
+                      review.note && review.note > i
+                        ? 'opacity-80'
+                        : 'opacity-40'
+                    }`}
+                    padding={false}
+                    scale={0.6}
+                    fill={review.note && review.note > i ? true : false}
+                  />
+                ))}
+              </Flex>
               <Text variant="overline" className="text-right px-2 py-1">
                 {formatDateString(review.created_at as string)}
               </Text>

@@ -5,7 +5,14 @@ import {
   ISpotExtended,
 } from '@/features/spots';
 import { useToggle } from '@/hooks';
-import { Button, Flex, InputDate, InputText, Text } from '../common';
+import {
+  Button,
+  Flex,
+  InputDate,
+  InputText,
+  InputTextArea,
+  Text,
+} from '../common';
 import { SpotCardSmall, SpotSearchModal } from '../spot';
 import { TEventInsert } from './types';
 
@@ -126,6 +133,16 @@ export const EventForm = ({
         <Text variant="body" className="py-0 px-3" color="text-brand-500">
           Optional fields
         </Text>
+        <InputTextArea
+          labelText="Description"
+          type="text"
+          height={100}
+          value={form.description}
+          onChange={(e) =>
+            setForm.description && setForm.description(e.target.value)
+          }
+          className="w-full"
+        />
         <InputDate
           labelText="End date"
           type="datetime-local"
