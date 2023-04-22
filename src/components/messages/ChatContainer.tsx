@@ -18,7 +18,7 @@ export const ChatContainer: React.FC<TChatContainerProps> = ({ eventId }) => {
           <Chat eventId={eventId} />
         </Card>
       </Flex>
-      <Flex className="md:hidden absolute bottom-0 right-0 p-3">
+      <Flex className="md:hidden absolute top-3 right-0 p-3">
         <Button
           onClick={openFloatingPanel}
           variant="default"

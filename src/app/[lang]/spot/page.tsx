@@ -1,5 +1,6 @@
 import { CustomImage, Flex, Text } from '@/components/common';
 import Pagination from '@/components/common/button/Pagination';
+import Footer from '@/components/footer/Footer';
 import { SearchBar, SpotCardSmall } from '@/components/spot';
 import { searchSpots } from '@/features/spots';
 import { createClient } from '@/lib/supabase/server';
@@ -86,6 +87,7 @@ export default async function Page({
           <div className="text-center text-gray-500">No spots found</div>
         )}
       </Flex>
+      <Footer />
     </Flex>
   );
 }

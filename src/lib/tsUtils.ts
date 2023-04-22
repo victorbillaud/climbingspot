@@ -77,3 +77,13 @@ export function formatMessageDate(inputDate: Date): string {
     return `${month}/${day} ${hours}:${minutes}`;
   }
 }
+
+export function copyToClipboard(
+  data: string,
+  onSuccess?: () => void,
+  onError?: () => void,
+) {
+  navigator?.clipboard
+    ? navigator.clipboard.writeText(data).then(onSuccess).catch(onError)
+    : onError?.();
+}

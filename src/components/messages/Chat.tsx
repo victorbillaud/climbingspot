@@ -31,7 +31,10 @@ export const Chat: React.FC<TChatProps> = ({ eventId }) => {
 
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollBy({
+        top: messagesEndRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
     }
   }, [messages]);
 
@@ -57,7 +60,10 @@ export const Chat: React.FC<TChatProps> = ({ eventId }) => {
           </Text>
         </Flex>
         {messages.length > 0 ? (
-          <div className="flex flex-col relative w-full h-full overflow-y-auto">
+          <div
+            className="flex flex-col relative w-full h-full overflow-y-auto"
+            ref={messagesEndRef}
+          >
             <div className="absolute bottom-0 w-full h-full p-3">
               {messages.map((message, index) => (
                 <Message
@@ -69,7 +75,6 @@ export const Chat: React.FC<TChatProps> = ({ eventId }) => {
                   isOwnMessage={message.user_id === user?.id}
                 />
               ))}
-              <div ref={messagesEndRef}></div>
             </div>
           </div>
         ) : (
