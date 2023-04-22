@@ -33,6 +33,7 @@ import Spin from './svg/spin';
 import Star from './svg/star';
 import Swatch from './svg/swatch';
 import UserCircle from './svg/user-circle';
+import UserGroup from './svg/user-group';
 import Warning from './svg/warning';
 
 export const icons = {
@@ -72,4 +73,5 @@ export const icons = {
   calendar: Calendar,
   send: Send,
   chat: Chat,
+  'user-group': UserGroup,
 };

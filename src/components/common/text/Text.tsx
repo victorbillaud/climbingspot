@@ -36,7 +36,9 @@ export const Text: FunctionComponent<ITextProps> = ({
 
   const classNameString = `${color ? color : colorClass}  ${
     textConfig[variant]
-  } ${weight ? weightClass[weight] : weightVariantClass[variant]} ${className}`;
+  } ${
+    weight ? weightClass[weight] : weightVariantClass[variant]
+  } transition-all ${className}`;
 
   if (variant === 'h1') {
     return (

@@ -1,5 +1,6 @@
-import { Flex, Text } from '@/components/common';
+import { Flex } from '@/components/common';
 import { getEvent } from '@/features/events';
+import { getSpotFromId } from '@/features/spots';
 import { Locale } from '@/i18n';
 import { createClient } from '@/lib/supabase/server';
 
@@ -21,10 +22,10 @@ export default async function Page({ params }: Props) {
   if (!event) {
     return null;
   }
+  const { spot } = await getSpotFromId({
+    client: supabase,
+    id: event.spot_id,
+  });
 
-  return (
-    <Flex gap={1} className="mt-2">
-      <Text variant="caption">Details</Text>
-    </Flex>
-  );
+  return <Flex fullSize gap={1} className="mt-2"></Flex>;
 }

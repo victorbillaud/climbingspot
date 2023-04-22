@@ -11,6 +11,7 @@ export type TMessageProps = {
     'avatar_url' | 'full_name' | 'id'
   >;
   isOwnMessage?: boolean;
+  showUser?: boolean;
 };
 
 export const Message: React.FC<TMessageProps> = ({
@@ -18,16 +19,17 @@ export const Message: React.FC<TMessageProps> = ({
   user,
   created_at,
   isOwnMessage,
+  showUser,
 }) => {
   return (
     <div
       className={`flex ${
-        isOwnMessage ? 'flex-col items-start' : 'flex-col items-end'
-      } justify-center gap-1 w-full opacity-90 py-2`}
+        isOwnMessage ? 'flex-col items-end' : 'flex-col items-end'
+      } justify-center gap-1 w-full opacity-90 py-[2px]`}
     >
       <Flex
         className="group w-full"
-        direction={isOwnMessage ? 'row-reverse' : 'row'}
+        direction={isOwnMessage ? 'row' : 'row-reverse'}
         horizontalAlign={'right'}
         verticalAlign="center"
       >
@@ -50,30 +52,32 @@ export const Message: React.FC<TMessageProps> = ({
         </div>
       </Flex>
 
-      <div
-        className={`group w-full flex gap-2 items-center ${
-          isOwnMessage ? 'flex-row' : 'flex-row-reverse'
-        }`}
-      >
-        <CustomImage
-          key={user.id}
-          src={user.avatar_url as string}
-          alt={`${user.full_name} avatar`}
-          width={20}
-          height={20}
-          rounded="full"
-          style={{
-            objectFit: 'cover',
-          }}
-          className="border border-white-300 dark:border-dark-300"
-        />
-        <Text
-          variant="overline"
-          className="opacity-0 group-hover:opacity-50 transition-opacity duration-300"
+      {showUser && (
+        <div
+          className={`group w-full flex gap-2 items-center ${
+            isOwnMessage ? 'flex-row-reverse' : 'flex-row'
+          }`}
         >
-          {user.full_name}
-        </Text>
-      </div>
+          <CustomImage
+            key={user.id}
+            src={user.avatar_url as string}
+            alt={`${user.full_name} avatar`}
+            width={20}
+            height={20}
+            rounded="full"
+            style={{
+              objectFit: 'cover',
+            }}
+            className="border border-white-300 dark:border-dark-300"
+          />
+          <Text
+            variant="overline"
+            className="opacity-0 group-hover:opacity-50 transition-opacity duration-300"
+          >
+            {user.full_name}
+          </Text>
+        </div>
+      )}
     </div>
   );
 };

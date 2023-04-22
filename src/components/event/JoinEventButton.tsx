@@ -40,7 +40,7 @@ export const JoinEventButton: React.FC<{
     }
 
     if (participation) {
-      onClick && onClick();
+      onClick ? onClick() : router.refresh();
       toast.success('You have joined the event');
     }
   };
@@ -65,7 +65,7 @@ export const JoinEventButton: React.FC<{
     if (status === 204) {
       toast.success('You have left the event');
       closeConfirmModal();
-      onClick && onClick();
+      onClick ? onClick() : router.refresh();
     } else toast.error(status);
   };
 
