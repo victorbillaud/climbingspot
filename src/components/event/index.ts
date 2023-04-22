@@ -5,5 +5,6 @@ export * from './EventCreatePanel';
 export * from './EventDetailedCard';
 export * from './EventParticipations';
 export * from './EventUpdatePanel';
+export * from './page';
 export * from './types';
 
