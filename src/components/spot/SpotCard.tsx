@@ -32,10 +32,10 @@ export const SpotCard = ({ spot }: TSpotCardProps) => {
             <Flex
               direction="row"
               horizontalAlign="center"
-              verticalAlign="center"
+              verticalAlign="bottom"
               gap={4}
             >
-              <Text variant="title">{spot.name}</Text>
+              <Text variant="h1">{spot.name}</Text>
               {spot.note ? (
                 <Flex
                   direction="row"
@@ -43,18 +43,22 @@ export const SpotCard = ({ spot }: TSpotCardProps) => {
                   verticalAlign="center"
                   gap={0}
                 >
-                  <Text variant="body" className="opacity-80">
+                  <Text variant="h3" weight={300} className="opacity-60">
                     {spot.note.toFixed(1)}
                   </Text>
                   <Icon name="star" color="text-yellow-400" fill />
                 </Flex>
               ) : null}
             </Flex>
-            <Flex direction="row" horizontalAlign="left">
-              <Text variant="body" className="opacity-80">
+            <Flex
+              direction="row"
+              horizontalAlign="center"
+              verticalAlign="center"
+            >
+              <Text variant="h4" weight={400} className="opacity-80">
                 {spot.location.city}
               </Text>
-              <Text variant="body" className="opacity-50">
+              <Text variant="h4" weight={200} className="opacity-50">
                 {spot.location.department}
               </Text>
               <Link href={`/maps?spotId=${spot.id}`}>
@@ -139,7 +143,7 @@ export const SpotCard = ({ spot }: TSpotCardProps) => {
         {spot.description}
       </Text>
       <Flex fullSize verticalAlign="top" className="mt-4">
-        <Text variant="subtitle" className="opacity-60">
+        <Text variant="h4" className="opacity-60">
           {dictionary.common.approach}
         </Text>
         <Text variant="body" className="opacity-60">

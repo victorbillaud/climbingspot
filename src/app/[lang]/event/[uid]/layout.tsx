@@ -52,13 +52,13 @@ export default async function RootLayout({ params, children }: Props) {
       direction="row"
       horizontalAlign="stretch"
       gap={0}
-      className="w-full min-h-full mx-auto md:w-11/12 lg:w-5/6 p-3 relative"
+      className="h-full w-full mx-auto md:w-11/12 lg:w-5/6 p-3 relative"
     >
       <Flex
         fullSize
         verticalAlign="center"
         horizontalAlign="left"
-        className="p-3"
+        className="p-0 md:p-3"
       >
         <div className="w-full flex flex-col md:flex-row items-top justify-center gap-3">
           <Flex

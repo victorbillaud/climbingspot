@@ -335,6 +335,19 @@ export interface Database {
           updated_at: string | null
         }
       }
+      reviews_with_like_count: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          creator_id: string | null
+          id: string | null
+          like_count: number | null
+          note: number | null
+          spot_id: string | null
+          title: string | null
+          updated_at: string | null
+        }
+      }
       spot_extended_view: {
         Row: {
           approach: string | null

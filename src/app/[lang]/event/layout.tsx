@@ -9,16 +9,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Flex
-      fullSize
-      direction="column"
-      verticalAlign="center"
-      horizontalAlign="left"
-      className="overflow-x-hidden"
-      gap={0}
-    >
-      <Suspense fallback={<Loading />}>{children}</Suspense>
+    <>
+      <Flex
+        fullSize
+        direction="column"
+        verticalAlign="center"
+        horizontalAlign="left"
+        className="overflow-x-hidden"
+        gap={0}
+      >
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+      </Flex>
       <Footer />
-    </Flex>
+    </>
   );
 }
