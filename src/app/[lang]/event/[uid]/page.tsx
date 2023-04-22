@@ -115,12 +115,7 @@ export default async function Page({ params }: Props) {
             <Text variant="caption" className="opacity-70">
               Spot Details
             </Text>
-            <Flex
-              className="w-full"
-              direction="row"
-              horizontalAlign="left"
-              gap={16}
-            >
+            <div className="w-full flex flex-col md:flex-row md:justify-between md:pr-10 gap-3 md:gap-16">
               <Flex verticalAlign="top" gap={0}>
                 <Text variant="caption" className="opacity-70">
                   Name
@@ -141,11 +136,11 @@ export default async function Page({ params }: Props) {
               </Flex>
               <Flex verticalAlign="top" gap={0}>
                 <Text variant="caption" className="opacity-70">
-                  Address
+                  City
                 </Text>
                 <Text variant="body">{spot?.location.city}</Text>
               </Flex>
-            </Flex>
+            </div>
           </Flex>
         )}
       </Flex>

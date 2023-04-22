@@ -13,7 +13,7 @@ export type TChatProps = {
 
 export const Chat: React.FC<TChatProps> = ({ eventId }) => {
   const { supabase, user } = useSupabase();
-  const [messages, sendMessage] = useChat({
+  const [messages, sendMessage, messageLoaded] = useChat({
     client: supabase,
     event_id: eventId,
   });
@@ -59,7 +59,17 @@ export const Chat: React.FC<TChatProps> = ({ eventId }) => {
             Chat
           </Text>
         </Flex>
-        {messages.length > 0 ? (
+        {!messageLoaded ? (
+          <Flex fullSize>
+            <Icon name="spin" className="animate-spin" />
+          </Flex>
+        ) : messages.length == 0 ? (
+          <Flex fullSize>
+            <Text variant="caption" className="opacity-40 p-3">
+              No messages yet
+            </Text>
+          </Flex>
+        ) : (
           <div
             className="flex flex-col relative w-full h-full overflow-y-auto"
             ref={messagesEndRef}
@@ -77,10 +87,6 @@ export const Chat: React.FC<TChatProps> = ({ eventId }) => {
               ))}
             </div>
           </div>
-        ) : (
-          <Flex fullSize>
-            <Icon name="spin" className="animate-spin" />
-          </Flex>
         )}
 
         <form className="w-full" onSubmit={handleSendMessage}>

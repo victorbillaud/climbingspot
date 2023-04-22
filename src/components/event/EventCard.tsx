@@ -117,7 +117,7 @@ export const EventCard: React.FC<TEventCardProps> = ({
             </Text>
           </Flex>
           {!showImage && (
-            <Link href={`/events/${event.id}`} target="_blank" className="p-2">
+            <Link href={`/event/${event.id}`} target="_blank" className="p-2">
               <Button text="see event" icon="eye" iconOnly />
             </Link>
           )}

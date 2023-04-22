@@ -1,8 +1,8 @@
 import {
-    TGetMessageParams,
-    TGetMessageReturn,
-    TListEventMessagesParams,
-    TUseChatParams,
+  TGetMessageParams,
+  TGetMessageReturn,
+  TListEventMessagesParams,
+  TUseChatParams,
 } from '@/features/messages/types';
 import { useEffect, useState } from 'react';
 
@@ -30,10 +30,12 @@ export function useChat({ client, event_id }: TUseChatParams): [
   NonNullable<TGetMessageReturn>[],
   // eslint-disable-next-line no-unused-vars
   (content: string, user_id: string) => Promise<void>,
+  boolean, // Adding messagesLoaded attribute
 ] {
   const [messages, setMessages] = useState<NonNullable<TGetMessageReturn[]>>(
     [],
   );
+  const [messagesLoaded, setMessagesLoaded] = useState<boolean>(false); // Add messagesLoaded state
 
   const sendMessage = async (content: string, user_id: string) => {
     const { data, error } = await client.from('messages').insert([
@@ -63,6 +65,7 @@ export function useChat({ client, event_id }: TUseChatParams): [
         console.error('Error fetching messages:', error);
       } else {
         setMessages(data);
+        setMessagesLoaded(true); // Update messagesLoaded state to true
       }
     };
 
@@ -99,5 +102,5 @@ export function useChat({ client, event_id }: TUseChatParams): [
     };
   }, [event_id]);
 
-  return [messages, sendMessage];
+  return [messages, sendMessage, messagesLoaded]; // Include messagesLoaded in the return array
 }
