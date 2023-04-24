@@ -46,6 +46,8 @@
         "confirm": "Confirm",
         "cancel": "Cancel",
         "no_image": "No image",
+        "no_description": "There is no description",
+        "no_approach" : "There is no approach",
         "select_images": "Select images",
         "delete_images": "Delete images",
         "no_images_selected": "No images selected",

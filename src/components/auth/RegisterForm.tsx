@@ -73,6 +73,11 @@ export const RegisterForm = (props: TRegisterFormProps) => {
       setSuccess(
         'User created. Please check your email to confirm your account',
       );
+      setForm.email('');
+      setForm.password('');
+      setForm.passwordConfirmation('');
+      setForm.firstName('');
+      setForm.lastName('');
       setIsLoading(false);
       return;
     }
