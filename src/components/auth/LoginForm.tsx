@@ -17,11 +17,12 @@ export const LoginForm = (props: TLoginFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const [form, setForm, formErrors, setFormErrors] = useCustomForm({
-    email: 'victorbillaud@gmail.com',
-    password: 'victorbillaud',
+    email: '',
+    password: '',
   });
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     setError(null);
 
@@ -57,40 +58,43 @@ export const LoginForm = (props: TLoginFormProps) => {
 
   return (
     <Flex fullSize>
-      <Flex className="w-full py-3">
-        <InputText
-          labelText="email"
-          error={formErrors.email}
-          value={form.email}
-          className="w-full"
-          onChange={(e) => setForm.email(e.target.value)}
-        />
-        <InputText
-          labelText="password"
-          type="password"
-          error={formErrors.password}
-          value={form.password}
-          className="w-full"
-          onChange={(e) => setForm.password(e.target.value)}
-        />
-        <Button
-          className="w-full"
-          text="Login"
-          variant="default"
-          isLoader={isLoading}
-          onClick={handleLogin}
-        />
-        <Text variant="caption">Or</Text>
-        <ProvidersContainer />
-        <Link href="/auth/register" passHref>
-          <Text variant="caption">You need to register ?</Text>
-        </Link>
-        {error && (
-          <InfoCard message="Error" color="red" icon="warning">
-            {error?.message}
-          </InfoCard>
-        )}
-      </Flex>
+      <form className="w-full" onSubmit={handleLogin}>
+        <Flex className="w-full py-3">
+          <InputText
+            labelText="email"
+            type="email"
+            error={formErrors.email}
+            value={form.email}
+            className="w-full"
+            onChange={(e) => setForm.email(e.target.value)}
+          />
+          <InputText
+            labelText="password"
+            type="password"
+            error={formErrors.password}
+            value={form.password}
+            className="w-full"
+            onChange={(e) => setForm.password(e.target.value)}
+          />
+          <Button
+            className="w-full"
+            text="Login"
+            variant="default"
+            isLoader={isLoading}
+            type="submit"
+          />
+          <Text variant="caption">Or</Text>
+          <ProvidersContainer />
+          <Link href="/auth/register" passHref>
+            <Text variant="caption">You need to register ?</Text>
+          </Link>
+          {error && (
+            <InfoCard message="Error" color="red" icon="warning">
+              {error?.message}
+            </InfoCard>
+          )}
+        </Flex>
+      </form>
     </Flex>
   );
 };
