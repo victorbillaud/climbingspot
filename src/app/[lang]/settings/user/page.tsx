@@ -13,6 +13,7 @@ export default async function Page() {
   } = await supabase.auth.getUser();
 
   if (!user) {
+    supabase.auth.signOut();
     return notFound();
   }
 
