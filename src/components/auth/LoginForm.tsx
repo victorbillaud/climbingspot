@@ -63,6 +63,7 @@ export const LoginForm = (props: TLoginFormProps) => {
           <InputText
             labelText="email"
             type="email"
+            placeholder="example@example.com"
             error={formErrors.email}
             value={form.email}
             className="w-full"
@@ -71,6 +72,7 @@ export const LoginForm = (props: TLoginFormProps) => {
           <InputText
             labelText="password"
             type="password"
+            placeholder="********"
             error={formErrors.password}
             value={form.password}
             className="w-full"

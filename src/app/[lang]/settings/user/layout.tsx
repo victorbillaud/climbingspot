@@ -6,9 +6,5 @@ interface IProps {
 }
 
 export default function RootLayout({ children }: IProps) {
-  return (
-    <Suspense fallback={<Loading />}>
-      <div>{children}</div>
-    </Suspense>
-  );
+  return <Suspense fallback={<Loading />}>{children}</Suspense>;
 }
