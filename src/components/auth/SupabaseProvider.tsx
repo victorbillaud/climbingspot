@@ -1,7 +1,6 @@
 'use client';
 
 import type { Database } from '@/lib/db_types';
-import { logger } from '@/lib/logger';
 import {
   Session,
   SupabaseClient,
@@ -55,13 +54,15 @@ export default function SupabaseProvider(props: {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event == 'PASSWORD_RECOVERY') {
+        router.push('/auth/reset-password');
+      }
+
       if (session?.access_token !== accessToken) {
         router.refresh();
         return;
       }
-
-      logger.debug('Auth event', event, session);
 
       setSession(session);
       setUser(session?.user ?? null);

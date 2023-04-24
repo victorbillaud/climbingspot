@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Button, Flex, InfoCard, InputText, Text } from '../common';
+import { ProvidersContainer } from './ProvidersContainer';
 import { useSupabase } from './SupabaseProvider';
 
 export type TRegisterFormProps = {};
@@ -25,7 +26,8 @@ export const RegisterForm = (props: TRegisterFormProps) => {
     false,
   );
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     setError(null);
     setSuccess(null);
@@ -87,66 +89,71 @@ export const RegisterForm = (props: TRegisterFormProps) => {
   }, [form.passwordConfirmation]);
 
   return (
-    <Flex fullSize className="p-3">
-      <InputText
-        labelText="email"
-        error={formErrors.email}
-        value={form.email}
-        className="w-full"
-        onChange={(e) => setForm.email(e.target.value)}
-      />
-      <Flex className="w-full" direction="row">
+    <form className="w-full" onSubmit={handleRegister}>
+      <Flex fullSize className="p-3">
         <InputText
-          labelText="first name"
-          error={formErrors.firstName}
-          value={form.firstName}
+          labelText="email"
+          type="email"
+          error={formErrors.email}
+          value={form.email}
           className="w-full"
-          onChange={(e) => setForm.firstName(e.target.value)}
+          onChange={(e) => setForm.email(e.target.value)}
+        />
+        <Flex className="w-full" direction="row">
+          <InputText
+            labelText="first name"
+            error={formErrors.firstName}
+            value={form.firstName}
+            className="w-full"
+            onChange={(e) => setForm.firstName(e.target.value)}
+          />
+          <InputText
+            labelText="last name"
+            error={formErrors.lastName}
+            value={form.lastName}
+            className="w-full"
+            onChange={(e) => setForm.lastName(e.target.value)}
+          />
+        </Flex>
+        <InputText
+          labelText="password"
+          type="password"
+          error={formErrors.password}
+          value={form.password}
+          className="w-full"
+          onChange={(e) => setForm.password(e.target.value)}
         />
         <InputText
-          labelText="last name"
-          error={formErrors.lastName}
-          value={form.lastName}
+          labelText="password confirmation"
+          type="password"
+          error={formErrors.passwordConfirmation}
+          value={form.passwordConfirmation}
           className="w-full"
-          onChange={(e) => setForm.lastName(e.target.value)}
+          onChange={(e) => setForm.passwordConfirmation(e.target.value)}
         />
+        <Button
+          className="w-full"
+          text="Register"
+          variant="default"
+          isLoader={isLoading}
+          type="submit"
+        />
+        <Text variant="caption">Or</Text>
+        <ProvidersContainer />
+        <Link href="/auth/login" passHref>
+          <Text variant="caption">Already have an account? Login</Text>
+        </Link>
+        {error && (
+          <InfoCard message="Error" color="red" icon="warning">
+            {error?.message}
+          </InfoCard>
+        )}
+        {success && (
+          <InfoCard message="Success" color="green" icon="check">
+            {success}
+          </InfoCard>
+        )}
       </Flex>
-      <InputText
-        labelText="password"
-        type="password"
-        error={formErrors.password}
-        value={form.password}
-        className="w-full"
-        onChange={(e) => setForm.password(e.target.value)}
-      />
-      <InputText
-        labelText="password confirmation"
-        type="password"
-        error={formErrors.passwordConfirmation}
-        value={form.passwordConfirmation}
-        className="w-full"
-        onChange={(e) => setForm.passwordConfirmation(e.target.value)}
-      />
-      <Button
-        className="w-full"
-        text="Register"
-        variant="default"
-        isLoader={isLoading}
-        onClick={handleRegister}
-      />
-      <Link href="/auth/login" passHref>
-        <Text variant="caption">Already have an account? Login</Text>
-      </Link>
-      {error && (
-        <InfoCard message="Error" color="red" icon="warning">
-          {error?.message}
-        </InfoCard>
-      )}
-      {success && (
-        <InfoCard message="Success" color="green" icon="check">
-          {success}
-        </InfoCard>
-      )}
-    </Flex>
+    </form>
   );
 };
