@@ -22,7 +22,7 @@ export const InputText = React.forwardRef<HTMLInputElement, IProps>(
             gap={3}
           >
             <label className="text-left" htmlFor="txt">
-              <Text variant="caption" className="py-0 pl-3">
+              <Text variant="caption" className="py-0 pl-3 capitalize">
                 {labelText}
               </Text>
             </label>

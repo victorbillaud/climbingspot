@@ -16,19 +16,17 @@ export const ProvidersContainer = () => {
   };
 
   return (
-    <>
-      <Flex>
-        <Button
-          text={`Continue with Google`}
-          variant="primary"
-          size="large"
-          icon={'google'}
-          onClick={() => {
-            handleLogin('google');
-          }}
-          className="w-full"
-        />
-      </Flex>
-    </>
+    <Flex className="w-full">
+      <Button
+        text={`Continue with Google`}
+        variant="primary"
+        size="large"
+        icon={'google'}
+        onClick={() => {
+          handleLogin('google');
+        }}
+        className="w-full"
+      />
+    </Flex>
   );
 };
