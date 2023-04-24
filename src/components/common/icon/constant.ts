@@ -23,6 +23,7 @@ import Link from './svg/link';
 import Loop from './svg/loop';
 import Map from './svg/map';
 import Models from './svg/models';
+import Moon from './svg/moon';
 import Photo from './svg/photo';
 import Pin from './svg/pin';
 import Plus from './svg/plus';
@@ -32,10 +33,12 @@ import Send from './svg/send';
 import Servers from './svg/servers';
 import Spin from './svg/spin';
 import Star from './svg/star';
+import Sun from './svg/sun';
 import Swatch from './svg/swatch';
 import UserCircle from './svg/user-circle';
 import UserGroup from './svg/user-group';
 import Warning from './svg/warning';
+
 export const icons = {
   'arrow-right': ArrowRight,
   bolt: Bolt,
@@ -75,4 +78,6 @@ export const icons = {
   chat: Chat,
   'user-group': UserGroup,
   link: Link,
+  sun: Sun,
+  moon: Moon,
 };

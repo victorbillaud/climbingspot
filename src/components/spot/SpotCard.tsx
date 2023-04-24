@@ -139,16 +139,28 @@ export const SpotCard = ({ spot }: TSpotCardProps) => {
       {spot.period && spot.period.length > 0 && (
         <SeasonDiagram months={spot.period} />
       )}
-      <Text variant="body" className="opacity-60">
-        {spot.description}
-      </Text>
+      {spot.description ? (
+        <Text variant="body" className="opacity-60">
+          {spot.description}
+        </Text>
+      ) : (
+        <Text variant="body" className="opacity-30">
+          {dictionary.common.no_description}
+        </Text>
+      )}
       <Flex fullSize verticalAlign="top" className="mt-4">
         <Text variant="h4" className="opacity-60">
           {dictionary.common.approach}
         </Text>
-        <Text variant="body" className="opacity-60">
-          {spot.approach}
-        </Text>
+        {spot.approach ? (
+          <Text variant="body" className="opacity-60">
+            {spot.approach}
+          </Text>
+        ) : (
+          <Text variant="body" className="opacity-30">
+            {dictionary.common.no_approach}
+          </Text>
+        )}
       </Flex>
     </Flex>
   );
