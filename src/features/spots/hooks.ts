@@ -17,6 +17,7 @@ export type CustomFormErrors<T> = {
 
 function useCustomForm<T extends object>(
   initialState: T,
+  toastErrors = true,
 ): [
   CustomFormValues<T>,
   CustomFormSetters<T>,
@@ -38,9 +39,8 @@ function useCustomForm<T extends object>(
 
   const setExternalErrors = (newErrors: Partial<CustomFormErrors<T>>) => {
     setErrors((prevErrors) => ({ ...prevErrors, ...newErrors }));
-    // toast all errors
     Object.entries(newErrors).forEach(([key, value]) => {
-      value && toast.error(`${key}: ${value}`);
+      value && toastErrors && toast.error(`${key}: ${value}`);
     });
   };
 

@@ -1,9 +1,10 @@
 'use client';
 
+import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSupabase } from '../auth/SupabaseProvider';
 import { Button, Flex, FloatingPanel } from '../common';
 import LocaleSwitcher from '../footer/LocaleSwitcher';
@@ -13,11 +14,18 @@ import { SearchBar } from './SearchBar';
 interface INavBarProps {}
 
 export const NavBar: React.FC<INavBarProps> = () => {
-  const { user } = useSupabase();
+  const { supabase, user: initialUser } = useSupabase();
   const router = useRouter();
   const params = useSearchParams();
 
+  const [user, setUser] = useState<User | null>(initialUser);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+  }, [supabase]);
 
   return (
     <Flex

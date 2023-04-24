@@ -1,6 +1,7 @@
 'use client';
 
 import type { Database } from '@/lib/db_types';
+import { logger } from '@/lib/logger';
 import {
   Session,
   SupabaseClient,
@@ -59,6 +60,8 @@ export default function SupabaseProvider(props: {
         router.refresh();
         return;
       }
+
+      logger.debug('Auth event', event, session);
 
       setSession(session);
       setUser(session?.user ?? null);

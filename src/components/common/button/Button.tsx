@@ -1,6 +1,5 @@
 import { FunctionComponent } from 'react';
 import { Icon } from '../icon';
-import { Flex } from '../layout';
 import { IButtonProps, TButtonVariant } from './types';
 
 export const Button: FunctionComponent<IButtonProps> = ({
@@ -40,7 +39,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
       {...props}
     >
       {isLoader ? (
-        <Flex>
+        <div className="w-full h-full flex justify-center items-center pr-1">
           <Icon
             scale={size === 'small' ? 0.6 : 1}
             name={'spin'}
@@ -48,7 +47,7 @@ export const Button: FunctionComponent<IButtonProps> = ({
             fill={iconFill}
             className="animate-spin-slow"
           />
-        </Flex>
+        </div>
       ) : (
         <>
           {icon && (
