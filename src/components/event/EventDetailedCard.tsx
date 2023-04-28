@@ -60,13 +60,13 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
               direction="row"
               verticalAlign="center"
               horizontalAlign="left"
-              className="h-full w-full relative rounded-t-md"
+              className="h-full w-1/3 relative rounded-t-md"
             >
               <CustomImage
                 src={event.spot.image[0]}
                 alt="hiking"
                 fullWidth
-                height={170}
+                height={130}
                 className="rounded-l-md"
                 style={{
                   objectFit: 'cover',
@@ -83,7 +83,7 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
             </Flex>
           )}
           <Flex
-            className="h-full w-7/12"
+            className="h-full w-9/12"
             direction="column"
             gap={0}
             horizontalAlign="stretch"
@@ -91,31 +91,45 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
             <Flex
               fullSize
               direction="row"
-              verticalAlign="center"
+              verticalAlign="top"
               horizontalAlign="stretch"
+              gap={0}
             >
               <Flex
-                direction="column"
-                verticalAlign="top"
-                horizontalAlign="center"
-                className="w-full p-2 border-b border-white-300 dark:border-dark-300"
+                direction="row"
+                verticalAlign="center"
+                horizontalAlign="stretch"
+                className="w-full p-2 relative border-b border-white-300 dark:border-dark-300"
                 gap={0}
               >
-                <Flex direction="row" gap={3} className="opacity-80">
-                  <Text variant="overline">
-                    <strong>{startDay.toUpperCase()}</strong>
-                  </Text>
-                  <Text variant="overline" color="text-brand-300">
-                    {startHours}
+                <Flex
+                  className="w-full"
+                  direction="column"
+                  verticalAlign="top"
+                  horizontalAlign="center"
+                  gap={0}
+                >
+                  <Flex direction="row" gap={3} className="opacity-80">
+                    <Text variant="overline">
+                      <strong>{startDay.toUpperCase()}</strong>
+                    </Text>
+                    <Text variant="overline" color="text-brand-300">
+                      {startHours}
+                    </Text>
+                  </Flex>
+                  <Text
+                    variant="subtitle"
+                    className="truncate"
+                    color="text-brand-300 dark:text-brand-100"
+                  >
+                    {event.name}
                   </Text>
                 </Flex>
-                <Text
-                  variant="subtitle"
-                  className="truncate"
-                  color="text-brand-300 dark:text-brand-100"
-                >
-                  {event.name}
-                </Text>
+                <JoinEventButton
+                  event={event}
+                  onClick={handleEventParticipationButtonClick}
+                  className="block"
+                />
               </Flex>
               {!showImage && (
                 <Link
@@ -152,18 +166,6 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
                 <strong>{participations.length}</strong>
                 <span className="opacity-70">/{event.places}</span>
               </Text>
-            </Flex>
-            <Flex
-              className="w-full p-1"
-              direction="row"
-              verticalAlign="center"
-              horizontalAlign="right"
-            >
-              <JoinEventButton
-                event={event}
-                onClick={handleEventParticipationButtonClick}
-                className="block"
-              />
             </Flex>
           </Flex>
         </Flex>
