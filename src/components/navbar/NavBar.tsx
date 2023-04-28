@@ -1,31 +1,61 @@
 'use client';
 
-import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSupabase } from '../auth/SupabaseProvider';
-import { Button, Flex, FloatingPanel } from '../common';
+import {
+  Button,
+  Card,
+  Flex,
+  FloatingPanel,
+  Icon,
+  IconNames,
+  Text,
+} from '../common';
 import LocaleSwitcher from '../footer/LocaleSwitcher';
 import { NavIcon } from './NavIcons';
 import { SearchBar } from './SearchBar';
 
+const MobileNavItem: React.FC<{
+  icon: IconNames;
+  title: string;
+  text: string;
+  onClick?: () => void;
+}> = ({ icon, title, text, onClick }) => {
+  return (
+    <Card className="w-full">
+      <Flex className="w-full p-2" direction="row">
+        <Icon
+          name={icon}
+          scale={1.8}
+          className="opacity-70"
+          color="text-brand-500"
+        />
+
+        <Button text="" variant="none" className="w-full" onClick={onClick}>
+          <Flex fullSize verticalAlign="top" horizontalAlign="center" gap={0}>
+            <Text variant="h4" className="px-2" color="text-brand-700">
+              {title}
+            </Text>
+            <Text variant="body" className="px-2" color="text-brand-700">
+              {text}
+            </Text>
+          </Flex>
+        </Button>
+      </Flex>
+    </Card>
+  );
+};
+
 interface INavBarProps {}
 
 export const NavBar: React.FC<INavBarProps> = () => {
-  const { supabase, user: initialUser } = useSupabase();
+  const { user } = useSupabase();
   const router = useRouter();
   const params = useSearchParams();
-
-  const [user, setUser] = useState<User | null>(initialUser);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-    });
-  }, [supabase]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(true);
 
   return (
     <Flex
@@ -91,47 +121,44 @@ export const NavBar: React.FC<INavBarProps> = () => {
               />
             </Flex>
           }
-          customFooter={<LocaleSwitcher />}
+          customFooter={
+            <Flex className="w-full p-3">
+              <LocaleSwitcher />
+            </Flex>
+          }
         >
           <Flex className="p-2">
-            <Button
-              text="Spots"
-              className="w-full"
-              variant="primary"
+            <MobileNavItem
               icon="flex"
+              title="Spots"
+              text="Find and share spots"
               onClick={() => {
                 setMobileMenuOpen(false);
                 router.push('/spot');
               }}
             />
-
-            <Button
-              text="Events"
-              className="w-full"
-              variant="primary"
+            <MobileNavItem
               icon="calendar"
+              title="Events"
+              text="Find and share events"
               onClick={() => {
                 setMobileMenuOpen(false);
                 router.push('/event');
               }}
             />
-
-            <Button
-              text="Maps"
-              className="w-full"
-              variant="primary"
+            <MobileNavItem
+              text="Explore map and find spots"
               icon="map"
+              title="Maps"
               onClick={() => {
                 setMobileMenuOpen(false);
                 router.push('/maps');
               }}
             />
-
-            <Button
-              text="Settings"
-              variant="primary"
-              className="w-full"
+            <MobileNavItem
+              text="Manage your account"
               icon="cog"
+              title="Settings"
               onClick={() => {
                 setMobileMenuOpen(false);
                 router.push('/settings');

@@ -16,8 +16,8 @@ export const getEvent = async ({ eventId, client }: getEventParams) => {
     .select(
       `
         *,
-        creator:profiles(avatar_url, full_name),
-        participations:events_participations(*, user:profiles(avatar_url, full_name)),
+        creator:profiles(avatar_url, full_name, username),
+        participations:events_participations(*, user:profiles(avatar_url, full_name, username)),
         spot:spots(*)
       `,
     )
@@ -38,8 +38,8 @@ export const createEvent = async ({ client, event }: createEventParams) => {
     .select(
       `
         *,
-        creator:profiles(avatar_url, full_name),
-        participations:events_participations(*, user:profiles(avatar_url, full_name))
+        creator:profiles(avatar_url, full_name, username),
+        participations:events_participations(*, user:profiles(avatar_url, full_name, username))
       `,
     )
     .single();
@@ -66,8 +66,8 @@ export const updateEvent = async ({ client, event }: updateEventParams) => {
     .select(
       `
         *,
-        creator:profiles(avatar_url, full_name),
-        participations:events_participations(*, user:profiles(avatar_url, full_name))
+        creator:profiles(avatar_url, full_name, username),
+        participations:events_participations(*, user:profiles(avatar_url, full_name, username))
       `,
     )
     .single();
@@ -88,8 +88,8 @@ export const getSpotEvents = async ({
     .select(
       `
         *,
-        creator:profiles(avatar_url, full_name),
-        participations:events_participations(*, user:profiles(avatar_url, full_name))
+        creator:profiles(avatar_url, full_name, username),
+        participations:events_participations(*, user:profiles(avatar_url, full_name, username))
       `,
     )
     .limit(10)
@@ -114,7 +114,7 @@ export const joinEvent = async ({
     .select(
       `
         *,
-        user:profiles(avatar_url, full_name)
+        user:profiles(avatar_url, full_name, username)
       `,
     )
     .single();
@@ -158,8 +158,8 @@ export const listEvents = async ({
     .select(
       `
         *,
-        creator:profiles(avatar_url, full_name),
-        participations:events_participations(*, user:profiles(avatar_url, full_name)),
+        creator:profiles(avatar_url, full_name, username),
+        participations:events_participations(*, user:profiles(avatar_url, full_name, username)),
         spot:spots(*)
       `,
       { count: 'exact' },
@@ -189,7 +189,7 @@ export const listEventsFromCreator = async ({
         start_at,
         end_at,
         places,
-        participations:events_participations(*, user:profiles(avatar_url, full_name)),
+        participations:events_participations(*, user:profiles(avatar_url, full_name, username)),
         spot_id,
         creator_id
       `,

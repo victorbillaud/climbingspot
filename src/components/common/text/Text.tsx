@@ -73,8 +73,8 @@ export const Text: FunctionComponent<ITextProps> = ({
   }
 
   return (
-    <div className={classNameString} {...props}>
+    <p className={classNameString} {...props}>
       {children}
-    </div>
+    </p>
   );
 };

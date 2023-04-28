@@ -49,7 +49,9 @@ export default async function Page({ params }: Props) {
               <CustomImage
                 key={participation.id}
                 src={participation.user?.avatar_url}
-                alt={participation.user?.full_name}
+                alt={
+                  participation.user?.username || participation.user?.full_name
+                }
                 width={35}
                 height={35}
                 rounded="full"
@@ -58,7 +60,9 @@ export default async function Page({ params }: Props) {
                 }}
                 className="border border-white-300 dark:border-dark-300"
               />
-              <Text variant="caption">{participation.user?.full_name}</Text>
+              <Text variant="caption">
+                {participation.user?.username || participation.user?.full_name}
+              </Text>
             </Flex>
             <Flex
               direction="row"
