@@ -30,7 +30,7 @@ export const ThemeSelector = () => {
             e.preventDefault();
             setTheme(e.target.value);
           }}
-          className="w-1/4 mx-2"
+          className="w-full md:w-1/4 px-2"
           icon={themeIcon[theme || 'eye']}
         >
           <option value="light">Light</option>

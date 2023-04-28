@@ -154,10 +154,15 @@ export default async function Page({ params }: Props) {
         <Flex>
           <ShareButton event={event} />
         </Flex>
-        <Flex horizontalAlign="right" verticalAlign="bottom" gap={0}>
-          <Text variant="caption">Created by</Text>
-          <Text variant="body">{getFirstItem(event.creator)?.full_name}</Text>
-        </Flex>
+        {event.creator && (
+          <Flex horizontalAlign="right" verticalAlign="bottom" gap={0}>
+            <Text variant="caption">Created by</Text>
+            <Text variant="body">
+              {getFirstItem(event.creator).username ||
+                getFirstItem(event.creator).full_name}
+            </Text>
+          </Flex>
+        )}
       </Flex>
     </Flex>
   );

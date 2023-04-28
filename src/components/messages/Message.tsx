@@ -8,7 +8,7 @@ export type TMessageProps = {
   created_at: string;
   user: Pick<
     Database['public']['Tables']['profiles']['Row'],
-    'avatar_url' | 'full_name' | 'id'
+    'avatar_url' | 'username' | 'id'
   >;
   isOwnMessage?: boolean;
   showUser?: boolean;
@@ -61,7 +61,7 @@ export const Message: React.FC<TMessageProps> = ({
           <CustomImage
             key={user.id}
             src={user.avatar_url as string}
-            alt={`${user.full_name} avatar`}
+            alt={`${user.username} avatar`}
             width={20}
             height={20}
             rounded="full"
@@ -74,7 +74,7 @@ export const Message: React.FC<TMessageProps> = ({
             variant="overline"
             className="opacity-0 group-hover:opacity-50 transition-opacity duration-300"
           >
-            {user.full_name}
+            {user.username}
           </Text>
         </div>
       )}

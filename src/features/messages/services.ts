@@ -10,7 +10,7 @@ export const listEventMessages = async (params: TListEventMessagesParams) => {
   const { client, event_id } = params;
   return await client
     .from('messages')
-    .select(`*, user:profiles (id, full_name, avatar_url)`)
+    .select(`*, user:profiles (id, username, avatar_url)`)
     .eq('event_id', event_id)
     .order('created_at', { ascending: true });
 };
@@ -19,7 +19,7 @@ export const getMessage = async (params: TGetMessageParams) => {
   const { client, message_id } = params;
   const { data, error } = await client
     .from('messages')
-    .select(`*, user:profiles (id, full_name, avatar_url)`)
+    .select(`*, user:profiles (id, username, avatar_url)`)
     .eq('id', message_id)
     .single();
 
