@@ -87,7 +87,7 @@ export const FloatingPanel: FunctionComponent<TFloatingPanelProps> = ({
         <div
           className={`floating-panel-right ${hasTransitionedIn && 'in'} ${
             props.isOpen && 'visible'
-          } fixed bottom-0 top-0 right-0 z-10 ${getPanelWidth()} flex justify-center`}
+          } fixed bottom-0 top-0 right-0 z-[100] ${getPanelWidth()} flex justify-center`}
           onMouseDown={(e) => {
             e.stopPropagation();
             preventClose();

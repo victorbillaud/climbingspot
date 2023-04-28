@@ -46,6 +46,7 @@ export default function SupabaseProvider(props: {
       const {
         data: { session: activeSession },
       } = await supabase.auth.getSession();
+
       setSession(activeSession);
       setUser(activeSession?.user ?? null);
       setInitial(false);
@@ -63,9 +64,6 @@ export default function SupabaseProvider(props: {
         router.refresh();
         return;
       }
-
-      setSession(session);
-      setUser(session?.user ?? null);
     });
 
     return () => {

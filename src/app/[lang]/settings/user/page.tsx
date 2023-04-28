@@ -30,14 +30,19 @@ export default async function Page() {
 
   return (
     <Flex fullSize>
-      <Flex fullSize verticalAlign="top" horizontalAlign="left" className="p-6">
+      <Flex
+        fullSize
+        verticalAlign="top"
+        horizontalAlign="left"
+        className="p-1 md:p-3"
+      >
         <Flex className="w-full p-3" direction="row" horizontalAlign="stretch">
           <Flex direction="row">
             <CustomImage
               src={profile.avatar_url as string}
               alt={profile.full_name as string}
-              width={100}
-              height={100}
+              width={80}
+              height={80}
               rounded="full"
             />
             <Flex verticalAlign="top" horizontalAlign="center" gap={0}>

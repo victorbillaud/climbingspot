@@ -71,7 +71,7 @@ export default async function Page({
         </Flex>
       </Flex>
 
-      <Flex className="w-full mt-[700px] z-50 p-6" direction="column" gap={0}>
+      <Flex className="w-full mt-[700px] p-6" direction="column" gap={0}>
         {spots && spots.length > 0 ? (
           <>
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

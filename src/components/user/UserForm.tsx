@@ -75,10 +75,10 @@ export const UserForm = ({ user }: userFormProps) => {
           />
         </Flex>
         <Flex fullSize verticalAlign="top" className="p-3">
-          <table className="w-1/2 border-separate border-spacing-2">
+          <table className="w-full md:w-1/2 border-separate border-spacing-2">
             <tbody>
               <tr className="h-10">
-                <td className="w-32">
+                <td className="w-20 md:w-32">
                   <Text variant="body">Email</Text>
                 </td>
                 <td>
@@ -93,7 +93,7 @@ export const UserForm = ({ user }: userFormProps) => {
                 </td>
               </tr>
               <tr className="h-10">
-                <td className="w-32">
+                <td className="w-20 md:w-32">
                   <Text variant="body">Full name</Text>
                 </td>
                 <td>
@@ -107,7 +107,7 @@ export const UserForm = ({ user }: userFormProps) => {
                 </td>
               </tr>
               <tr className="h-10">
-                <td className="w-32">
+                <td className="w-20 md:w-32">
                   <Text variant="body">Username</Text>
                 </td>
                 <td>
