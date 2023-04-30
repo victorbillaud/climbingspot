@@ -55,7 +55,7 @@ export const NavBar: React.FC<INavBarProps> = () => {
   const { user } = useSupabase();
   const router = useRouter();
   const params = useSearchParams();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <Flex
@@ -78,11 +78,7 @@ export const NavBar: React.FC<INavBarProps> = () => {
         </Link>
       </Flex>
       <Flex className="absolute w-8/12 md:w-1/2 lg:w-1/3 h-full left-1/2 z-30 transform -translate-x-1/2">
-        <SearchBar
-          onClickItem={(spot) => {
-            router.push(`${spot.slug}?${params.toString()}`);
-          }}
-        />
+        <SearchBar />
       </Flex>
       <Flex
         direction="row"

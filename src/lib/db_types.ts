@@ -177,7 +177,6 @@ export interface Database {
       profiles: {
         Row: {
           avatar_url: string | null
-          created_at: string | null
           full_name: string | null
           id: string
           updated_at: string | null
@@ -186,7 +185,6 @@ export interface Database {
         }
         Insert: {
           avatar_url?: string | null
-          created_at?: string | null
           full_name?: string | null
           id: string
           updated_at?: string | null
@@ -195,7 +193,6 @@ export interface Database {
         }
         Update: {
           avatar_url?: string | null
-          created_at?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null
@@ -338,6 +335,18 @@ export interface Database {
           updated_at: string | null
         }
       }
+      event_search_view: {
+        Row: {
+          city: string | null
+          country: number | null
+          department: string | null
+          description: string | null
+          id: string | null
+          name: string | null
+          places: number | null
+          start_at: string | null
+        }
+      }
       reviews_with_like_count: {
         Row: {
           content: string | null
@@ -455,6 +464,21 @@ export interface Database {
           "": string
         }
         Returns: Record<string, unknown>
+      }
+      search_events: {
+        Args: {
+          keyword: string
+        }
+        Returns: {
+          city: string | null
+          country: number | null
+          department: string | null
+          description: string | null
+          id: string | null
+          name: string | null
+          places: number | null
+          start_at: string | null
+        }[]
       }
       search_spots: {
         Args: {
