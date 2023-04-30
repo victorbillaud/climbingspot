@@ -141,9 +141,6 @@ export const EventCard: React.FC<TEventCardProps> = ({
                   />
                 )}
               </Flex>
-              <Text variant="caption" color="text-brand-300">
-                {getFirstItem(event.creator).username}
-              </Text>
             </div>
           )}
           <Text variant="caption" className="tracking-widest">
