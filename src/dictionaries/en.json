@@ -45,6 +45,7 @@
     "common": {
         "confirm": "Confirm",
         "cancel": "Cancel",
+        "reset" : "Reset to default",
         "no_image": "No image",
         "no_description": "There is no description",
         "no_approach" : "There is no approach",
@@ -98,6 +99,7 @@
         "title": "Spots",
         "login_to_create": "Login to create a spot",
         "create_spot": "Create a spot",
+        "update_spot": "Update spot",
         "spot_name": "Spot name",
         "spot_description": "Spot description",
         "rock_type": "Rock type",
@@ -114,7 +116,9 @@
             "Medium": "Medium",
             "Hard": "Hard"
         },
-        "spot_images": "Spot images"
+        "spot_images": "Spot images",
+        "spot_add_images": "Add more images",
+        "spot_images_already_uploaded": "Spot images already uploaded"
     },
     "spotsCreation": {
         "no_location_found": "No location found",

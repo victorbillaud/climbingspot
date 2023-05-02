@@ -45,6 +45,7 @@
     "common": {
         "confirm": "Confirmer",
         "cancel": "Annuler",
+        "reset": "Réinitialiser",
         "no_image": "Aucune image",
         "no_description": "Aucune description",
         "no_approach": "Aucune approche",
@@ -98,6 +99,7 @@
         "title": "Spots",
         "login_to_create": "Connectez-vous pour créer un spot",
         "create_spot": "Créer un spot",
+        "update_spot": "Modifier le spot",
         "spot_name": "Nom du spot",
         "spot_description": "Description du spot",
         "rock_type": "Type de rocher",
@@ -114,7 +116,9 @@
             "Medium": "Moyen",
             "Hard": "Difficile"
         },
-        "spot_images": "Images du spot"
+        "spot_images": "Images du spot",
+        "spot_add_images": "Ajouter des images supplémentaires",
+        "spot_images_already_uploaded": "Images déjà téléchargées"
     },
     "spotsCreation": {
         "no_location_found": "Aucun emplacement trouvé",

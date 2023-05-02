@@ -11,7 +11,10 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   children?: React.ReactNode;
   icon?: IconNames;
-  initialImages?: File[];
+  initialImages?: string[];
+  onDeleteInitialImage?: (image: string) => void;
+  onDeleteImagesButtonClicked?: () => void;
+  onResetButtonClicked?: () => void;
   onSelectedFilesChange: (images: File[]) => void;
 }
 
@@ -23,7 +26,10 @@ export const InputImage = React.forwardRef<HTMLInputElement, IProps>(
       labelText,
       type = 'file',
       error,
-      initialImages,
+      initialImages = [],
+      onDeleteInitialImage,
+      onDeleteImagesButtonClicked,
+      onResetButtonClicked,
       onSelectedFilesChange,
       ...props
     },
@@ -31,9 +37,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, IProps>(
   ) => {
     const dictionary = useDictionary();
 
-    const [selectedFiles, setSelectedFiles] = useState<File[]>(
-      initialImages || [],
-    );
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +62,16 @@ export const InputImage = React.forwardRef<HTMLInputElement, IProps>(
               </Text>
             </label>
             <Flex fullSize direction="row" horizontalAlign="right" gap={2}>
+              {onResetButtonClicked && (
+                <Button
+                  text={dictionary.common.reset}
+                  variant="none"
+                  className="text-dark-100 dark:text-white-200"
+                  onClick={() => {
+                    onResetButtonClicked();
+                  }}
+                />
+              )}
               <Button
                 text={dictionary.common.delete_images}
                 variant="none"
@@ -65,6 +79,7 @@ export const InputImage = React.forwardRef<HTMLInputElement, IProps>(
                 onClick={() => {
                   setSelectedFiles([]);
                   onSelectedFilesChange([]);
+                  onDeleteImagesButtonClicked && onDeleteImagesButtonClicked();
                 }}
               />
             </Flex>
@@ -104,14 +119,37 @@ export const InputImage = React.forwardRef<HTMLInputElement, IProps>(
             icon="warning"
           />
         )}
-        {selectedFiles && selectedFiles.length > 0 ? (
+        {(selectedFiles && selectedFiles.length > 0) ||
+        initialImages.length > 0 ? (
           <Flex fullSize direction="row">
             <ImageCarouselController
-              images={selectedFiles.map((file) => ({
-                src: URL.createObjectURL(file),
-                alt: 'Selected image',
-                width: 300,
-              }))}
+              images={[
+                ...initialImages.map((image) => ({
+                  src: image,
+                  alt: 'Selected image',
+                  width: 300,
+                })),
+                ...selectedFiles.map((file) => ({
+                  src: URL.createObjectURL(file),
+                  alt: 'Selected image',
+                  width: 300,
+                })),
+              ]}
+              topRightButton
+              topRightButtonIcon="cross"
+              topRightButtonOnClick={(index, image) => {
+                // if image start with blob: then it is a file
+                if (image.startsWith('blob:')) {
+                  // find the file in the selected files array with index and remove it
+                  const newSelectedFiles = selectedFiles.filter(
+                    (file, i) => i !== index - initialImages.length,
+                  );
+                  setSelectedFiles(newSelectedFiles);
+                  onSelectedFilesChange(newSelectedFiles);
+                } else {
+                  onDeleteInitialImage && onDeleteInitialImage(image);
+                }
+              }}
             />
           </Flex>
         ) : (
