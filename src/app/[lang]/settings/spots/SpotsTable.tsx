@@ -64,6 +64,10 @@ export const SpotsTable = ({ spots }: TSpotsTableProps) => {
           onClose={() => {
             setSpotToUpdateId(undefined);
           }}
+          onSpotUpdated={() => {
+            toast.success('Spot updated');
+            setSpotToUpdateId(undefined);
+          }}
         />
       )}
     </Flex>

@@ -9,6 +9,7 @@ import {
   listSpotsParams,
   searchSpotsParams,
   spotsSearchWithBoundsParams,
+  updateSpotParams,
 } from './types';
 
 export const getSpotFromSlug = async ({
@@ -205,6 +206,32 @@ export const searchSpotsWithBounds = async ({
 
 export const insertSpot = async ({ client, spot }: insertSpotParams) => {
   const { data, error } = await client.from('spots').insert(spot).select();
+
+  if (error) {
+    logger.error(error);
+  }
+
+  return { spot: data, error };
+};
+
+export const updateSpot = async ({ client, spot }: updateSpotParams) => {
+  logger.info('updateSpot', { spot });
+  const { data, error } = await client
+    .from('spots')
+    .update({
+      description: spot.description,
+      approach: spot.approach,
+      difficulty: spot.difficulty,
+      type: spot.type,
+      rock_type: spot.rock_type,
+      cliff_height: spot.cliff_height,
+      period: spot.period,
+      orientation: spot.orientation,
+      image: spot.image,
+    })
+    .eq('id', spot.id)
+    .select()
+    .single();
 
   if (error) {
     logger.error(error);
