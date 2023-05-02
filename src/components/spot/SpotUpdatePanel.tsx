@@ -1,65 +1,64 @@
 'use client';
 
 import {
-  Button,
-  Flex,
-  FloatingPanel,
-  Icon,
-  InfoCard,
-  InputImage,
-  InputMultipleSelect,
-  InputText,
-  InputTextArea,
-  Modal,
-  Select,
-  Text
+    Button,
+    Flex,
+    FloatingPanel,
+    Icon,
+    ImageCarouselController,
+    InfoCard,
+    InputImage,
+    InputMultipleSelect,
+    InputText,
+    InputTextArea,
+    Modal,
+    Select,
+    Text,
 } from '@/components/common';
-import { TLocationInsert, insertLocation } from '@/features/locations';
 import {
-  ISpotExtended,
-  SPOT_PERIODS,
-  TSpot,
-  TSpotInsert,
-  insertSpot,
-  spotsSearchWithBoundsResponseSuccess,
+    ISpotExtended,
+    SPOT_PERIODS,
+    TSpot,
+    TSpotInsert,
+    TSpotUpdate,
+    updateSpot,
 } from '@/features/spots';
 import {
-  SPOT_DIFFICULTIES,
-  SPOT_ORIENTATIONS,
-  SPOT_TYPES,
+    SPOT_DIFFICULTIES,
+    SPOT_ORIENTATIONS,
+    SPOT_TYPES,
 } from '@/features/spots/constants';
 import useCustomForm from '@/features/spots/hooks';
 import { deleteFiles, uploadFiles } from '@/features/storage';
 import { useToggle } from '@/hooks';
-import { formatDateString } from '@/lib';
 import { logger } from '@/lib/logger';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useDictionary } from '../DictionaryProvider';
 import { useSupabase } from '../auth/SupabaseProvider';
-import { InputMaps } from '../maps';
 
-export type SpotCreationPanelProps = {
-  onSpotCreated?: (spot: TSpot) => void;
+export type SpotUpdatePanelProps = {
+  onSpotUpdated?: (spot: TSpot) => void;
   onClose?: () => void;
+  initialSpot: ISpotExtended;
   initialPanelState?: boolean;
   showButton?: boolean;
 };
 
-export function SpotCreationPanel({
-  onSpotCreated,
+export function SpotUpdatePanel({
+  onSpotUpdated,
   onClose,
+  initialSpot,
   initialPanelState = false,
   showButton = true,
-}: SpotCreationPanelProps) {
+}: SpotUpdatePanelProps) {
   const dictionary = useDictionary();
   const { supabase, user } = useSupabase();
   const router = useRouter();
   const [panelOpen, openPanel, closePanel] = useToggle(initialPanelState);
 
-  const initialState: TSpotInsert | ISpotExtended = {
+  const initialState: TSpotInsert | ISpotExtended = initialSpot || {
     name: '',
     description: undefined,
     approach: undefined,
@@ -70,168 +69,12 @@ export function SpotCreationPanel({
     orientation: undefined,
     image: [],
     creator: '',
-    location: 0,
     type: 'Indoor',
   };
 
   const [spotForm, setSpotForm, errors, setErrors] =
     useCustomForm(initialState);
-  const [location, setLocation] = useState<TLocationInsert | null>(null);
-  const [spotsCloseToLocation, setSpotsCloseToLocation] =
-    useState<spotsSearchWithBoundsResponseSuccess>();
   const [images, setImages] = useState<File[]>([]);
-
-  const handleFileUpload = async (files: File[]) => {
-    const imagesPaths = await uploadFiles({
-      client: supabase,
-      path: 'spots',
-      files: files,
-    });
-
-    setSpotForm.image &&
-      setSpotForm.image(imagesPaths.map((image) => image.publicUrl));
-
-    return imagesPaths;
-  };
-
-  const handleLocationCreation = async (location: TLocationInsert) => {
-    const { location: locationCreated, error } = await insertLocation({
-      client: supabase,
-      location: location,
-    });
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return locationCreated;
-  };
-
-  const handleSpotCreation = async (spot: TSpotInsert) => {
-    const { spot: spotCreated, error } = await insertSpot({
-      client: supabase,
-      spot: spot,
-    });
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return spotCreated;
-  };
-
-  const handleDeleteImages = async (imagesPaths: string[]) => {
-    const response = await deleteFiles({
-      client: supabase,
-      files: imagesPaths,
-    });
-
-    return response;
-  };
-
-  const handleSubmit = async () => {
-    if (!user) {
-      toast.error('You must be logged in to create a spot');
-      return false;
-    }
-
-    setSubmittingMessage(`${dictionary.spotsCreation.checking_data}...`);
-
-    setErrors({
-      name: spotForm.name === '' ? dictionary.common.required_field : undefined,
-      difficulty:
-        spotForm.difficulty.length == 0
-          ? dictionary.common.required_field
-          : undefined,
-      type:
-        spotForm.type.length == 0
-          ? dictionary.common.required_field
-          : undefined,
-      location:
-        location === null
-          ? dictionary.spotsCreation.must_select_location
-          : undefined,
-      image:
-        images.length == 0 ? dictionary.common.must_select_image : undefined,
-    });
-
-    if (
-      spotForm.name === '' ||
-      spotForm.difficulty.length == 0 ||
-      spotForm.type.length == 0 ||
-      location === null ||
-      images.length == 0
-    ) {
-      setSubmittingMessage(undefined);
-      return false;
-    }
-
-    let publicImagesPaths: string[] = [];
-    let imagesPaths: string[] = [];
-    let locationId: number = 0;
-    // create this variable because setState is async and we need to wait for the state to be updated
-
-    /* 
-      UPLOAD IMAGES
-    */
-    setSubmittingMessage(`${dictionary.spotsCreation.uploading_images}...`);
-    try {
-      const responses = await handleFileUpload(images);
-      publicImagesPaths = responses.map((response) => response.publicUrl);
-      imagesPaths = responses.map((response) => response.path);
-    } catch (error) {
-      logger.error(error);
-      toast.error(dictionary.spotsCreation.error_uploading_images);
-      setSubmittingMessage(undefined);
-      return false;
-    }
-
-    /*
-      CREATE LOCATION
-    */
-    setSubmittingMessage(`${dictionary.spotsCreation.creating_spot}...`);
-    try {
-      const locationCreated = await handleLocationCreation(
-        location as TLocationInsert,
-      );
-      if (!locationCreated) {
-        throw new Error(dictionary.spotsCreation.error_creating_spot);
-      }
-      locationId = locationCreated[0].id;
-    } catch (error) {
-      logger.error(error);
-      toast.error(dictionary.spotsCreation.error_creating_spot);
-      handleDeleteImages(imagesPaths);
-      setSubmittingMessage(undefined);
-      return false;
-    }
-
-    /*
-      CREATE SPOT
-    */
-
-    setSubmittingMessage(`${dictionary.spotsCreation.creating_spot}...`);
-    try {
-      const spotCreated = await handleSpotCreation({
-        ...spotForm,
-        location: locationId,
-        image: publicImagesPaths,
-        creator: user?.id,
-      });
-      if (!spotCreated) {
-        throw new Error(dictionary.spotsCreation.error_creating_spot);
-      }
-      onSpotCreated && onSpotCreated(spotCreated[0]);
-      setSubmittingMessage(undefined);
-      return true;
-    } catch (error) {
-      logger.error(error);
-      toast.error(dictionary.spotsCreation.error_creating_spot);
-      handleDeleteImages(imagesPaths);
-      setSubmittingMessage(undefined);
-      return false;
-    }
-  };
 
   const [submittingMessage, setSubmittingMessage] = useState<
     string | undefined
@@ -258,18 +101,217 @@ export function SpotCreationPanel({
       spotForm.name !== '',
       spotForm.difficulty !== null,
       spotForm.type !== null,
-      location !== null,
+      location !== null || initialSpot.location !== null,
       images !== null,
     ];
 
     return requiredFields.every((field) => field === true);
   }, [spotForm, location, images]);
 
+  const fieldsUpdated: { name: string; initialValue: any; newValue: any }[] =
+    useMemo(() => {
+      const fields = [
+        {
+          name: 'name',
+          initialValue: initialSpot.name,
+          newValue: spotForm.name,
+        },
+        {
+          name: 'description',
+          initialValue: initialSpot.description,
+          newValue: spotForm.description,
+        },
+        {
+          name: 'approach',
+          initialValue: initialSpot.approach,
+          newValue: spotForm.approach,
+        },
+        {
+          name: 'difficulty',
+          initialValue: initialSpot.difficulty,
+          newValue: spotForm.difficulty,
+        },
+        {
+          name: 'rock_type',
+          initialValue: initialSpot.rock_type,
+          newValue: spotForm.rock_type,
+        },
+        {
+          name: 'cliff_height',
+          initialValue: initialSpot.cliff_height,
+          newValue: spotForm.cliff_height,
+        },
+        {
+          name: 'period',
+          initialValue: initialSpot.period,
+          newValue: spotForm.period,
+        },
+        {
+          name: 'orientation',
+          initialValue: initialSpot.orientation,
+          newValue: spotForm.orientation,
+        },
+        {
+          name: 'image',
+          initialValue: initialSpot.image,
+          newValue: [
+            ...(spotForm.image as string[]),
+            ...images.map((image) => URL.createObjectURL(image)),
+          ],
+        },
+        {
+          name: 'creator',
+          initialValue: initialSpot.creator,
+          newValue: spotForm.creator,
+        },
+        {
+          name: 'city',
+          initialValue: initialSpot.location.city,
+          newValue: location?.city,
+        },
+        {
+          name: 'department',
+          initialValue: initialSpot.location.department,
+          newValue: location?.department,
+        },
+        {
+          name: 'country',
+          initialValue: initialSpot.location.country,
+          newValue: location?.country,
+        },
+        {
+          name: 'latitude',
+          initialValue: initialSpot.location.latitude,
+          newValue: location?.latitude,
+        },
+        {
+          name: 'longitude',
+          initialValue: initialSpot.location.longitude,
+          newValue: location?.longitude,
+        },
+        {
+          name: 'type',
+          initialValue: initialSpot.type,
+          newValue: spotForm.type,
+        },
+      ];
+
+      return fields.filter((field) =>
+        field.name === 'image'
+          ? images.length > 0 || spotForm.image !== initialSpot.image
+          : field.newValue !== undefined &&
+            field.initialValue !== field.newValue,
+      );
+    }, [spotForm, location, images]);
+
+  const handleFileUpload = async (files: File[]) => {
+    const imagesPaths = await uploadFiles({
+      client: supabase,
+      path: 'spots',
+      files: files,
+    });
+
+    setSpotForm.image &&
+      setSpotForm.image(imagesPaths.map((image) => image.publicUrl));
+
+    return imagesPaths;
+  };
+  const handleDeleteImages = async (imagesPaths: string[]) => {
+    const response = await deleteFiles({
+      client: supabase,
+      files: imagesPaths,
+    });
+
+    return response;
+  };
+
+  const handleSpotUpdate = async (spot: TSpotUpdate) => {
+    const { spot: spotUpdated, error } = await updateSpot({
+      client: supabase,
+      spot: spot,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return spotUpdated;
+  };
+
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error('You must be logged in to create a spot');
+      return false;
+    }
+
+    setSubmittingMessage(`${dictionary.spotsCreation.checking_data}...`);
+
+    if (fieldsUpdated.length === 0) {
+      toast.error('No fields updated');
+      setSubmittingMessage(undefined);
+      return false;
+    }
+
+    let publicImagesPaths: string[] = [];
+    let imagesPaths: string[] = [];
+
+    /* 
+      UPLOAD IMAGES
+    */
+    if (images.length > 0) {
+      setSubmittingMessage(`${dictionary.spotsCreation.uploading_images}...`);
+      try {
+        const responses = await handleFileUpload(images);
+        publicImagesPaths = responses.map((response) => response.publicUrl);
+        imagesPaths = responses.map((response) => response.path);
+      } catch (error) {
+        logger.error(error);
+        toast.error(dictionary.spotsCreation.error_uploading_images);
+        setSubmittingMessage(undefined);
+        return false;
+      }
+    }
+
+    /*
+    UPDATE SPOT
+    */
+
+    setSubmittingMessage(`${dictionary.spotsCreation.creating_spot}...`);
+    try {
+      const spotUpdated = await handleSpotUpdate({
+        id: initialSpot.id as string,
+        description: spotForm.description,
+        approach: spotForm.approach,
+        difficulty: spotForm.difficulty || undefined,
+        type: spotForm.type || undefined,
+        rock_type: spotForm.rock_type,
+        cliff_height: spotForm.cliff_height,
+        period: spotForm.period,
+        orientation: spotForm.orientation,
+        image: [...(spotForm.image as string[]), ...publicImagesPaths],
+      });
+      if (!spotUpdated) {
+        toast.error(dictionary.spotsCreation.error_creating_spot);
+        throw new Error(dictionary.spotsCreation.error_creating_spot);
+      }
+      logger.info('Spot updated', spotUpdated);
+      onSpotUpdated && onSpotUpdated(spotUpdated);
+      setSubmittingMessage(undefined);
+      return true;
+    } catch (error) {
+      logger.error(error);
+      toast.error(dictionary.spotsCreation.error_creating_spot);
+      publicImagesPaths.length > 0 && handleDeleteImages(imagesPaths);
+      setSubmittingMessage(undefined);
+      return false;
+    }
+  };
+
   return (
     <>
       {showButton && (
         <Button
-          text={dictionary.spots.create_spot}
+          text={dictionary.spots.update_spot}
           icon="models"
           variant="default"
           onClick={() => openPanel()}
@@ -278,7 +320,7 @@ export function SpotCreationPanel({
       {panelOpen && (
         <FloatingPanel
           isOpen={panelOpen}
-          title={dictionary.spots.create_spot}
+          title={dictionary.spots.update_spot}
           onClose={() => {
             closePanel();
             onClose && onClose();
@@ -325,6 +367,7 @@ export function SpotCreationPanel({
                 type="text"
                 error={errors.name}
                 value={spotForm.name}
+                disabled
                 onChange={(e) => {
                   setSpotForm.name(e.target.value);
                   setErrors({ name: undefined });
@@ -369,30 +412,24 @@ export function SpotCreationPanel({
               <InputImage
                 labelText={dictionary.spots.spot_images}
                 error={errors.image}
+                initialImages={spotForm.image || []}
+                onDeleteInitialImage={(image) => {
+                  setSpotForm.image &&
+                    setSpotForm.image(
+                      spotForm.image.filter((i) => i !== image),
+                    );
+                }}
+                onDeleteImagesButtonClicked={() => {
+                  setSpotForm.image && setSpotForm.image([]);
+                }}
+                onResetButtonClicked={() => {
+                  setSpotForm.image && setSpotForm.image(initialSpot.image);
+                }}
                 onSelectedFilesChange={(images) => {
                   setImages(images);
                   setErrors({ image: undefined });
                 }}
               />
-
-              <Flex className="w-full" direction="column" gap={3}>
-                <InputMaps
-                  onChangeLocation={(location) => {
-                    setLocation(location);
-                    setErrors({ location: undefined });
-                  }}
-                  onSpotsFound={(spots) => {
-                    setSpotsCloseToLocation(spots);
-                  }}
-                />
-                {errors.location && (
-                  <InfoCard
-                    color="red"
-                    icon="warning"
-                    message={errors.location}
-                  />
-                )}
-              </Flex>
             </Flex>
             <Flex
               className="w-full p-6"
@@ -465,6 +502,9 @@ export function SpotCreationPanel({
                 onChange={(selectedItems) => {
                   setSpotForm.period && setSpotForm.period(selectedItems);
                 }}
+                initialSelectedOptions={spotForm?.period?.map(
+                  (period) => dictionary.month[period.toLocaleLowerCase()],
+                )}
                 options={Object.values(SPOT_PERIODS).map(
                   (period) => dictionary.month[period.toLocaleLowerCase()],
                 )}
@@ -539,39 +579,85 @@ export function SpotCreationPanel({
                   })}
                 </InfoCard>
               ) : null}
-              {spotsCloseToLocation && spotsCloseToLocation.length > 0 && (
+              {fieldsUpdated.length > 0 && (
                 <InfoCard
-                  message={dictionary.spotsCreation.spots_found_warning}
+                  message={'You did some changes, please confirm them'}
                   color="warning"
                   icon="warning"
+                  className="w-full"
                 >
-                  {spotsCloseToLocation.map((spot) => (
-                    <Flex
-                      direction="row"
-                      gap={2}
-                      verticalAlign="center"
-                      horizontalAlign="left"
-                      key={spot.name}
-                    >
-                      <Text variant="caption" className="opacity-90">
-                        {spot.name}
-                      </Text>
-                      <Text variant="caption" className="opacity-60">
-                        {`${dictionary.common.created_at} ${formatDateString(
-                          spot.created_at,
-                        )}`}
-                      </Text>
-                      <Link
-                        href={`${spot.slug}`}
-                        className="opacity-60 hover:opacity-100"
-                        target="_blank"
-                      >
-                        <Text variant="caption" className="opacity-60">
-                          {dictionary.common.view}
+                  {fieldsUpdated.map((field) =>
+                    field.name !== 'image' ? (
+                      <Flex direction="row" gap={2} key={field.name}>
+                        <Text variant="caption" className="opacity-90">
+                          {field.name}
                         </Text>
-                      </Link>
-                    </Flex>
-                  ))}
+                        <Text
+                          variant="caption"
+                          className="opacity-60 line-through"
+                        >
+                          {Array.isArray(field.initialValue)
+                            ? field.initialValue.join(', ')
+                            : field.initialValue}
+                        </Text>
+                        <Icon
+                          name="arrow-right"
+                          className="opacity-90"
+                          scale={0.6}
+                        />
+                        <Text variant="caption" className="opacity-60">
+                          {Array.isArray(field.newValue)
+                            ? field.newValue.join(', ')
+                            : field.newValue}
+                        </Text>
+                      </Flex>
+                    ) : (
+                      <Flex
+                        direction="column"
+                        verticalAlign="top"
+                        horizontalAlign="left"
+                        className="w-full"
+                        gap={2}
+                        key={field.name}
+                      >
+                        <Text variant="caption" className="opacity-90">
+                          Old images
+                        </Text>
+                        <ImageCarouselController
+                          images={field.initialValue.map((image) => ({
+                            src: image,
+                            alt: 'spot image',
+                          }))}
+                          imageWidth="medium"
+                          height={100}
+                        />
+                        <Flex className="w-full" gap={2}>
+                          <Icon
+                            name="chevron-down"
+                            className="opacity-90"
+                            scale={0.6}
+                          />
+                        </Flex>
+                        <Text variant="caption" className="opacity-90">
+                          New images
+                        </Text>
+                        {field.newValue.length > 0 ? (
+                          <ImageCarouselController
+                            images={field.newValue.map((image) => ({
+                              src: image,
+                              alt: 'spot image',
+                            }))}
+                            imageWidth="medium"
+                            height={100}
+                          />
+                        ) : (
+                          <Text variant="caption" className="opacity-60">
+                            {dictionary.common.no_image}
+                          </Text>
+                        )}
+                      </Flex>
+                    ),
+                  )}
                 </InfoCard>
               )}
               <Text variant="body" className="py-0 px-3">

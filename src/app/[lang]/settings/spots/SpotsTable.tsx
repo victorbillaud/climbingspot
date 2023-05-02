@@ -2,7 +2,7 @@
 
 import { useSupabase } from '@/components/auth/SupabaseProvider';
 import { Flex, Table } from '@/components/common';
-import { SpotCreationPanel } from '@/components/spot/SpotCreationPanel';
+import { SpotUpdatePanel } from '@/components/spot/SpotUpdatePanel';
 import {
   CreatorsSpotsResponseSuccess,
   ISpotExtended,
@@ -57,11 +57,15 @@ export const SpotsTable = ({ spots }: TSpotsTableProps) => {
         }}
       />
       {spotToUpdate && (
-        <SpotCreationPanel
+        <SpotUpdatePanel
           initialPanelState={true}
           initialSpot={spotToUpdate}
           showButton={false}
           onClose={() => {
+            setSpotToUpdateId(undefined);
+          }}
+          onSpotUpdated={() => {
+            toast.success('Spot updated');
             setSpotToUpdateId(undefined);
           }}
         />

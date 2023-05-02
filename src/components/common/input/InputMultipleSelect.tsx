@@ -11,6 +11,7 @@ interface IProps<T> {
   children?: React.ReactNode;
   icon?: IconNames;
   options: T[];
+  initialSelectedOptions?: T[];
   onChange: (selectedOptions: T[]) => void;
 }
 
@@ -19,10 +20,13 @@ export const InputMultipleSelect = <T extends string>({
   error,
   children,
   options,
+  initialSelectedOptions = [],
   onChange,
 }: IProps<T>) => {
   const dictionary = useDictionary();
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(() => {
+    return initialSelectedOptions;
+  });
 
   const handleOptionClick = (option: string) => {
     if (selectedOptions.includes(option)) {

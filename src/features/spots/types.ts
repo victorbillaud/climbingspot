@@ -92,8 +92,14 @@ export type spotsSearchWithBoundsResponseSuccess =
   spotsSearchWithBoundsResponse['spots'];
 
 export type TSpotInsert = Database['public']['Tables']['spots']['Insert'];
+export type TSpotUpdate = Database['public']['Tables']['spots']['Update'];
 
 export type insertSpotParams = {
   client: ReturnType<typeof createClient>;
   spot: TSpotInsert;
+};
+
+export type updateSpotParams = {
+  client: ReturnType<typeof createClient>;
+  spot: TSpotUpdate;
 };

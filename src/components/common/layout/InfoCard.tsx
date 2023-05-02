@@ -27,7 +27,7 @@ export const InfoCard = React.forwardRef<HTMLDivElement, IInfoCardProps>(
       >
         <Icon name={props.icon} color={textColor[color]} />
         <Flex
-          className="p-1"
+          className="w-full p-1"
           verticalAlign="top"
           horizontalAlign="left"
           gap={1}
