@@ -36,8 +36,6 @@ export const InputImage = React.forwardRef<HTMLInputElement, IProps>(
     );
     const inputRef = useRef<HTMLInputElement>(null);
 
-    console.log('initialImages', initialImages);
-
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.files) {
         const filesArray = Array.from(event.target.files);
