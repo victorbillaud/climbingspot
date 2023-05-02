@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { logger } from '@supabase/auth-helpers-nextjs';
+import { logger } from '@/lib/logger';
 import {
   deleteFilesParams,
   uploadFileParams,

@@ -77,6 +77,8 @@ export function SpotCreationPanel({
     type: 'Indoor',
   };
 
+  logger.debug('initialState', initialState);
+
   const [spotForm, setSpotForm, errors, setErrors] =
     useCustomForm(initialState);
   const [location, setLocation] = useState<TLocationInsert | null>(null);
@@ -469,6 +471,9 @@ export function SpotCreationPanel({
                 onChange={(selectedItems) => {
                   setSpotForm.period && setSpotForm.period(selectedItems);
                 }}
+                initialSelectedOptions={spotForm?.period?.map(
+                  (period) => dictionary.month[period.toLocaleLowerCase()],
+                )}
                 options={Object.values(SPOT_PERIODS).map(
                   (period) => dictionary.month[period.toLocaleLowerCase()],
                 )}
