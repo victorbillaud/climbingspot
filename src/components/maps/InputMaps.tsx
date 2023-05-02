@@ -91,11 +91,15 @@ export const MarkerContainer = ({ onMove }: MarkerContainerProps) => {
 export type InputMapsProps = {
   onChangeLocation: (location: TLocationInsert) => void;
   onSpotsFound: (spots: spotsSearchWithBoundsResponseSuccess) => void;
+  initialLocation?: TLocationInsert;
+  spotId?: string;
 };
 
 export const InputMaps = ({
   onChangeLocation,
   onSpotsFound,
+  initialLocation,
+  spotId,
 }: InputMapsProps) => {
   const dictionary = useDictionary();
   const { resolvedTheme } = useTheme();
@@ -112,13 +116,15 @@ export const InputMaps = ({
     }
   }, [resolvedTheme]);
 
-  const [location, setLocation] = useState({
-    latitude: DEFAULT_LATITUDE,
-    longitude: DEFAULT_LONGITUDE,
-    city: '',
-    department: '',
-    country: 1,
-  });
+  const [location, setLocation] = useState(
+    initialLocation || {
+      latitude: DEFAULT_LATITUDE,
+      longitude: DEFAULT_LONGITUDE,
+      city: '',
+      department: '',
+      country: 1,
+    },
+  );
 
   const [spotsCloseToLocation, setSpotsCloseToLocation] =
     useState<spotsSearchWithBoundsResponseSuccess>();
@@ -157,8 +163,10 @@ export const InputMaps = ({
         },
       });
       if (spotsFound) {
-        setSpotsCloseToLocation(spotsFound);
-        onSpotsFound(spotsFound);
+        setSpotsCloseToLocation(
+          spotsFound.filter((spot) => spot.id !== spotId),
+        );
+        onSpotsFound(spotsFound.filter((spot) => spot.id !== spotId));
       }
     };
 
@@ -218,7 +226,11 @@ export const InputMaps = ({
       >
         <Card className="absolute bg-white-200 dark:bg-dark-100 top-0 bottom-0 left-0 right-0 z-0">
           <LazyMapContainer
-            center={[DEFAULT_LATITUDE, DEFAULT_LONGITUDE]}
+            center={
+              initialLocation
+                ? [initialLocation.latitude, initialLocation.longitude]
+                : [DEFAULT_LATITUDE, DEFAULT_LONGITUDE]
+            }
             zoom={DEFAULT_ZOOM}
             scrollWheelZoom={true}
             className="w-full h-full rounded-md bg-black z-0"
