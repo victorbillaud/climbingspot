@@ -15,13 +15,13 @@ import {
     Select,
     Text,
 } from '@/components/common';
-import { TLocationInsert } from '@/features/locations';
 import {
     ISpotExtended,
     SPOT_PERIODS,
     TSpot,
     TSpotInsert,
-    spotsSearchWithBoundsResponseSuccess,
+    TSpotUpdate,
+    updateSpot,
 } from '@/features/spots';
 import {
     SPOT_DIFFICULTIES,
@@ -29,15 +29,14 @@ import {
     SPOT_TYPES,
 } from '@/features/spots/constants';
 import useCustomForm from '@/features/spots/hooks';
+import { deleteFiles, uploadFiles } from '@/features/storage';
 import { useToggle } from '@/hooks';
-import { formatDateString } from '@/lib';
 import { logger } from '@/lib/logger';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useDictionary } from '../DictionaryProvider';
 import { useSupabase } from '../auth/SupabaseProvider';
-import { InputMaps } from '../maps';
 
 export type SpotUpdatePanelProps = {
   onSpotUpdated?: (spot: TSpot) => void;
@@ -53,7 +52,6 @@ export function SpotUpdatePanel({
   initialSpot,
   initialPanelState = false,
   showButton = true,
-  update = false,
 }: SpotUpdatePanelProps) {
   const dictionary = useDictionary();
   const { supabase, user } = useSupabase();
@@ -71,15 +69,11 @@ export function SpotUpdatePanel({
     orientation: undefined,
     image: [],
     creator: '',
-    location: 0,
     type: 'Indoor',
   };
 
   const [spotForm, setSpotForm, errors, setErrors] =
     useCustomForm(initialState);
-  const [location, setLocation] = useState<TLocationInsert | null>(null);
-  const [spotsCloseToLocation, setSpotsCloseToLocation] =
-    useState<spotsSearchWithBoundsResponseSuccess>();
   const [images, setImages] = useState<File[]>([]);
 
   const [submittingMessage, setSubmittingMessage] = useState<
@@ -210,7 +204,108 @@ export function SpotUpdatePanel({
       );
     }, [spotForm, location, images]);
 
-  logger.debug('fieldsUpdated', fieldsUpdated);
+  const handleFileUpload = async (files: File[]) => {
+    const imagesPaths = await uploadFiles({
+      client: supabase,
+      path: 'spots',
+      files: files,
+    });
+
+    setSpotForm.image &&
+      setSpotForm.image(imagesPaths.map((image) => image.publicUrl));
+
+    return imagesPaths;
+  };
+  const handleDeleteImages = async (imagesPaths: string[]) => {
+    const response = await deleteFiles({
+      client: supabase,
+      files: imagesPaths,
+    });
+
+    return response;
+  };
+
+  const handleSpotUpdate = async (spot: TSpotUpdate) => {
+    const { spot: spotUpdated, error } = await updateSpot({
+      client: supabase,
+      spot: spot,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return spotUpdated;
+  };
+
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error('You must be logged in to create a spot');
+      return false;
+    }
+
+    setSubmittingMessage(`${dictionary.spotsCreation.checking_data}...`);
+
+    if (fieldsUpdated.length === 0) {
+      toast.error('No fields updated');
+      setSubmittingMessage(undefined);
+      return false;
+    }
+
+    let publicImagesPaths: string[] = [];
+    let imagesPaths: string[] = [];
+
+    /* 
+      UPLOAD IMAGES
+    */
+    if (images.length > 0) {
+      setSubmittingMessage(`${dictionary.spotsCreation.uploading_images}...`);
+      try {
+        const responses = await handleFileUpload(images);
+        publicImagesPaths = responses.map((response) => response.publicUrl);
+        imagesPaths = responses.map((response) => response.path);
+      } catch (error) {
+        logger.error(error);
+        toast.error(dictionary.spotsCreation.error_uploading_images);
+        setSubmittingMessage(undefined);
+        return false;
+      }
+    }
+
+    /*
+    UPDATE SPOT
+    */
+
+    setSubmittingMessage(`${dictionary.spotsCreation.creating_spot}...`);
+    try {
+      const spotUpdated = await handleSpotUpdate({
+        id: initialSpot.id as string,
+        description: spotForm.description,
+        approach: spotForm.approach,
+        difficulty: spotForm.difficulty || undefined,
+        type: spotForm.type || undefined,
+        rock_type: spotForm.rock_type,
+        cliff_height: spotForm.cliff_height,
+        period: spotForm.period,
+        orientation: spotForm.orientation,
+        image: [...(spotForm.image as string[]), ...publicImagesPaths],
+      });
+      if (!spotUpdated) {
+        toast.error(dictionary.spotsCreation.error_creating_spot);
+        throw new Error(dictionary.spotsCreation.error_creating_spot);
+      }
+      logger.info('Spot updated', spotUpdated);
+      onSpotUpdated && onSpotUpdated(spotUpdated);
+      setSubmittingMessage(undefined);
+      return true;
+    } catch (error) {
+      logger.error(error);
+      toast.error(dictionary.spotsCreation.error_creating_spot);
+      publicImagesPaths.length > 0 && handleDeleteImages(imagesPaths);
+      setSubmittingMessage(undefined);
+      return false;
+    }
+  };
 
   return (
     <>
@@ -272,6 +367,7 @@ export function SpotUpdatePanel({
                 type="text"
                 error={errors.name}
                 value={spotForm.name}
+                disabled
                 onChange={(e) => {
                   setSpotForm.name(e.target.value);
                   setErrors({ name: undefined });
@@ -314,11 +410,7 @@ export function SpotUpdatePanel({
               </Flex>
 
               <InputImage
-                labelText={
-                  update
-                    ? dictionary.spots.spot_add_images
-                    : dictionary.spots.spot_images
-                }
+                labelText={dictionary.spots.spot_images}
                 error={errors.image}
                 initialImages={spotForm.image || []}
                 onDeleteInitialImage={(image) => {
@@ -338,27 +430,6 @@ export function SpotUpdatePanel({
                   setErrors({ image: undefined });
                 }}
               />
-
-              <Flex className="w-full" direction="column" gap={3}>
-                <InputMaps
-                  onChangeLocation={(location) => {
-                    setLocation(location);
-                    setErrors({ location: undefined });
-                  }}
-                  onSpotsFound={(spots) => {
-                    setSpotsCloseToLocation(spots);
-                  }}
-                  spotId={initialSpot.id as string}
-                  initialLocation={spotForm.location}
-                />
-                {errors.location && (
-                  <InfoCard
-                    color="red"
-                    icon="warning"
-                    message={errors.location}
-                  />
-                )}
-              </Flex>
             </Flex>
             <Flex
               className="w-full p-6"
@@ -587,42 +658,6 @@ export function SpotUpdatePanel({
                       </Flex>
                     ),
                   )}
-                </InfoCard>
-              )}
-
-              {spotsCloseToLocation && spotsCloseToLocation.length > 0 && (
-                <InfoCard
-                  message={dictionary.spotsCreation.spots_found_warning}
-                  color="warning"
-                  icon="warning"
-                >
-                  {spotsCloseToLocation.map((spot) => (
-                    <Flex
-                      direction="row"
-                      gap={2}
-                      verticalAlign="center"
-                      horizontalAlign="left"
-                      key={spot.name}
-                    >
-                      <Text variant="caption" className="opacity-90">
-                        {spot.name}
-                      </Text>
-                      <Text variant="caption" className="opacity-60">
-                        {`${dictionary.common.created_at} ${formatDateString(
-                          spot.created_at,
-                        )}`}
-                      </Text>
-                      <Link
-                        href={`${spot.slug}`}
-                        className="opacity-60 hover:opacity-100"
-                        target="_blank"
-                      >
-                        <Text variant="caption" className="opacity-60">
-                          {dictionary.common.view}
-                        </Text>
-                      </Link>
-                    </Flex>
-                  ))}
                 </InfoCard>
               )}
               <Text variant="body" className="py-0 px-3">
