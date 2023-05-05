@@ -1,4 +1,5 @@
-import { CustomImage, Flex, Tag, Text } from '@/components/common';
+import { Flex, Tag, Text } from '@/components/common';
+import { UserPicture } from '@/components/user';
 import { getEvent } from '@/features/events';
 import { Locale } from '@/i18n';
 import { getFirstItem } from '@/lib';
@@ -46,19 +47,10 @@ export default async function Page({ params }: Props) {
             horizontalAlign="stretch"
           >
             <Flex direction="row" verticalAlign="center" horizontalAlign="left">
-              <CustomImage
-                key={participation.id}
-                src={participation.user?.avatar_url}
-                alt={
-                  participation.user?.username || participation.user?.full_name
-                }
-                width={35}
-                height={35}
-                rounded="full"
-                style={{
-                  objectFit: 'cover',
-                }}
-                className="border border-white-300 dark:border-dark-300"
+              <UserPicture
+                user={participation.user}
+                userId={participation.user_id}
+                size={35}
               />
               <Text variant="caption">
                 {participation.user?.username || participation.user?.full_name}

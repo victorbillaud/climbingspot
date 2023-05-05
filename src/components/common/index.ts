@@ -9,4 +9,5 @@ export * from './modal';
 export * from './table';
 export * from './tags';
 export * from './text';
+export * from './tooltip';
 
