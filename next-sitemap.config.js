@@ -2,12 +2,11 @@
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://www.climbingspot.eu',
-  generateRobotsTxt: true,
+  siteUrl: 'https://www.climbingspot.eu/fr',
   changefreq: 'daily',
   priority: 0.7,
   sitemapSize: 5000,
-  exclude: ['/server-sitemap.xml'],
+  exclude: ['/server-sitemap.xml', 'sitemap-*.xml'],
   alternateRefs: [
     {
       href: 'https://www.climbingspot.eu/fr',
@@ -20,7 +19,7 @@ module.exports = {
   ],
   transform: async (config, path) => {
     return {
-      loc: path, // => this will be exported as http(s)://<config.siteUrl>/<path>
+      loc: path,
       changefreq: config.changefreq,
       priority: config.priority,
       lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
@@ -42,7 +41,7 @@ module.exports = {
       },
     ],
     additionalSitemaps: [
-      'https://climbingspot.eu/server-sitemap.xml', // <==== Add here
+      'https://www.climbingspot.eu/server-sitemap.xml', // <==== Add here
     ],
   },
 };
