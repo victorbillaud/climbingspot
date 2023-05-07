@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server';
 import '@/styles/globals.css';
 import { Barlow } from '@next/font/google';
 import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
+import Head from 'next/head';
 import { ReactNode } from 'react';
 export type TypedSupabaseClient = SupabaseClient<Database>;
 
@@ -39,6 +40,11 @@ export default async function RootLayout({ children }: IProps) {
 
   return (
     <html lang="en" className={`${barlow.variable}`}>
+      <Head>
+        <meta charSet="utf-8" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <body className="w-screen h-screen flex justify-center items-center bg-white-200 dark:bg-dark-100">
         <SupabaseProvider accessToken={accessToken as string}>
           <AnalyticsProvider />
