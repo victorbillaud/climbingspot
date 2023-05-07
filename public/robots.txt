@@ -10,4 +10,4 @@ Host: https://www.climbingspot.eu
 
 # Sitemaps
 Sitemap: https://www.climbingspot.eu/sitemap.xml
-Sitemap: https://climbingspot.eu/server-sitemap.xml
+Sitemap: https://www.climbingspot.eu/server-sitemap.xml
