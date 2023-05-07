@@ -3,11 +3,9 @@ import Pagination from '@/components/common/button/Pagination';
 import { SpotCardSmall } from '@/components/spot';
 import { listSpotsFromSlug } from '@/features/spots';
 import { createClient } from '@/lib/supabase/server';
+import { Metadata } from 'next';
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
+type Props = {
   params: {
     slug: string[];
   };
@@ -15,7 +13,44 @@ export default async function Page({
     page: number;
     [key: string]: string | number | undefined;
   };
-}) {
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  let country = params.slug[0];
+  let city = params.slug[1];
+
+  const title = city ? `Spots in ${city} - ${country}` : `Spots in ${country}`;
+  const description = city
+    ? `Unlock the thrill of climbing at ${city} in ${country}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${city}'s climbing scene and boost your adventure at ${city} today!`
+    : `Unlock the thrill of climbing in ${country}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${country}'s climbing scene and boost your adventure today!`;
+
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      images: [
+        {
+          url: `/climber.png`,
+        },
+      ],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        noimageindex: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    category: 'climbing',
+  };
+}
+
+export default async function Page({ params, searchParams }: Props) {
   const supabase = createClient();
   const { slug } = params;
 
