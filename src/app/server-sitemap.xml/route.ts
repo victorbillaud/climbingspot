@@ -28,47 +28,27 @@ export async function GET(request: Request) {
   // extract from spotsPaths the paths like /spot/france/paris and /spot/france/lyon
   const paths: ISitemapField[] = [];
 
-  spotsPaths.forEach((spotPath) => {
-    const path = spotPath.loc.split('https://www.climbingspot.eu/fr')[1];
-    const pathArray = path.split('/');
-    const country = pathArray[2];
-    const city = pathArray[3];
-    const countryPath = `/spot/${country}`;
-    const cityPath = `/spot/${country}/${city}`;
-
-    paths.push({
-      loc: `https://www.climbingspot.eu/fr${countryPath}`,
-      lastmod: new Date().toISOString(),
-      changefreq: 'daily',
-      priority: 0.7,
-      alternateRefs: [
-        {
-          hreflang: 'en',
-          href: `https://www.climbingspot.eu/en${countryPath}`,
-        },
-        {
-          hreflang: 'fr',
-          href: `https://www.climbingspot.eu/fr${countryPath}`,
-        },
-      ],
-    });
-
-    paths.push({
-      loc: `https://www.climbingspot.eu/fr${cityPath}`,
-      lastmod: new Date().toISOString(),
-      changefreq: 'daily',
-      priority: 0.7,
-      alternateRefs: [
-        {
-          hreflang: 'en',
-          href: `https://www.climbingspot.eu/en${cityPath}`,
-        },
-        {
-          hreflang: 'fr',
-          href: `https://www.climbingspot.eu/fr${cityPath}`,
-        },
-      ],
-    });
+  slugs.forEach((slug) => {
+    const path = slug?.split('/')?.slice(0, 4)?.join('/');
+    console.log(path);
+    if (path) {
+      paths.push({
+        loc: `https://www.climbingspot.eu/fr${path}`,
+        lastmod: new Date().toISOString(),
+        changefreq: 'daily',
+        priority: 0.7,
+        alternateRefs: [
+          {
+            hreflang: 'en',
+            href: `https://www.climbingspot.eu/en${path}`,
+          },
+          {
+            hreflang: 'fr',
+            href: `https://www.climbingspot.eu/fr${path}`,
+          },
+        ],
+      });
+    }
   });
 
   // remove duplicates
@@ -77,5 +57,5 @@ export async function GET(request: Request) {
       index === self.findIndex((t) => t.loc === thing.loc),
   );
 
-  return getServerSideSitemap([...spotsPaths, ...uniquePaths]);
+  return getServerSideSitemap([...uniquePaths, ...spotsPaths]);
 }
