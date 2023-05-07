@@ -1,6 +1,8 @@
 import { AnalyticsProvider } from '@/components/AnalyticsProvider';
 import SupabaseProvider from '@/components/auth/SupabaseProvider';
 import { ColorSchemeProvider } from '@/components/ColorSchemeProvider';
+import CookieBanner from '@/components/CookieBanner';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 import { JobaiProvider } from '@/components/JobaiProvider';
 import type { Database } from '@/lib/db_types';
 import { createClient } from '@/lib/supabase/server';
@@ -48,9 +50,11 @@ export default async function RootLayout({ children }: IProps) {
       <body className="w-screen h-screen flex justify-center items-center bg-white-200 dark:bg-dark-100">
         <SupabaseProvider accessToken={accessToken as string}>
           <AnalyticsProvider />
+          <GoogleAnalytics GA_MEASUREMENT_ID="G-8D5GHH2KEL" />
           <JobaiProvider>
             <ColorSchemeProvider>
               <div className="h-full w-full">{children}</div>
+              <CookieBanner />
             </ColorSchemeProvider>
           </JobaiProvider>
         </SupabaseProvider>
