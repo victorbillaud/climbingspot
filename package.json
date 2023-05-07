@@ -63,6 +63,7 @@
     "@storybook/nextjs": "^7.0.0-beta.44",
     "@storybook/react": "7.0.0-beta.44",
     "@storybook/testing-library": "^0.0.14-next.1",
+    "@types/gtag.js": "^0.0.12",
     "@types/leaflet": "^1.9.1",
     "@types/lodash": "^4.14.192",
     "@types/negotiator": "^0.6.1",
