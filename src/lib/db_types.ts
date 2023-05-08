@@ -604,7 +604,7 @@ export interface Database {
         | "South America"
       difficulty: "Easy" | "Medium" | "Hard"
       diffulty: "Easy" | "Medium" | "Hard"
-      invitation_status: "Pending" | "Accepted"
+      invitation_status: "Pending" | "Accepted" | "Declined"
       month:
         | "January"
         | "February"

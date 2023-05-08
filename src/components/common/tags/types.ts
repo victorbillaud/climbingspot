@@ -1,5 +1,6 @@
 import React from 'react';
 import { IconNames } from '../icon';
+import { TTextStyles } from '../text';
 
 export type TTagColor =
   | 'red'
@@ -19,4 +20,10 @@ export interface ITag extends React.HTMLAttributes<HTMLDivElement> {
   color: TTagColor;
   size?: TTagSize;
   icon?: IconNames;
+}
+
+export interface IBadge extends React.HTMLAttributes<HTMLDivElement> {
+  text: string;
+  textVariant?: TTextStyles;
+  color: TTagColor;
 }

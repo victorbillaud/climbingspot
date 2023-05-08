@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
-import { Icon, IconNames } from '../common';
+import { Badge, Icon, IconNames } from '../common';
 import { Flex } from '../common/layout';
 import { Text } from '../common/text';
 
@@ -9,6 +9,7 @@ export interface IMenuItemsProps {
   icon: IconNames;
   label: string;
   to: string;
+  pins?: number;
 }
 
 interface ISideMenuProps {
@@ -35,7 +36,7 @@ export const SideMenu: React.FC<ISideMenuProps> = ({ menuItems }) => {
             direction="row"
             gap={1}
             fullSize
-            horizontalAlign="left"
+            horizontalAlign="stretch"
             className={`${
               isActive(item.to)
                 ? 'border border-white-300 dark:border-dark-300 dark:bg-dark-200 bg-white-200'
@@ -43,21 +44,28 @@ export const SideMenu: React.FC<ISideMenuProps> = ({ menuItems }) => {
             }w-full outline-none py-1 px-1 text-s lg:text-sm xl:text-base text-black-100 dark:text-white-100
             rounded-md`}
           >
-            <Icon
-              name={item.icon}
-              // color={`${
-              //   isActive(item.to) ? 'text-brand-600' : 'text-gray-400'
-              // }`}
-            />
-            <Text
-              key={item.label}
-              variant="caption"
-              // color={`${
-              //   isActive(item.to) ? 'text-brand-600' : 'text-gray-400'
-              // }`}
+            <Flex
+              className="w-full"
+              direction="row"
+              horizontalAlign="left"
+              gap={1}
             >
-              {item.label}
-            </Text>
+              <Icon name={item.icon} />
+              <Text key={item.label} variant="caption">
+                {item.label}
+              </Text>
+            </Flex>
+            {item.pins && (
+              <Flex
+                className="w-full"
+                direction="row"
+                horizontalAlign="right"
+                verticalAlign="center"
+                gap={1}
+              >
+                <Badge color="red" text={item.pins.toString()} />
+              </Flex>
+            )}
           </Flex>
         </Link>
       ))}
