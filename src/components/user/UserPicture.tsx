@@ -4,6 +4,7 @@ import { TProfile } from '@/features/profiles/types';
 import { getFirstItem } from '@/lib';
 import { logger } from '@/lib/logger';
 import { useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useSupabase } from '../auth/SupabaseProvider';
 import { Button, CustomImage, Flex, Icon, Text, Tooltip } from '../common';
 
@@ -11,12 +12,14 @@ type TUserPictureProps = {
   userId: TProfile['id'];
   user: TProfile;
   size?: number;
+  tooltip?: boolean;
 };
 
 export const UserPicture = ({
   userId: paramsUserId,
   user: paramsUser,
   size = 25,
+  tooltip = true,
 }: TUserPictureProps) => {
   const { supabase, user: connectedUser } = useSupabase();
   const [user, setUser] = useState<TProfile | null>(null);
@@ -55,6 +58,7 @@ export const UserPicture = ({
     });
 
     if (error) {
+      toast.error(error.message);
       console.error(error);
     }
 
@@ -70,8 +74,8 @@ export const UserPicture = ({
           className="w-full"
           disabled={true}
           variant={'secondary'}
-          text={'Pending'}
-          icon={'spin'}
+          text={'Invitation sent'}
+          icon={'envelop'}
         />
       );
     } else if (isFriend) {
@@ -98,7 +102,7 @@ export const UserPicture = ({
     }
   }, [isFriend, isPending]);
 
-  return (
+  return tooltip ? (
     <Tooltip
       interactive
       delay={100}
@@ -117,7 +121,7 @@ export const UserPicture = ({
 
               <Text variant="body">{user.username || user.full_name}</Text>
             </Flex>
-            {buttonRender}
+            {connectedUser?.id !== user.id && buttonRender}
           </Flex>
         ) : (
           <Flex fullSize>
@@ -140,5 +144,14 @@ export const UserPicture = ({
         />
       </div>
     </Tooltip>
+  ) : (
+    <CustomImage
+      width={size}
+      height={size}
+      src={paramsUser.avatar_url}
+      alt={paramsUser.username}
+      rounded="full"
+      className="cursor-pointer border border-white-300 dark:border-dark-300"
+    />
   );
 };

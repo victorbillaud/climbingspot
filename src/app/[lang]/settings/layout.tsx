@@ -1,5 +1,7 @@
 import { Flex } from '@/components/common/layout';
 import { SideMenu } from '@/components/navbar';
+import { getFriends } from '@/features/friendship';
+import { createClient } from '@/lib/supabase/server';
 import { ReactNode } from 'react';
 
 interface IProps {
@@ -8,7 +10,18 @@ interface IProps {
 
 export const revalidate = 0;
 
-export default function RootLayout({ children }: IProps) {
+export default async function RootLayout({ children }: IProps) {
+  const supabase = createClient();
+  const {
+    data: { user: connectedUser },
+  } = await supabase.auth.getUser();
+
+  const { friendships, error } = await getFriends({
+    client: supabase,
+    userId: connectedUser?.id as string,
+    status: 'Pending',
+  });
+
   return (
     <Flex fullSize direction="column" verticalAlign="stretch">
       <div className="w-full h-full gap-0 flex flex-col md:flex-row items-middle justify-start">
@@ -33,6 +46,12 @@ export default function RootLayout({ children }: IProps) {
                 label: 'Events',
                 icon: 'calendar',
                 to: '/settings/events',
+              },
+              {
+                label: 'Friends',
+                icon: 'user-group',
+                to: '/settings/friends',
+                pins: friendships?.length > 0 ? friendships?.length : undefined,
               },
             ]}
           />

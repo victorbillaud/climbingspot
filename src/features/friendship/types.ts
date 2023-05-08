@@ -1,5 +1,6 @@
 import { Database } from '@/lib/db_types';
 import { createClient } from '@/lib/supabase/server';
+import { checkFriendship } from './services';
 
 export type TFriendship = Database['public']['Tables']['friendships']['Row'];
 export type TInsertFriendship =
@@ -13,7 +14,7 @@ export type addFriendProps = {
 export type getFriendsProps = {
   client: ReturnType<typeof createClient>;
   userId: string;
-  status: TFriendship['status'];
+  status?: TFriendship['status'];
 };
 
 export type checkFriendshipProps = {
@@ -21,3 +22,13 @@ export type checkFriendshipProps = {
   firstUserId: string;
   secondUserId: string;
 };
+
+export type answerFriendRequestProps = {
+  client: ReturnType<typeof createClient>;
+  friendshipId: string;
+  status: TFriendship['status'];
+};
+
+export type TFriendShipExtended = NonNullable<
+  Awaited<ReturnType<typeof checkFriendship>>['friendship']
+>;
