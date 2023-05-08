@@ -122,6 +122,32 @@ export interface Database {
           user_id?: string
         }
       }
+      friendships: {
+        Row: {
+          created_at: string | null
+          creator_user_id: string
+          first_user_id: string
+          id: string
+          second_user_id: string
+          status: Database["public"]["Enums"]["invitation_status"]
+        }
+        Insert: {
+          created_at?: string | null
+          creator_user_id: string
+          first_user_id: string
+          id?: string
+          second_user_id: string
+          status?: Database["public"]["Enums"]["invitation_status"]
+        }
+        Update: {
+          created_at?: string | null
+          creator_user_id?: string
+          first_user_id?: string
+          id?: string
+          second_user_id?: string
+          status?: Database["public"]["Enums"]["invitation_status"]
+        }
+      }
       locations: {
         Row: {
           city: string | null

@@ -83,8 +83,6 @@ async function handleSupabaseSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log('user', user);
-
   if ((!session || !user) && pathname.startsWith(`/${locale}/settings`)) {
     const redirectUrl = new URL(
       `${getLocale(request)}/auth/login`,
