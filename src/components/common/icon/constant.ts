@@ -10,6 +10,7 @@ import ChevronRight from './svg/chevron-right';
 import ChevronUp from './svg/chevron-up';
 import Cog from './svg/cog';
 import Cross from './svg/cross';
+import Envelop from './svg/envelop';
 import Eye from './svg/eye';
 import EyeClosed from './svg/eye-closed';
 import File from './svg/file';
@@ -80,4 +81,5 @@ export const icons = {
   link: Link,
   sun: Sun,
   moon: Moon,
+  envelop: Envelop,
 };

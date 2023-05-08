@@ -55,16 +55,29 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
               horizontalAlign="left"
               className="h-full w-1/3 relative rounded-t-md"
             >
-              <CustomImage
-                src={event.spot.image[0]}
-                alt="hiking"
-                fullWidth
-                height={130}
-                className="rounded-l-md"
-                style={{
-                  objectFit: 'cover',
-                }}
-              />
+              {event?.spot && event.spot.image.length > 0 ? (
+                <CustomImage
+                  src={event.spot.image[0]}
+                  alt="hiking"
+                  fullWidth
+                  height={130}
+                  className="rounded-l-md"
+                  style={{
+                    objectFit: 'cover',
+                  }}
+                />
+              ) : (
+                <CustomImage
+                  src="/hiking.png"
+                  alt="hiking"
+                  fullWidth
+                  height={130}
+                  className="rounded-l-md"
+                  style={{
+                    objectFit: 'cover',
+                  }}
+                />
+              )}
 
               <Link
                 className="absolute top-0 left-0"
