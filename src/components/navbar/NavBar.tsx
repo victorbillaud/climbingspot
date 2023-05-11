@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -56,6 +57,8 @@ export const NavBar: React.FC<INavBarProps> = () => {
   const router = useRouter();
   const params = useSearchParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  logger.debug('user', user);
 
   return (
     <Flex

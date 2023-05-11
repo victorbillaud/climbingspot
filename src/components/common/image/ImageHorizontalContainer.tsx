@@ -21,7 +21,7 @@ export function ImageHorizontalContainer({
           height={25}
           rounded="full"
           style={{
-            marginLeft: index !== 0 ? `-${index * 10}px` : '0px',
+            marginLeft: index !== 0 ? `-${index * 20}px` : '0px',
             zIndex: images.length - index,
             objectFit: 'cover',
           }}

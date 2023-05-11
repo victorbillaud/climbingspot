@@ -1,5 +1,6 @@
 import { Badge, Card, Flex, Text } from '@/components/common';
 import { getFriends } from '@/features/friendship';
+import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/server';
 import { UserInvite } from './UserInvite';
 
@@ -13,6 +14,8 @@ export default async function Page() {
     client: supabase,
     userId: connectedUser?.id as string,
   });
+
+  logger.debug(friendships);
 
   return (
     <Flex fullSize direction="column" horizontalAlign="left" className="p-4">
@@ -40,15 +43,18 @@ export default async function Page() {
           {friendships &&
           friendships?.filter((friendship) => friendship.status === 'Pending')
             .length > 0 ? (
-            friendships
-              ?.filter((friendship) => friendship.status === 'Pending')
-              .map((friendship) => (
-                <UserInvite
-                  key={friendship.id}
-                  friendship={friendship}
-                  showActions={true}
-                />
-              ))
+            <Flex>
+              {friendships
+                ?.filter((friendship) => friendship.status === 'Pending')
+                .map((friendship) => (
+                  <UserInvite
+                    key={friendship.id}
+                    friendship={friendship}
+                    showCreator={true}
+                    showActions={true}
+                  />
+                ))}
+            </Flex>
           ) : (
             <Flex fullSize>
               <Text variant="caption">No pending requests</Text>
@@ -67,11 +73,13 @@ export default async function Page() {
           {friendships &&
           friendships.filter((friendship) => friendship.status === 'Accepted')
             .length > 0 ? (
-            friendships
-              ?.filter((friendship) => friendship.status === 'Accepted')
-              .map((friendship) => (
-                <UserInvite key={friendship.id} friendship={friendship} />
-              ))
+            <Flex>
+              {friendships
+                ?.filter((friendship) => friendship.status === 'Accepted')
+                .map((friendship) => (
+                  <UserInvite key={friendship.id} friendship={friendship} />
+                ))}
+            </Flex>
           ) : (
             <Flex fullSize direction="column" horizontalAlign="center">
               <Text variant="caption">You have no friends yet</Text>

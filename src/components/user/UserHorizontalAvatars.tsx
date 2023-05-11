@@ -13,7 +13,7 @@ export function UserHorizontalAvatars({ users }: UserHorizontalAvatarsProps) {
         <div
           key={user.id}
           style={{
-            marginLeft: index !== 0 ? `-${index * 10}px` : '0px',
+            marginLeft: index !== 0 ? `-${index + 1 * 10}px` : '0px',
             zIndex: users.length - index,
           }}
         >

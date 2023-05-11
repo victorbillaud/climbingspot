@@ -316,6 +316,8 @@ export const searchSpots = async ({
   difficulty,
   limit = 20,
   page = 1,
+  ordering = 'image',
+  ascending = false,
 }: searchSpotsParams) => {
   if (difficulty?.indexOf('All') !== -1) {
     difficulty = ['Easy', 'Medium', 'Hard'];
@@ -337,7 +339,7 @@ export const searchSpots = async ({
     .ilike('name', `%${spotName}%`)
     .ilike('location.city', `%${location}%`)
     .in('difficulty', difficulty || [])
-    .order('image', { ascending: false })
+    .order(ordering, { ascending: ascending })
     .range((page - 1) * limit, page * limit - 1);
 
   return {

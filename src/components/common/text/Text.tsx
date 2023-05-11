@@ -72,9 +72,17 @@ export const Text: FunctionComponent<ITextProps> = ({
     );
   }
 
+  if (variant == 'body') {
+    return (
+      <p className={`my-0 mx-0 ${classNameString}`} {...props}>
+        {children}
+      </p>
+    );
+  }
+
   return (
-    <p className={classNameString} {...props}>
+    <span className={`${classNameString}`} {...props}>
       {children}
-    </p>
+    </span>
   );
 };
