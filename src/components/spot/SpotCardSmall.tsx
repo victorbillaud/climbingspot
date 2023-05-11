@@ -37,7 +37,7 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
           direction="row"
           verticalAlign="top"
           horizontalAlign="left"
-          className="w-full relative rounded-t-md"
+          className="w-full h-full relative rounded-t-md"
         >
           {spot.image && spot.image.length > 0 ? (
             <CustomImage
@@ -110,10 +110,10 @@ export const SpotCardSmall: React.FC<TSpotCardSmallProps> = ({
               {spot.name}
             </Text>
             <Flex direction="row" horizontalAlign="left">
-              <Text variant="body" className="opacity-80">
+              <Text variant="caption" className="opacity-80">
                 {spot.location.city}
               </Text>
-              <Text variant="body" className="opacity-50">
+              <Text variant="caption" className="opacity-50">
                 {spot.location.department}
               </Text>
             </Flex>
