@@ -69,23 +69,7 @@ export default async function Page({
             </Text>
           </Flex>
         </Flex>
-        {spots && spots.length > 0 && (
-          <>
-            <div className="w-full h-full relative">
-              <Flex
-                direction="row"
-                horizontalAlign="left"
-                className="h-full w-full overflow-x-auto scrollbar-hide p-3 py-10"
-              >
-                {spots.map((spot) => (
-                  <div className="h-full min-w-[300px]" key={spot.id}>
-                    <SpotCardSmall spot={spot} />
-                  </div>
-                ))}
-              </Flex>
-            </div>
-          </>
-        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:mx-[10%] px-4 py-10">
           {Object.entries(dictionary.home.part).map(([key, value]) => (
             <Card key={key} className="p-6">
@@ -109,8 +93,28 @@ export default async function Page({
             </Card>
           ))}
         </div>
-        <Flex className="w-full md:mx-[10%] px-4 py-10">
-          <Text variant="h2" className="text-center py-4">
+        <div className="w-1/4 border-2 rounded-md border-white-200 dark:border-dark-200"></div>
+
+        {spots && spots.length > 0 && (
+          <>
+            <div className="w-full h-full relative">
+              <Flex
+                direction="row"
+                horizontalAlign="left"
+                className="h-full w-full overflow-x-auto scrollbar-hide p-3 py-10"
+              >
+                {spots.map((spot) => (
+                  <div className="h-full min-w-[300px]" key={spot.id}>
+                    <SpotCardSmall spot={spot} />
+                  </div>
+                ))}
+              </Flex>
+            </div>
+          </>
+        )}
+        <div className="w-1/4 border-2 rounded-md border-white-200 dark:border-dark-200"></div>
+        <Flex className="w-full md:mx-[10%] px-4 py-6">
+          <Text variant="h2" className="text-center py-8">
             {dictionary.home.part.first.title}
           </Text>
           <Flex
@@ -128,7 +132,11 @@ export default async function Page({
                 gap={6}
               >
                 <Flex className="h-full">
-                  <Text variant="h3" weight={300} className="text-center py-4">
+                  <Text
+                    variant="h3"
+                    weight={300}
+                    className="text-center py-4 opacity-60"
+                  >
                     Search in more than 1000 spots and events in France
                   </Text>
                 </Flex>
@@ -181,7 +189,11 @@ export default async function Page({
                   rounded="sm"
                 />
                 <Flex className="h-full">
-                  <Text variant="h3" weight={300} className="text-center py-4">
+                  <Text
+                    variant="h3"
+                    weight={300}
+                    className="text-center py-4 opacity-60"
+                  >
                     Find events near you and add new friends to your climbing
                   </Text>
                 </Flex>
