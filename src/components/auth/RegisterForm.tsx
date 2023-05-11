@@ -11,6 +11,7 @@ export type TRegisterFormProps = {};
 export const RegisterForm = (props: TRegisterFormProps) => {
   const { supabase } = useSupabase();
 
+  // TODO: Avatar upload
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const [success, setSuccess] = useState<string | null>(null);

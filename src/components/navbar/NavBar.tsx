@@ -1,9 +1,11 @@
 'use client';
 
+import { logger } from '@/lib/logger';
+import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSupabase } from '../auth/SupabaseProvider';
 import {
   Button,
@@ -52,10 +54,27 @@ const MobileNavItem: React.FC<{
 interface INavBarProps {}
 
 export const NavBar: React.FC<INavBarProps> = () => {
-  const { user } = useSupabase();
+  const { supabase, user: initialUser } = useSupabase();
   const router = useRouter();
   const params = useSearchParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(initialUser);
+
+  logger.debug('NavBar: initialUser', initialUser);
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        const user = session?.user;
+        logger.debug('NavBar: onAuthStateChange', { event, session, user });
+        setUser(user || null);
+      },
+    );
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   return (
     <Flex

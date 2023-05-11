@@ -2,6 +2,7 @@
     background-color: #E0E3E6; 
     border: none;
     border-radius: 8px;
+    padding: 0px;
 }
 
 .leaflet-popup-content-wrapper .leaflet-popup-content {
@@ -13,7 +14,7 @@
 }
 
 .leaflet-popup-tip {
-    background-color: #E0E3E6;
+    background-color: #fbfcfd;
 }
 
 .leaflet-popup {

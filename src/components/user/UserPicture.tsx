@@ -116,9 +116,8 @@ export const UserPicture = ({
                 src={user.avatar_url}
                 alt={user.username}
                 rounded="full"
-                className="cursor-pointer border border-white-300 dark:border-dark-300"
+                className="cursor-pointer rounded-full border border-white-300 dark:border-dark-200"
               />
-
               <Text variant="body">{user.username || user.full_name}</Text>
             </Flex>
             {connectedUser?.id !== user.id && buttonRender}

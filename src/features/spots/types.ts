@@ -39,6 +39,8 @@ export type searchSpotsParams = {
   location?: string;
   difficulty?: SpotExtended['difficulty'][];
   limit?: number;
+  ordering?: 'image' | 'note';
+  ascending?: boolean;
   page?: number;
 };
 

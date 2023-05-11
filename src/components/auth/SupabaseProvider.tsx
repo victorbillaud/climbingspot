@@ -78,7 +78,12 @@ export default function SupabaseProvider(props: {
       user,
       supabase,
       signOut: () => {
-        return supabase.auth.signOut();
+        try {
+          supabase.auth.signOut();
+          router.push('/auth/login');
+        } catch (error) {
+          return Promise.resolve({ error: null });
+        }
       },
     };
   }, [initial, session, user]);
