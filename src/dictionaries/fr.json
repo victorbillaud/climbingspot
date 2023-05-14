@@ -99,6 +99,8 @@
     },
     "spots": {
         "title": "Spots",
+        "related_spots": "Spots similaires",
+        "see_all_spots": "Voir tous les spots",
         "login_to_create": "Connectez-vous pour créer un spot",
         "create_spot": "Créer un spot",
         "update_spot": "Modifier le spot",

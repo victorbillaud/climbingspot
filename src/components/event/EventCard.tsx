@@ -4,7 +4,6 @@ import {
   EventResponseSuccess,
   JoinEventResponseSuccess,
 } from '@/features/events';
-import { getFirstItem } from '@/lib';
 import { formatDate } from '@/lib/tsUtils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -14,9 +13,9 @@ import {
   Card,
   CustomImage,
   Flex,
-  ImageHorizontalContainer,
-  Text,
+  Text
 } from '../common';
+import { UserHorizontalAvatars } from '../user';
 import { JoinEventButton } from './JoinEventButton';
 
 export type TEventCardProps = {
@@ -133,10 +132,10 @@ export const EventCard: React.FC<TEventCardProps> = ({
             <div>
               <Flex direction="row" gap={1}>
                 {participations && (
-                  <ImageHorizontalContainer
-                    images={participations.map((participation) => ({
-                      src: getFirstItem(participation?.user)?.avatar_url,
-                      alt: getFirstItem(participation?.user)?.username,
+                  <UserHorizontalAvatars
+                    users={participations.map((p) => ({
+                      id: p?.user_id,
+                      ...p?.user,
                     }))}
                   />
                 )}

@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import { getFriends } from '../friendship';
 import {
   createEventParams,
   getEventParams,
@@ -6,7 +7,9 @@ import {
   joinEventParams,
   listEventsFromCreatorParams,
   listEventsParams,
-  updateEventParams,
+  listFriendsEventsParams,
+  listUserEventsParams,
+  updateEventParams
 } from './types';
 // TODO: CHANGE FULL_NAME TO USERNAME
 
@@ -148,12 +151,9 @@ export const listEvents = async ({
   client,
   limit = 20,
   page = 1,
+  ids,
 }: listEventsParams) => {
-  const {
-    data: events,
-    count,
-    error,
-  } = await client
+  const query = client
     .from('events')
     .select(
       `
@@ -164,9 +164,15 @@ export const listEvents = async ({
       `,
       { count: 'exact' },
     )
-    .limit(10)
+    .limit(limit)
     .order('start_at', { ascending: true })
     .range((page - 1) * limit, page * limit - 1);
+
+  if (ids) {
+    query.filter('id', 'in', `(${ids.join(',')})`);
+  }
+
+  const { data: events, count, error } = await query;
 
   if (error) {
     logger.error(error);
@@ -202,4 +208,83 @@ export const listEventsFromCreator = async ({
   }
 
   return { events, error };
+};
+
+export const listFriendsEvents = async ({
+  client,
+  userId,
+}: listFriendsEventsParams) => {
+  const { friendships } = await getFriends({ client, userId });
+
+  if (!friendships) {
+    return { events: [], error: null };
+  }
+
+  const friends = friendships?.map((friendship) =>
+    friendship.second_user_id == userId
+      ? friendship.first_user_id
+      : friendship.second_user_id,
+  );
+
+  const { data: events, error } = await client
+    .from('events')
+    .select(
+      `
+        *,
+        events_participations!inner(*, user:profiles(avatar_url, full_name, username))
+      `,
+    )
+    .limit(10)
+    .order('start_at', { ascending: true })
+    .filter('events_participations.user_id', 'in', `(${friends.join(',')})`)
+    .filter('creator_id', 'neq', userId);
+
+  const {
+    events: eventsToSend,
+    error: error2,
+    count,
+  } = await listEvents({ client: client, ids: events?.map((e) => e.id) });
+
+  if (error || error2) {
+    logger.error(error || error2);
+  }
+
+  return {
+    events: eventsToSend,
+    count,
+    error,
+  };
+};
+
+export const listUserEvents = async ({
+  client,
+  userId,
+}: listUserEventsParams) => {
+  const { data: events, error } = await client
+    .from('events')
+    .select(
+      `
+        *,
+        events_participations!inner(*, user:profiles(avatar_url, full_name, username))
+      `,
+    )
+    .limit(10)
+    .order('start_at', { ascending: true })
+    .filter('events_participations.user_id', 'eq', userId);
+
+  const {
+    events: eventsToSend,
+    error: error2,
+    count,
+  } = await listEvents({ client: client, ids: events?.map((e) => e.id) });
+
+  if (error || error2) {
+    logger.error(error || error2);
+  }
+
+  return {
+    events: eventsToSend,
+    count,
+    error,
+  };
 };

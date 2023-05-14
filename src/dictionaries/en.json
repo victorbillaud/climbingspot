@@ -99,6 +99,8 @@
     },
     "spots": {
         "title": "Spots",
+        "related_spots": "Related spots",
+        "see_all_spots": "See all spots",
         "login_to_create": "Login to create a spot",
         "create_spot": "Create a spot",
         "update_spot": "Update spot",

@@ -14,7 +14,7 @@ import {
   FloatingPanel,
   Icon,
   IconNames,
-  Text,
+  Text
 } from '../common';
 import LocaleSwitcher from '../footer/LocaleSwitcher';
 import { NavIcon } from './NavIcons';
@@ -33,15 +33,15 @@ const MobileNavItem: React.FC<{
           name={icon}
           scale={1.8}
           className="opacity-70"
-          color="text-brand-500"
+          color="text-brand-100"
         />
 
         <Button text="" variant="none" className="w-full" onClick={onClick}>
           <Flex fullSize verticalAlign="top" horizontalAlign="center" gap={0}>
-            <Text variant="h4" className="px-2" color="text-brand-700">
+            <Text variant="h4" className="px-2" color="text-brand-100">
               {title}
             </Text>
-            <Text variant="body" className="px-2" color="text-brand-700">
+            <Text variant="body" className="px-2" color="text-brand-100">
               {text}
             </Text>
           </Flex>
