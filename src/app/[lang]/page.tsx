@@ -3,7 +3,6 @@ import Footer from '@/components/footer/Footer';
 import { SpotCardSmall } from '@/components/spot';
 import { searchSpots } from '@/features/spots';
 import { getDictionary } from '@/lib/get-dictionary';
-import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Locale } from '../../i18n';
@@ -16,7 +15,7 @@ export default async function Page({
   const dictionary = await getDictionary(lang);
   const supabase = createClient();
 
-  const { spots, error } = await searchSpots({
+  const { spots } = await searchSpots({
     client: supabase,
     spotName: '',
     location: '',
@@ -25,12 +24,6 @@ export default async function Page({
     difficulty: ['All'],
     ascending: true,
   });
-
-  if (error) {
-    logger.error(error);
-  }
-
-  logger.debug(spots);
 
   return (
     <>
@@ -94,7 +87,6 @@ export default async function Page({
           ))}
         </div>
         <div className="w-1/4 border-2 rounded-md border-white-200 dark:border-dark-200"></div>
-
         {spots && spots.length > 0 && (
           <>
             <div className="w-full h-full relative">
@@ -123,23 +115,17 @@ export default async function Page({
             horizontalAlign="left"
             gap={0}
           >
-            <Link href={`/${lang}/maps`} className="w-full">
-              <Flex
-                verticalAlign="center"
-                horizontalAlign="center"
-                direction="row"
-                className="w-full h-full relative"
-                gap={6}
-              >
-                <Flex className="h-full">
-                  <Text
-                    variant="h3"
-                    weight={300}
-                    className="text-center py-4 opacity-60"
-                  >
-                    Search in more than 1000 spots and events in France
-                  </Text>
-                </Flex>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full h-full relative">
+              <Flex className="h-full">
+                <Text
+                  variant="h3"
+                  weight={300}
+                  className="text-center py-4 opacity-60"
+                >
+                  Search in more than 1000 spots and events in France
+                </Text>
+              </Flex>
+              <Link href={`/${lang}/maps`} className="w-full">
                 <CustomImage
                   src="/search_w.png"
                   srcDark="/search_d.png"
@@ -153,8 +139,8 @@ export default async function Page({
                   }}
                   rounded="sm"
                 />
-              </Flex>
-            </Link>
+              </Link>
+            </div>
           </Flex>
         </Flex>
         <Flex className="w-full md:mx-[10%] px-4 py-10">
@@ -167,14 +153,8 @@ export default async function Page({
             horizontalAlign="left"
             gap={0}
           >
-            <Link href={`/${lang}/event`} className="w-full">
-              <Flex
-                verticalAlign="center"
-                horizontalAlign="center"
-                direction="row"
-                className="w-full h-full relative"
-                gap={6}
-              >
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full h-full relative">
+              <Link href={`/${lang}/event`} className="w-full">
                 <CustomImage
                   src="/event_w.png"
                   srcDark="/event_d.png"
@@ -188,17 +168,17 @@ export default async function Page({
                   }}
                   rounded="sm"
                 />
-                <Flex className="h-full">
-                  <Text
-                    variant="h3"
-                    weight={300}
-                    className="text-center py-4 opacity-60"
-                  >
-                    Find events near you and add new friends to your climbing
-                  </Text>
-                </Flex>
+              </Link>
+              <Flex className="h-full">
+                <Text
+                  variant="h3"
+                  weight={300}
+                  className="text-center py-4 opacity-60"
+                >
+                  Find events near you and add new friends to your climbing
+                </Text>
               </Flex>
-            </Link>
+            </div>
           </Flex>
         </Flex>
         <Footer />

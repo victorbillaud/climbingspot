@@ -7,15 +7,16 @@ import {
 import { EventCreatePanel } from '@/components/event';
 import { EventContainer } from '@/components/event/EventContainer';
 import { ReviewContainer, ReviewCreateModal } from '@/components/review';
-import { SpotCard } from '@/components/spot';
+import { SpotCard, SpotCardSmall } from '@/components/spot';
 import { getSpotEvents } from '@/features/events/service';
 import { getSpotReviews } from '@/features/reviews';
-import { getSpotFromSlug } from '@/features/spots';
+import { getSpotFromSlug, searchSpots } from '@/features/spots';
 import { Locale } from '@/i18n';
 import { getFirstItem } from '@/lib';
 import { getDictionary } from '@/lib/get-dictionary';
 import { createClient } from '@/lib/supabase/server';
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 type Props = {
   params: {
@@ -71,6 +72,17 @@ export default async function Page({ params }: Props) {
     client: supabase,
     slug: slugFormatted,
   });
+
+  const { spots: relatedSpots } = await searchSpots({
+    client: supabase,
+    spotName: '',
+    location: '',
+    ordering: 'note',
+    limit: 10,
+    difficulty: [spot?.difficulty],
+    ascending: true,
+  });
+
   const { reviews } = await getSpotReviews({
     client: supabase,
     spotId: spot?.id as string,
@@ -89,94 +101,127 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <div className="w-full md:w-11/12 lg:w-5/6">
-      <Flex
-        fullSize
-        verticalAlign="top"
-        horizontalAlign="left"
-        className="h-full overflow-y-auto p-3 pt-0"
-        gap={8}
-      >
-        <Flex className="h-full w-full">
-          {spot.image && spot.image.length > 1 ? (
-            <ImageCarouselController
-              images={spot?.image?.map((image) => {
-                return {
-                  src: image,
-                  alt: spot.name || '',
-                  width: 400,
-                };
-              })}
-              height={500}
-            />
-          ) : spot.image && spot.image.length == 1 ? (
-            <CustomImage
-              src={getFirstItem(spot.image) || ''}
-              alt={spot.name || ''}
-              loader={true}
-              width={400}
-              height={400}
-              fullWidth={true}
-              style={{
-                objectFit: 'cover',
-                objectPosition: 'bottom',
-              }}
-              rounded="md"
-              className="z-10"
-            />
-          ) : (
-            <Flex
-              className="bg-gray-100 dark:bg-dark-100 w-full h-full rounded-md"
-              fullSize
-              verticalAlign="center"
-              horizontalAlign="center"
-            >
-              <Text variant="body">{dictionary.common.no_image}</Text>
+    <Flex className="w-full">
+      <div className="w-full md:w-11/12 lg:w-5/6">
+        <Flex
+          fullSize
+          verticalAlign="top"
+          horizontalAlign="left"
+          className="h-full overflow-y-auto p-3 pt-0"
+          gap={8}
+        >
+          <Flex className="h-full w-full">
+            {spot.image && spot.image.length > 1 ? (
+              <ImageCarouselController
+                images={spot?.image?.map((image) => {
+                  return {
+                    src: image,
+                    alt: spot.name || '',
+                    width: 400,
+                  };
+                })}
+                height={500}
+              />
+            ) : spot.image && spot.image.length == 1 ? (
+              <CustomImage
+                src={getFirstItem(spot.image) || ''}
+                alt={spot.name || ''}
+                loader={true}
+                width={400}
+                height={400}
+                fullWidth={true}
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'bottom',
+                }}
+                rounded="md"
+                className="z-10"
+              />
+            ) : (
+              <Flex
+                className="bg-gray-200 dark:bg-dark-200 w-full h-full rounded-md p-2"
+                fullSize
+                verticalAlign="center"
+                horizontalAlign="center"
+              >
+                <Text variant="body">{dictionary.common.no_image}</Text>
+              </Flex>
+            )}
+          </Flex>
+          <SpotCard spot={spot} />
+          <Flex verticalAlign="top" className="w-full">
+            <Flex direction="row" horizontalAlign="stretch" className="w-full">
+              <Text variant="title">
+                {dictionary.events.title}
+                <span className="ml-1 opacity-70">({events?.length})</span>{' '}
+              </Text>
+              {session ? (
+                <EventCreatePanel spot={spot} />
+              ) : (
+                <Text variant="body" className="opacity-60">
+                  {dictionary.events.login_to_create}
+                </Text>
+              )}
             </Flex>
-          )}
-        </Flex>
-        <SpotCard spot={spot} />
-        <Flex verticalAlign="top" className="w-full">
-          <Flex direction="row" horizontalAlign="stretch" className="w-full">
-            <Text variant="title">
-              {dictionary.events.title}
-              <span className="ml-1 opacity-70">({events?.length})</span>{' '}
-            </Text>
-            {session ? (
-              <EventCreatePanel spot={spot} />
+            {events && events.length > 0 ? (
+              <EventContainer events={events} />
             ) : (
-              <Text variant="body" className="opacity-60">
-                {dictionary.events.login_to_create}
-              </Text>
+              <Text variant="body">{dictionary.events.no_events}</Text>
             )}
           </Flex>
-          {events && events.length > 0 ? (
-            <EventContainer events={events} />
-          ) : (
-            <Text variant="body">{dictionary.events.no_events}</Text>
-          )}
-        </Flex>
-        <Flex verticalAlign="top" className="w-full">
-          <Flex direction="row" horizontalAlign="stretch" className="w-full">
-            <Text variant="title">
-              {dictionary.reviews.title}
-              <span className="ml-1 opacity-70">({reviews?.length})</span>{' '}
-            </Text>
-            {session ? (
-              <ReviewCreateModal spotId={spot.id || ''} />
-            ) : (
-              <Text variant="body" className="opacity-60">
-                {dictionary.reviews.login_to_review}
+          <Flex verticalAlign="top" className="w-full">
+            <Flex direction="row" horizontalAlign="stretch" className="w-full">
+              <Text variant="title">
+                {dictionary.reviews.title}
+                <span className="ml-1 opacity-70">
+                  ({reviews?.length})
+                </span>{' '}
               </Text>
+              {session ? (
+                <ReviewCreateModal spotId={spot.id || ''} />
+              ) : (
+                <Text variant="body" className="opacity-60">
+                  {dictionary.reviews.login_to_review}
+                </Text>
+              )}
+            </Flex>
+            {reviews && reviews.length > 0 ? (
+              <ReviewContainer reviews={reviews} />
+            ) : (
+              <Text variant="body">{dictionary.reviews.no_reviews}</Text>
             )}
           </Flex>
-          {reviews && reviews.length > 0 ? (
-            <ReviewContainer reviews={reviews} />
-          ) : (
-            <Text variant="body">{dictionary.reviews.no_reviews}</Text>
-          )}
         </Flex>
+      </div>
+      <Flex verticalAlign="center" className="w-full">
+        <Flex direction="row" horizontalAlign="center" className="w-2/3">
+          <div className="w-1/4 border-2 rounded-md border-white-200 dark:border-dark-200" />
+          <Text variant="title" className="opacity-80">
+            {dictionary.spots.related_spots}
+          </Text>
+          <div className="w-1/4 border-2 rounded-md border-white-200 dark:border-dark-200" />
+        </Flex>
+        {relatedSpots && relatedSpots.length > 0 && (
+          <div className="w-full h-full relative">
+            <Flex
+              direction="row"
+              horizontalAlign="left"
+              className="h-full w-full overflow-x-auto scrollbar-hide p-3 py-6"
+            >
+              {relatedSpots.map((spot) => (
+                <div className="h-full min-w-[300px]" key={spot.id}>
+                  <SpotCardSmall spot={spot} />
+                </div>
+              ))}
+            </Flex>
+          </div>
+        )}
+        <Link href="/spot">
+          <Text variant="body" className="opacity-60">
+            {dictionary.spots.see_all_spots}
+          </Text>
+        </Link>
       </Flex>
-    </div>
+    </Flex>
   );
 }

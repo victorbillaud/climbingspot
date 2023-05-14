@@ -25,15 +25,9 @@ export default async function Page() {
       gap={3}
       className="h-full w-full relative"
     >
-      <Flex
-        direction="row"
-        horizontalAlign="stretch"
-        gap={0}
-        verticalAlign="top"
-        className="w-full mx-auto md:w-11/12 lg:w-5/6"
-      >
+      <div className="flex flex-col-reverse md:flex-row items-stretch justify-start gap-0 w-full mx-auto md:w-11/12 lg:w-5/6">
         <Flex
-          className="w-full p-3 pr-0"
+          className="w-full p-3 md:pr-0"
           direction="column"
           horizontalAlign="left"
         >
@@ -43,12 +37,15 @@ export default async function Page() {
             ))}
           </div>
         </Flex>
-        <Flex className="sticky top-0 w-1/4 p-3" horizontalAlign="left">
+        <Flex
+          className="sticky top-0 w-full md:w-1/4 p-3 pb-0 md:pb-3"
+          horizontalAlign="left"
+        >
           <Card className=" top-3 w-full p-3 shadow-lg">
             <Text variant="caption">This is a card</Text>
           </Card>
         </Flex>
-      </Flex>
+      </div>
       <Footer />
     </Flex>
   );
