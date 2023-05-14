@@ -7,7 +7,7 @@ import {
   joinEvent,
   listEvents,
   listEventsFromCreator,
-  updateEvent,
+  updateEvent
 } from './service';
 
 export type getEventParams = {
@@ -60,6 +60,7 @@ export type listEventsParams = {
   client: ReturnType<typeof createClient>;
   limit?: number;
   page?: number;
+  ids?: string[];
 };
 
 type ListEventsResponse = Awaited<ReturnType<typeof listEvents>>;
@@ -78,3 +79,24 @@ export type ListEventsFromCreatorResponseSuccess =
   ListEventsFromCreatorResponse['events'];
 export type ListEventsFromCreatorResponseError =
   ListEventsFromCreatorResponse['error'];
+
+export type listFriendsEventsParams = {
+  client: ReturnType<typeof createClient>;
+  userId: string;
+};
+
+type ListFriendsEventsResponse = Awaited<
+  ReturnType<typeof listEventsFromCreator>
+>;
+export type ListFriendsEventsResponseSuccess =
+  ListFriendsEventsResponse['events'];
+export type ListFriendsEventsResponseError = ListFriendsEventsResponse['error'];
+
+export type listUserEventsParams = {
+  client: ReturnType<typeof createClient>;
+  userId: string;
+};
+
+type ListUserEventsResponse = Awaited<ReturnType<typeof listEventsFromCreator>>;
+export type ListUserEventsResponseSuccess = ListUserEventsResponse['events'];
+export type ListUserEventsResponseError = ListUserEventsResponse['error'];

@@ -2,7 +2,7 @@
 
 import { ISpotExtended } from '@/features/spots';
 import { useState } from 'react';
-import { Flex, InputText, Modal, Text } from '../common';
+import { Flex, Icon, InputText, Modal, Text } from '../common';
 
 export type TSpotSearchModalProps = {
   isOpen: boolean;

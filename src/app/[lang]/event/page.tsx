@@ -1,14 +1,37 @@
 import { Card, Flex, Text } from '@/components/common';
 import { EventDetailedCard } from '@/components/event';
 import Footer from '@/components/footer/Footer';
-import { listEvents } from '@/features/events';
+import {
+  listEvents,
+  listFriendsEvents,
+  listUserEvents
+} from '@/features/events';
+import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function Page() {
   const supabase = createClient();
-  const { events, count } = await listEvents({
+  const user = await supabase.auth.getUser();
+
+  const { events: userEvents } = await listUserEvents({
+    client: supabase,
+    userId: user.data.user?.id as string,
+  });
+
+  const { events: friendEvents } = await listFriendsEvents({
+    client: supabase,
+    userId: user.data.user?.id as string,
+  });
+
+  const { events: allEvents, count } = await listEvents({
     client: supabase,
   });
+
+  const events = allEvents?.filter(
+    (event) =>
+      !friendEvents?.find((e) => e.id === event.id) &&
+      !userEvents?.find((e) => e.id === event.id),
+  );
 
   if (!events || count === 0) {
     return (
@@ -17,6 +40,8 @@ export default async function Page() {
       </Flex>
     );
   }
+
+  logger.debug(userEvents?.length);
 
   return (
     <Flex
@@ -30,17 +55,56 @@ export default async function Page() {
           className="w-full p-3 md:pr-0"
           direction="column"
           horizontalAlign="left"
+          verticalAlign="stretch"
         >
-          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {events.map((event) => (
-              <EventDetailedCard event={event} key={event.id} />
-            ))}
-          </div>
+          {userEvents && userEvents.length > 0 && (
+            <>
+              <Text variant="h4" weight={400} className="opacity-75">
+                My events
+              </Text>
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
+                {userEvents.map((event) => (
+                  <EventDetailedCard event={event} key={event.id} />
+                ))}
+              </div>
+            </>
+          )}
+
+          {friendEvents && friendEvents.length > 0 && (
+            <>
+              <Text variant="h4" weight={400} className="opacity-75">
+                My friends participates to
+              </Text>
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
+                {friendEvents.map((event) => (
+                  <EventDetailedCard event={event} key={event.id} />
+                ))}
+              </div>
+            </>
+          )}
+          <Text variant="h3" weight={400} className="opacity-75">
+            All events
+          </Text>
+          {events && events.length > 0 ? (
+            <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3">
+              {events.map((event) => (
+                <EventDetailedCard event={event} key={event.id} />
+              ))}
+            </div>
+          ) : (
+            <Flex className="w-full" horizontalAlign="center">
+              <Text variant="caption">There is no events</Text>
+            </Flex>
+          )}
         </Flex>
         <Flex
           className="sticky top-0 w-full md:w-1/4 p-3 pb-0 md:pb-3"
           horizontalAlign="left"
+          verticalAlign="stretch"
         >
+          <Text variant="h4" weight={400} className="opacity-75">
+            Filters
+          </Text>
           <Card className=" top-3 w-full p-3 shadow-lg">
             <Text variant="caption">This is a card</Text>
           </Card>
