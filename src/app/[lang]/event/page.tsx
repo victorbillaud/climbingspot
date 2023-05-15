@@ -13,15 +13,19 @@ export default async function Page() {
   const supabase = createClient();
   const user = await supabase.auth.getUser();
 
-  const { events: userEvents } = await listUserEvents({
-    client: supabase,
-    userId: user.data.user?.id as string,
-  });
+  const { events: userEvents } = user
+    ? await listUserEvents({
+        client: supabase,
+        userId: user.data.user?.id || '',
+      })
+    : { events: [] };
 
-  const { events: friendEvents } = await listFriendsEvents({
-    client: supabase,
-    userId: user.data.user?.id as string,
-  });
+  const { events: friendEvents } = user
+    ? await listFriendsEvents({
+        client: supabase,
+        userId: user.data.user?.id as string,
+      })
+    : { events: [] };
 
   const { events: allEvents, count } = await listEvents({
     client: supabase,
