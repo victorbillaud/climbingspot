@@ -239,14 +239,19 @@ export const listFriendsEvents = async ({
     .filter('events_participations.user_id', 'in', `(${friends.join(',')})`)
     .filter('creator_id', 'neq', userId);
 
+  if (error) {
+    logger.error(error);
+    return { events: [], error };
+  }
+
   const {
     events: eventsToSend,
     error: error2,
     count,
   } = await listEvents({ client: client, ids: events?.map((e) => e.id) });
 
-  if (error || error2) {
-    logger.error(error || error2);
+  if (error2) {
+    logger.error('listFriendEvents', error2);
   }
 
   return {
@@ -272,15 +277,22 @@ export const listUserEvents = async ({
     .order('start_at', { ascending: true })
     .filter('events_participations.user_id', 'eq', userId);
 
+  if (error) {
+    logger.error(error);
+    return { events: [], error };
+  }
+
   const {
     events: eventsToSend,
     error: error2,
     count,
   } = await listEvents({ client: client, ids: events?.map((e) => e.id) });
 
-  if (error || error2) {
-    logger.error(error || error2);
+  if (error2) {
+    logger.error('listUserEvents', error2);
   }
+
+  logger.info(eventsToSend);
 
   return {
     events: eventsToSend,

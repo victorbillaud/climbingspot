@@ -198,12 +198,35 @@ export const NavBar: React.FC<INavBarProps> = () => {
           <NavIcon icon="calendar" label="calendar" to="/event" />
         </Flex>
         <Flex className="h-full px-3">
-          <NavIcon
-            icon="cog"
-            label="settings"
-            to="/settings"
-            userImage={user?.user_metadata?.avatar_url}
-          />
+          {user ? (
+            <NavIcon
+              icon="cog"
+              label="settings"
+              to="/settings"
+              userImage={user?.user_metadata?.avatar_url}
+            />
+          ) : (
+            <>
+              <Flex
+                direction="row"
+                verticalAlign="center"
+                horizontalAlign="center"
+                className="h-full px-0"
+                gap={0}
+              >
+                <Button
+                  variant="primary"
+                  text="Signup"
+                  onClick={() => router.push('/auth/register')}
+                />
+                <Button
+                  variant="default"
+                  text="Login"
+                  onClick={() => router.push('/auth/login')}
+                />
+              </Flex>
+            </>
+          )}
         </Flex>
       </Flex>
     </Flex>
