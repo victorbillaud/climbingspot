@@ -52,7 +52,7 @@ export default async function RootLayout({ children }: IProps) {
           <AnalyticsProvider />
           <GoogleAnalytics
             GA_MEASUREMENT_ID="G-8D5GHH2KEL"
-            ADS_MEASUREMENT_ID="AW-11143081114"
+            // ADS_MEASUREMENT_ID="AW-11143081114"
           />
           <JobaiProvider>
             <ColorSchemeProvider>
