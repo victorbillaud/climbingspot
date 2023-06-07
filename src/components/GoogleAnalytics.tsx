@@ -7,10 +7,8 @@ import { useEffect } from 'react';
 
 export default function GoogleAnalytics({
   GA_MEASUREMENT_ID,
-  ADS_MEASUREMENT_ID,
 }: {
   GA_MEASUREMENT_ID: string;
-  ADS_MEASUREMENT_ID: string;
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -25,24 +23,6 @@ export default function GoogleAnalytics({
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-      />
-      <Script
-        id="google-ads"
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${ADS_MEASUREMENT_ID}`}
-      />
-      <Script
-        id="google-ads"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-        
-          gtag('config', '${ADS_MEASUREMENT_ID}');
-          `,
-        }}
       />
       <Script
         id="google-analytics"
@@ -61,15 +41,6 @@ export default function GoogleAnalytics({
                     page_path: window.location.pathname,
                 });
                 `,
-        }}
-      />
-      <Script
-        id="google-ads"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-          gtag('event', 'conversion', {'send_to': '${ADS_MEASUREMENT_ID}/BsHPCLTo36gYEJrZt8Ep'});
-          `,
         }}
       />
     </>
