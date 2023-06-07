@@ -50,7 +50,10 @@ export default async function RootLayout({ children }: IProps) {
       <body className="w-screen h-screen flex justify-center items-center bg-white-200 dark:bg-dark-100">
         <SupabaseProvider accessToken={accessToken as string}>
           <AnalyticsProvider />
-          <GoogleAnalytics GA_MEASUREMENT_ID="G-8D5GHH2KEL" />
+          <GoogleAnalytics
+            GA_MEASUREMENT_ID="G-8D5GHH2KEL"
+            ADS_MEASUREMENT_ID="AW-11143081114"
+          />
           <JobaiProvider>
             <ColorSchemeProvider>
               <div className="h-full w-full">{children}</div>
