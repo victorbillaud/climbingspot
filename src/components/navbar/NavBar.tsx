@@ -31,15 +31,23 @@ const MobileNavItem: React.FC<{
           name={icon}
           scale={1.8}
           className="opacity-70"
-          color="text-brand-100"
+          color="text-brand-600 dark:text-brand-100"
         />
 
         <Button text="" variant="none" className="w-full" onClick={onClick}>
           <Flex fullSize verticalAlign="top" horizontalAlign="center" gap={0}>
-            <Text variant="h4" className="px-2" color="text-brand-100">
+            <Text
+              variant="h4"
+              className="px-2"
+              color="text-brand-600 dark:text-brand-100"
+            >
               {title}
             </Text>
-            <Text variant="body" className="px-2" color="text-brand-100">
+            <Text
+              variant="body"
+              className="px-2"
+              color="text-brand-600 dark:text-brand-100"
+            >
               {text}
             </Text>
           </Flex>
