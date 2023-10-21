@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import { i18n } from './i18n';
 
 import { match as matchLocale } from '@formatjs/intl-localematcher';
-import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import Negotiator from 'negotiator';
 import { Database } from './lib/db_types';
 
@@ -71,7 +71,7 @@ async function handleSupabaseSession(request: NextRequest) {
   const locale = getLocaleFromReferer(request) || getLocale(request);
   const res = NextResponse.next();
 
-  const supabase = createMiddlewareSupabaseClient<Database>({
+  const supabase = createMiddlewareClient<Database>({
     req: request,
     res,
   });
