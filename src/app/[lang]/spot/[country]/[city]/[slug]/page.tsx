@@ -30,6 +30,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const locale = params.lang;
   const slugFormatted = `/spot/${params.country}/${params.city}/${params.slug}`;
   const cookieStore = cookies();
   const supabase = createServerComponentClient<Database>({
@@ -41,9 +42,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     slug: slugFormatted,
   });
 
+  let description = `Unlock the thrill of climbing at ${spot?.name} in ${spot?.location.city}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${spot?.location.city}'s climbing scene and boost your adventure at ${spot?.name} today!`;
+
+  if (locale === 'fr') {
+    description = `Débloquez le frisson de l'escalade à ${spot?.name} à ${spot?.location.city}! Notre page de spot complète offre des informations essentielles sur les itinéraires, les événements locaux et les liens avec les autres grimpeurs. Découvrez le meilleur de la scène de l'escalade à ${spot?.location.city} et boostez votre aventure à ${spot?.name} dès aujourd'hui!`;
+  }
+
   return {
     title: `${spot?.name} - ClimbingSpot`,
-    description: `Unlock the thrill of climbing at ${spot?.name} in ${spot?.location.city}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${spot?.location.city}'s climbing scene and boost your adventure at ${spot?.name} today!`,
+    description: description,
     openGraph: {
       images: spot?.image?.map((image) => {
         return {

@@ -9,6 +9,7 @@ import { cookies } from 'next/headers';
 
 type Props = {
   params: {
+    lang: string;
     slug: string[];
   };
   searchParams: {
@@ -18,13 +19,30 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const locale = params.lang;
   let country = params.slug[0];
   let city = params.slug[1];
 
-  const title = city ? `Spots in ${city} - ${country}` : `Spots in ${country}`;
-  const description = city
-    ? `Unlock the thrill of climbing at ${city} in ${country}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${city}'s climbing scene and boost your adventure at ${city} today!`
-    : `Unlock the thrill of climbing in ${country}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${country}'s climbing scene and boost your adventure today!`;
+  let title: string;
+  let description: string;
+
+  if (locale === 'fr') {
+    title = city
+      ? `Spots d'escalade à ${city} - ${country}`
+      : `Spots d'escalade en ${country}`;
+
+    description = city
+      ? `Débloquez le frisson de l'escalade à ${city} en ${country}! Notre page de spot complète offre des informations essentielles sur les itinéraires, les événements locaux et les liens avec les autres grimpeurs. Découvrez le meilleur de la scène de l'escalade à ${city} et boostez votre aventure dès aujourd'hui!`
+      : `Débloquez le frisson de l'escalade en ${country}! Notre page de spot complète offre des informations essentielles sur les itinéraires, les événements locaux et les liens avec les autres grimpeurs. Découvrez le meilleur de la scène de l'escalade en ${country} et boostez votre aventure dès aujourd'hui!`;
+  } else {
+    title = city
+      ? `Climbing spots in ${city} - ${country}`
+      : `Climbing spots in ${country}`;
+
+    description = city
+      ? `Unlock the thrill of climbing at ${city} in ${country}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${city}'s climbing scene and boost your adventure at ${city} today!`
+      : `Unlock the thrill of climbing in ${country}! Our comprehensive spot page offers essential route information, local events, and connections with fellow climbers. Experience the best of ${country}'s climbing scene and boost your adventure today!`;
+  }
 
   return {
     title: title,
