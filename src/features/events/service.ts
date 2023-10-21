@@ -9,7 +9,7 @@ import {
   listEventsParams,
   listFriendsEventsParams,
   listUserEventsParams,
-  updateEventParams
+  updateEventParams,
 } from './types';
 // TODO: CHANGE FULL_NAME TO USERNAME
 

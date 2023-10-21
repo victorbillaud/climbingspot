@@ -2,8 +2,10 @@ import { Card, CustomImage, Flex, Icon, Text } from '@/components/common';
 import Footer from '@/components/footer/Footer';
 import { SpotCardSmall } from '@/components/spot';
 import { searchSpots } from '@/features/spots';
+import { Database } from '@/lib/db_types';
 import { getDictionary } from '@/lib/get-dictionary';
-import { createClient } from '@/lib/supabase/server';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { Locale } from '../../i18n';
 
@@ -13,7 +15,10 @@ export default async function Page({
   params: { lang: Locale };
 }) {
   const dictionary = await getDictionary(lang);
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
 
   const { spots } = await searchSpots({
     client: supabase,

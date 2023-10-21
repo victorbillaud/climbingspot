@@ -1,12 +1,12 @@
 import { Database } from '@/lib/db_types';
-import { createClient } from '@/lib/supabase/server';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { insertLocation } from './service';
 
 export type TLocationInsert =
   Database['public']['Tables']['locations']['Insert'];
 
 export type insertLocationParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   location: TLocationInsert;
 };
 

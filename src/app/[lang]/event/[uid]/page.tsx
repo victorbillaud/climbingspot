@@ -4,8 +4,9 @@ import { getEvent } from '@/features/events';
 import { getSpotFromId } from '@/features/spots';
 import { Locale } from '@/i18n';
 import { getFirstItem } from '@/lib';
-import { getDictionary } from '@/lib/get-dictionary';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 type Props = {
   params: {
@@ -15,8 +16,10 @@ type Props = {
 };
 
 export default async function Page({ params }: Props) {
-  const supabase = createClient();
-  const dictionary = await getDictionary(params.lang);
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
 
   const { event } = await getEvent({
     client: supabase,

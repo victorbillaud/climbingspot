@@ -1,11 +1,17 @@
 import { Flex, Icon, Text } from '@/components/common';
 import { SpotCreationPanel } from '@/components/spot/SpotCreationPanel';
 import { listCreatorSpots } from '@/features/spots';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { SpotsTable } from './SpotsTable';
 
 export default async function Page() {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
+
   const user = await supabase.auth.getUser();
 
   if (!user) {

@@ -5,11 +5,14 @@ import CookieBanner from '@/components/CookieBanner';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import { JobaiProvider } from '@/components/JobaiProvider';
 import type { Database } from '@/lib/db_types';
-import { createClient } from '@/lib/supabase/server';
 import '@/styles/globals.css';
 import { Barlow } from '@next/font/google';
-import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
+import {
+  createServerComponentClient,
+  type SupabaseClient,
+} from '@supabase/auth-helpers-nextjs';
 import Head from 'next/head';
+import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 export type TypedSupabaseClient = SupabaseClient<Database>;
 
@@ -32,7 +35,10 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: IProps) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
 
   const {
     data: { session },

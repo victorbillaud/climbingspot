@@ -1,5 +1,5 @@
 import { Database } from '@/lib/db_types';
-import { createClient } from '@/lib/supabase/server';
+import { SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import {
   getSpotFromSlug,
   listCreatorSpots,
@@ -7,26 +7,26 @@ import {
 } from './service';
 
 export type getSpotFromSlugParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   slug: string;
 };
 
 export type getSpotFromIdParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   id: string;
 };
 
 export type listSpotsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   limit?: number;
 };
 
 export type listSpotsSlugsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
 };
 
 export type listSpotsFromLocationParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   country?: string;
   city?: string;
   limit?: number;
@@ -34,7 +34,7 @@ export type listSpotsFromLocationParams = {
 };
 
 export type searchSpotsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   spotName?: string;
   location?: string;
   difficulty?: SpotExtended['difficulty'][];
@@ -75,7 +75,7 @@ export type CreatorsSpotsResponseError = CreatorsSpotsResponse['error'];
 export type CreatorsSpotsResponseSuccess = CreatorsSpotsResponse['spots'];
 
 export type spotsSearchWithBoundsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   bounds: {
     latitude_lte: number;
     latitude_gte: number;
@@ -97,11 +97,11 @@ export type TSpotInsert = Database['public']['Tables']['spots']['Insert'];
 export type TSpotUpdate = Database['public']['Tables']['spots']['Update'];
 
 export type insertSpotParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   spot: TSpotInsert;
 };
 
 export type updateSpotParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   spot: TSpotUpdate;
 };

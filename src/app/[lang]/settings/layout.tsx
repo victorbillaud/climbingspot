@@ -1,7 +1,9 @@
 import { Flex } from '@/components/common/layout';
 import { SideMenu } from '@/components/navbar';
 import { getFriends } from '@/features/friendship';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 
 interface IProps {
@@ -11,7 +13,11 @@ interface IProps {
 export const revalidate = 0;
 
 export default async function RootLayout({ children }: IProps) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
+
   const {
     data: { user: connectedUser },
   } = await supabase.auth.getUser();

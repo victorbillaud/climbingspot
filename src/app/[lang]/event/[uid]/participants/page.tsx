@@ -3,7 +3,9 @@ import { UserPicture } from '@/components/user';
 import { getEvent } from '@/features/events';
 import { Locale } from '@/i18n';
 import { getFirstItem } from '@/lib';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 type Props = {
   params: {
@@ -13,7 +15,10 @@ type Props = {
 };
 
 export default async function Page({ params }: Props) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
 
   const { event } = await getEvent({
     client: supabase,

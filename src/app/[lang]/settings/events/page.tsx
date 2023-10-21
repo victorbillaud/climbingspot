@@ -2,11 +2,17 @@ import { Flex, Icon, Text } from '@/components/common';
 import { EventCreatePanel } from '@/components/event';
 import { listEventsFromCreator } from '@/features/events';
 import { listMapSpots } from '@/features/spots';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { EventsTable } from './EventsTable';
 
 export default async function Page() {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
+
   const user = await supabase.auth.getUser();
 
   if (!user) {

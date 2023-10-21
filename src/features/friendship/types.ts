@@ -1,5 +1,5 @@
 import { Database } from '@/lib/db_types';
-import { createClient } from '@/lib/supabase/server';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { checkFriendship } from './services';
 
 export type TFriendship = Database['public']['Tables']['friendships']['Row'];
@@ -7,24 +7,24 @@ export type TInsertFriendship =
   Database['public']['Tables']['friendships']['Insert'];
 
 export type addFriendProps = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   friendship: TInsertFriendship;
 };
 
 export type getFriendsProps = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   userId: string;
   status?: TFriendship['status'];
 };
 
 export type checkFriendshipProps = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   firstUserId: string;
   secondUserId: string;
 };
 
 export type answerFriendRequestProps = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   friendshipId: string;
   status: TFriendship['status'];
 };

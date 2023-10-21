@@ -1,5 +1,6 @@
 import { TEventInsert, TEventUpdate } from '@/components/event';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { SupabaseClient } from '@supabase/supabase-js';
 import {
   createEvent,
   getEvent,
@@ -7,11 +8,11 @@ import {
   joinEvent,
   listEvents,
   listEventsFromCreator,
-  updateEvent
+  updateEvent,
 } from './service';
 
 export type getEventParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   eventId: string;
 };
 
@@ -20,7 +21,7 @@ export type EventResponseSuccess = EventResponse['event'];
 export type EventResponseError = EventResponse['error'];
 
 export type getSpotEventsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   spotId: string;
 };
 
@@ -29,7 +30,7 @@ export type SpotEventsResponseSuccess = SpotEventsResponse['events'];
 export type SpotEventsResponseError = SpotEventsResponse['error'];
 
 export type joinEventParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   eventId: string;
   userId: string;
 };
@@ -39,7 +40,7 @@ export type JoinEventResponseSuccess = JoinEventResponse['participation'];
 export type JoinEventResponseError = JoinEventResponse['error'];
 
 export type createEventParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   event: TEventInsert;
 };
 
@@ -48,7 +49,7 @@ export type CreateEventResponseSuccess = CreateEventResponse['event'];
 export type CreateEventResponseError = CreateEventResponse['error'];
 
 export type updateEventParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   event: TEventUpdate;
 };
 
@@ -57,7 +58,7 @@ export type UpdateEventResponseSuccess = UpdateEventResponse['event'];
 export type UpdateEventResponseError = UpdateEventResponse['error'];
 
 export type listEventsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   limit?: number;
   page?: number;
   ids?: string[];
@@ -68,7 +69,7 @@ export type ListEventsResponseSuccess = ListEventsResponse['events'];
 export type ListEventsResponseError = ListEventsResponse['error'];
 
 export type listEventsFromCreatorParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   creatorId: string;
 };
 
@@ -81,7 +82,7 @@ export type ListEventsFromCreatorResponseError =
   ListEventsFromCreatorResponse['error'];
 
 export type listFriendsEventsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   userId: string;
 };
 
@@ -93,7 +94,7 @@ export type ListFriendsEventsResponseSuccess =
 export type ListFriendsEventsResponseError = ListFriendsEventsResponse['error'];
 
 export type listUserEventsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   userId: string;
 };
 

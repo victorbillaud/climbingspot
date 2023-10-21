@@ -1,6 +1,8 @@
 import { listMapSpots } from '@/features/spots';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import dynamic from 'next/dynamic';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 const Map = dynamic(() => import('@/components/maps/Maps'), { ssr: false });
@@ -12,7 +14,11 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
+
   const { spots } = await listMapSpots({
     client: supabase,
   });

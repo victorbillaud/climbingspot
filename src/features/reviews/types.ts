@@ -1,8 +1,9 @@
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { getReview, getSpotReviews } from './service';
 
 export type getReviewParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   reviewId: string;
 };
 
@@ -11,7 +12,7 @@ export type ReviewResponseSuccess = ReviewResponse['review'];
 export type ReviewResponseError = ReviewResponse['error'];
 
 export type getSpotReviewsParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   spotId: string;
 };
 

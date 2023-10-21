@@ -1,18 +1,19 @@
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export type uploadFileParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   path: string;
   file: File;
 };
 
 export type uploadFilesParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   path: string;
   files: File[];
 };
 
 export type deleteFilesParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   files: string[];
 };

@@ -4,13 +4,18 @@ import Footer from '@/components/footer/Footer';
 import {
   listEvents,
   listFriendsEvents,
-  listUserEvents
+  listUserEvents,
 } from '@/features/events';
+import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
-import { createClient } from '@/lib/supabase/server';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 export default async function Page() {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
   const user = await supabase.auth.getUser();
 
   const { events: userEvents } = user

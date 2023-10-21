@@ -1,9 +1,14 @@
 import { listSpotsSlugs } from '@/features/spots';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { ISitemapField, getServerSideSitemap } from 'next-sitemap';
+import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
   const { slugs } = await listSpotsSlugs({
     client: supabase,
   });

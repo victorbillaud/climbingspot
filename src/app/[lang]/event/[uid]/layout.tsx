@@ -6,7 +6,9 @@ import { SpotCardSmall } from '@/components/spot';
 import { getEvent } from '@/features/events';
 import { Locale } from '@/i18n';
 import { formatDate, getFirstItem } from '@/lib';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import React from 'react';
 
 type Props = {
@@ -18,7 +20,10 @@ type Props = {
 };
 
 export default async function RootLayout({ params, children }: Props) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
   const {
     data: { session: session },
   } = await supabase.auth.getSession();

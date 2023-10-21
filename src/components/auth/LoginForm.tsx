@@ -86,17 +86,17 @@ export const LoginForm = (props: TLoginFormProps) => {
             type="submit"
           />
           <Text variant="caption">Or</Text>
-          <ProvidersContainer />
-          <Link href="/auth/register" passHref>
-            <Text variant="caption">You need to register ?</Text>
-          </Link>
-          {error && (
-            <InfoCard message="Error" color="red" icon="warning">
-              {error?.message}
-            </InfoCard>
-          )}
         </Flex>
       </form>
+      <ProvidersContainer />
+      <Link href="/auth/register" passHref>
+        <Text variant="caption">You need to register ?</Text>
+      </Link>
+      {error && (
+        <InfoCard message="Error" color="red" icon="warning">
+          {error?.message}
+        </InfoCard>
+      )}
     </Flex>
   );
 };

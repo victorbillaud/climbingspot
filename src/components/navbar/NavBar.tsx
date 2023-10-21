@@ -1,11 +1,9 @@
 'use client';
 
-import { logger } from '@/lib/logger';
-import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { useSupabase } from '../auth/SupabaseProvider';
 import {
   Button,
@@ -14,7 +12,7 @@ import {
   FloatingPanel,
   Icon,
   IconNames,
-  Text
+  Text,
 } from '../common';
 import LocaleSwitcher from '../footer/LocaleSwitcher';
 import { NavIcon } from './NavIcons';
@@ -54,27 +52,9 @@ const MobileNavItem: React.FC<{
 interface INavBarProps {}
 
 export const NavBar: React.FC<INavBarProps> = () => {
-  const { supabase, user: initialUser } = useSupabase();
+  let { user: initialUser } = useSupabase();
   const router = useRouter();
-  const params = useSearchParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(initialUser);
-
-  logger.debug('NavBar: initialUser', initialUser);
-
-  useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        const user = session?.user;
-        logger.debug('NavBar: onAuthStateChange', { event, session, user });
-        setUser(user || null);
-      },
-    );
-
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, [supabase]);
 
   return (
     <Flex
@@ -176,7 +156,7 @@ export const NavBar: React.FC<INavBarProps> = () => {
               title="Settings"
               onClick={() => {
                 setMobileMenuOpen(false);
-                router.push('/settings');
+                router.push('/settings/user');
               }}
             />
           </Flex>
@@ -198,12 +178,12 @@ export const NavBar: React.FC<INavBarProps> = () => {
           <NavIcon icon="calendar" label="calendar" to="/event" />
         </Flex>
         <Flex className="h-full px-3">
-          {user ? (
+          {initialUser ? (
             <NavIcon
               icon="cog"
               label="settings"
-              to="/settings"
-              userImage={user?.user_metadata?.avatar_url}
+              to="/settings/user"
+              userImage={initialUser?.user_metadata?.avatar_url}
             />
           ) : (
             <>

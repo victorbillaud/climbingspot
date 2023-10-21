@@ -2,8 +2,10 @@ import { Flex, Text } from '@/components/common';
 import Pagination from '@/components/common/button/Pagination';
 import { SpotCardSmall } from '@/components/spot';
 import { listSpotsFromSlug } from '@/features/spots';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 
 type Props = {
   params: {
@@ -51,7 +53,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Page({ params, searchParams }: Props) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
   const { slug } = params;
 
   const { spots, count } = await listSpotsFromSlug({

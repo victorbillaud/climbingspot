@@ -1,26 +1,26 @@
 import { Database } from '@/lib/db_types';
-import { createClient } from '@/lib/supabase/browser';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { getMessage } from './services';
 
 export type TMessage = Database['public']['Tables']['messages']['Row'];
 
 export type TListEventMessagesParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   event_id: string;
 };
 
 export type TGetMessageParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   message_id: string;
 };
 
 export type TUseChatParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   event_id: string;
 };
 
 export type TSendMessageParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   event_id: string;
   content: string;
   user_id: string;

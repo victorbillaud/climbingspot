@@ -1,12 +1,17 @@
 import { Card, CustomImage, Flex, Text } from '@/components/common';
 import { ThemeSelector, UserForm } from '@/components/user';
+import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
-import { createClient } from '@/lib/supabase/server';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Logout } from './Logout';
 
 export default async function Page() {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
 
   const {
     data: { user: user },

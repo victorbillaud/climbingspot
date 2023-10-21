@@ -3,7 +3,9 @@ import Pagination from '@/components/common/button/Pagination';
 import Footer from '@/components/footer/Footer';
 import { SearchBar, SpotCardSmall } from '@/components/spot';
 import { searchSpots } from '@/features/spots';
-import { createClient } from '@/lib/supabase/server';
+import { Database } from '@/lib/db_types';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 export const metadata = {
   title: 'Spots - ClimbingSpot',
@@ -23,7 +25,10 @@ export default async function Page({
     difficulty: string;
   };
 }) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
 
   const { spots, count } = await searchSpots({
     client: supabase,

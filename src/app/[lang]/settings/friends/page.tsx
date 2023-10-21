@@ -1,11 +1,16 @@
 import { Badge, Card, Flex, Text } from '@/components/common';
 import { getFriends } from '@/features/friendship';
+import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
-import { createClient } from '@/lib/supabase/server';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { UserInvite } from './UserInvite';
 
 export default async function Page() {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
   const {
     data: { user: connectedUser },
   } = await supabase.auth.getUser();

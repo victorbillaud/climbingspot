@@ -1,9 +1,9 @@
 import { Database } from '@/lib/db_types';
-import { createClient } from '@/lib/supabase/server';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export type TProfile = Database['public']['Tables']['profiles']['Row'];
 
 export type TGetProfileParams = {
-  client: ReturnType<typeof createClient>;
+  client: SupabaseClient<Database>;
   id: string;
 };

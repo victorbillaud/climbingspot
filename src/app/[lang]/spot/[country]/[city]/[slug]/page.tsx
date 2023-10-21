@@ -13,9 +13,11 @@ import { getSpotReviews } from '@/features/reviews';
 import { getSpotFromSlug, searchSpots } from '@/features/spots';
 import { Locale } from '@/i18n';
 import { getFirstItem } from '@/lib';
+import { Database } from '@/lib/db_types';
 import { getDictionary } from '@/lib/get-dictionary';
-import { createClient } from '@/lib/supabase/server';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 
 type Props = {
@@ -29,7 +31,10 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slugFormatted = `/spot/${params.country}/${params.city}/${params.slug}`;
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
 
   const { spot } = await getSpotFromSlug({
     client: supabase,
@@ -65,7 +70,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const slugFormatted = `/spot/${params.country}/${params.city}/${params.slug}`;
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
   const dictionary = await getDictionary(params.lang);
 
   const { spot } = await getSpotFromSlug({
