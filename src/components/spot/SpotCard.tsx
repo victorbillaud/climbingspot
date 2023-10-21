@@ -55,10 +55,10 @@ export const SpotCard = ({ spot }: TSpotCardProps) => {
               horizontalAlign="center"
               verticalAlign="center"
             >
-              <Text variant="h4" weight={400} className="opacity-80">
+              <Text variant="title" weight={400} className="opacity-80">
                 {spot.location.city}
               </Text>
-              <Text variant="h4" weight={200} className="opacity-50">
+              <Text variant="title" weight={200} className="opacity-50">
                 {spot.location.department}
               </Text>
               <Link href={`/maps?spotId=${spot.id}`}>

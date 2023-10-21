@@ -257,7 +257,7 @@ export const SpotListItems = ({
         className="w-full"
         onClick={onClickText}
       >
-        <Flex direction="row" className="w-full" horizontalAlign="left">
+        <div className="w-full flex flex-col md:flex-row items-start gap-0 md:gap-3">
           <Text variant="body" className="">
             {spot.name}
           </Text>
@@ -265,7 +265,7 @@ export const SpotListItems = ({
             variant="caption"
             className="opacity-30"
           >{`${spot.city}, ${spot.department}`}</Text>
-        </Flex>
+        </div>
         <Flex
           direction="row"
           horizontalAlign="center"
@@ -323,12 +323,7 @@ export const EventListItems = ({
         className="w-full"
         onClick={onClickText}
       >
-        <Flex
-          direction="row"
-          className="w-full"
-          horizontalAlign="left"
-          verticalAlign="center"
-        >
+        <div className="w-full flex flex-col md:flex-row items-start gap-0 md:gap-3">
           <Text variant="body" className="h-full">
             {event.name}
           </Text>
@@ -341,7 +336,7 @@ export const EventListItems = ({
               minute: 'numeric',
             })}
           </Text>
-        </Flex>
+        </div>
       </Flex>
     </Flex>
   );
