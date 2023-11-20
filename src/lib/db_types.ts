@@ -3,10 +3,35 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       countries: {
@@ -34,6 +59,7 @@ export interface Database {
           local_name?: string | null
           name?: string | null
         }
+        Relationships: []
       }
       events: {
         Row: {
@@ -72,6 +98,32 @@ export interface Database {
           start_at?: string
           updated_at?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "events_creator_id_fkey"
+            columns: ["creator_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spot_extended_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spot_search_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       events_invitations: {
         Row: {
@@ -98,6 +150,38 @@ export interface Database {
           status?: Database["public"]["Enums"]["invitation_status"] | null
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "events_invitations_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_invitations_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "event_extanded_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_invitations_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "event_search_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_invitations_event_participation_id_fkey"
+            columns: ["event_participation_id"]
+            referencedRelation: "events_participations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_invitations_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       events_participations: {
         Row: {
@@ -121,6 +205,32 @@ export interface Database {
           status?: Database["public"]["Enums"]["invitation_status"] | null
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "events_participations_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_participations_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "event_extanded_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_participations_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "event_search_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_participations_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       friendships: {
         Row: {
@@ -147,6 +257,26 @@ export interface Database {
           second_user_id?: string
           status?: Database["public"]["Enums"]["invitation_status"]
         }
+        Relationships: [
+          {
+            foreignKeyName: "friendships_creator_user_id_fkey"
+            columns: ["creator_user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friendships_first_user_id_fkey"
+            columns: ["first_user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friendships_second_user_id_fkey"
+            columns: ["second_user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       locations: {
         Row: {
@@ -176,6 +306,14 @@ export interface Database {
           latitude?: number
           longitude?: number
         }
+        Relationships: [
+          {
+            foreignKeyName: "locations_country_fkey"
+            columns: ["country"]
+            referencedRelation: "countries"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       messages: {
         Row: {
@@ -199,6 +337,32 @@ export interface Database {
           id?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "messages_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "event_extanded_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "event_search_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       profiles: {
         Row: {
@@ -225,6 +389,14 @@ export interface Database {
           username?: string | null
           website?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       reviews: {
         Row: {
@@ -257,6 +429,32 @@ export interface Database {
           title?: string | null
           updated_at?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_creator_id_fkey"
+            columns: ["creator_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spot_extended_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spot_search_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       reviews_likes: {
         Row: {
@@ -277,6 +475,32 @@ export interface Database {
           profile_id?: string
           review_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_likes_profile_id_fkey"
+            columns: ["profile_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_likes_review_id_fkey"
+            columns: ["review_id"]
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_likes_review_id_fkey"
+            columns: ["review_id"]
+            referencedRelation: "detailed_review"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_likes_review_id_fkey"
+            columns: ["review_id"]
+            referencedRelation: "reviews_with_like_count"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       spots: {
         Row: {
@@ -333,6 +557,41 @@ export interface Database {
           type?: Database["public"]["Enums"]["type"]
           updated_at?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "spots_creator_fkey"
+            columns: ["creator"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "spots_location_fkey"
+            columns: ["location"]
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "spots_location_fkey"
+            columns: ["location"]
+            referencedRelation: "spot_search_view"
+            referencedColumns: ["location_id"]
+          }
+        ]
+      }
+      test_tenant: {
+        Row: {
+          details: string | null
+          id: number
+        }
+        Insert: {
+          details?: string | null
+          id?: number
+        }
+        Update: {
+          details?: string | null
+          id?: number
+        }
+        Relationships: []
       }
     }
     Views: {
@@ -349,6 +608,32 @@ export interface Database {
           title: string | null
           updated_at: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_creator_id_fkey"
+            columns: ["creator_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spot_extended_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spot_search_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       event_extanded_view: {
         Row: {
@@ -360,6 +645,7 @@ export interface Database {
           start_at: string | null
           updated_at: string | null
         }
+        Relationships: []
       }
       event_search_view: {
         Row: {
@@ -372,6 +658,14 @@ export interface Database {
           places: number | null
           start_at: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "locations_country_fkey"
+            columns: ["country"]
+            referencedRelation: "countries"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       reviews_with_like_count: {
         Row: {
@@ -385,6 +679,32 @@ export interface Database {
           title: string | null
           updated_at: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_creator_id_fkey"
+            columns: ["creator_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spot_extended_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            referencedRelation: "spot_search_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       spot_extended_view: {
         Row: {
@@ -406,6 +726,26 @@ export interface Database {
           type: Database["public"]["Enums"]["type"] | null
           updated_at: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "spots_creator_fkey"
+            columns: ["creator"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "spots_location_fkey"
+            columns: ["location"]
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "spots_location_fkey"
+            columns: ["location"]
+            referencedRelation: "spot_search_view"
+            referencedColumns: ["location_id"]
+          }
+        ]
       }
       spot_search_view: {
         Row: {
@@ -415,12 +755,21 @@ export interface Database {
           description: string | null
           difficulty: Database["public"]["Enums"]["difficulty"] | null
           id: string | null
+          image: string[] | null
           location_id: number | null
           name: string | null
           note: number | null
           slug: string | null
           type: Database["public"]["Enums"]["type"] | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "locations_country_fkey"
+            columns: ["country"]
+            referencedRelation: "countries"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Functions: {
@@ -517,6 +866,7 @@ export interface Database {
           description: string | null
           difficulty: Database["public"]["Enums"]["difficulty"] | null
           id: string | null
+          image: string[] | null
           location_id: number | null
           name: string | null
           note: number | null
@@ -552,7 +902,7 @@ export interface Database {
         Args: {
           "": string
         }
-        Returns: string[]
+        Returns: unknown
       }
       slugify: {
         Args: {
@@ -640,6 +990,185 @@ export interface Database {
         box: string
         unit: string
       }
+    }
+  }
+  storage: {
+    Tables: {
+      buckets: {
+        Row: {
+          allowed_mime_types: string[] | null
+          avif_autodetection: boolean | null
+          created_at: string | null
+          file_size_limit: number | null
+          id: string
+          name: string
+          owner: string | null
+          public: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          allowed_mime_types?: string[] | null
+          avif_autodetection?: boolean | null
+          created_at?: string | null
+          file_size_limit?: number | null
+          id: string
+          name: string
+          owner?: string | null
+          public?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          allowed_mime_types?: string[] | null
+          avif_autodetection?: boolean | null
+          created_at?: string | null
+          file_size_limit?: number | null
+          id?: string
+          name?: string
+          owner?: string | null
+          public?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "buckets_owner_fkey"
+            columns: ["owner"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      migrations: {
+        Row: {
+          executed_at: string | null
+          hash: string
+          id: number
+          name: string
+        }
+        Insert: {
+          executed_at?: string | null
+          hash: string
+          id: number
+          name: string
+        }
+        Update: {
+          executed_at?: string | null
+          hash?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      objects: {
+        Row: {
+          bucket_id: string | null
+          created_at: string | null
+          id: string
+          last_accessed_at: string | null
+          metadata: Json | null
+          name: string | null
+          owner: string | null
+          path_tokens: string[] | null
+          updated_at: string | null
+          version: string | null
+        }
+        Insert: {
+          bucket_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          metadata?: Json | null
+          name?: string | null
+          owner?: string | null
+          path_tokens?: string[] | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Update: {
+          bucket_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          metadata?: Json | null
+          name?: string | null
+          owner?: string | null
+          path_tokens?: string[] | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "objects_bucketId_fkey"
+            columns: ["bucket_id"]
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      can_insert_object: {
+        Args: {
+          bucketid: string
+          name: string
+          owner: string
+          metadata: Json
+        }
+        Returns: undefined
+      }
+      extension: {
+        Args: {
+          name: string
+        }
+        Returns: string
+      }
+      filename: {
+        Args: {
+          name: string
+        }
+        Returns: string
+      }
+      foldername: {
+        Args: {
+          name: string
+        }
+        Returns: unknown
+      }
+      get_size_by_bucket: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          size: number
+          bucket_id: string
+        }[]
+      }
+      search: {
+        Args: {
+          prefix: string
+          bucketname: string
+          limits?: number
+          levels?: number
+          offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
+        }
+        Returns: {
+          name: string
+          id: string
+          updated_at: string
+          created_at: string
+          last_accessed_at: string
+          metadata: Json
+        }[]
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
     }
   }
 }
