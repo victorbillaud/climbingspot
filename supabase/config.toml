@@ -107,16 +107,6 @@ redirect_uri = "http://localhost:54321/auth/v1/callback"
 # or any other third-party OIDC providers.
 url = ""
 
-[auth.external.apple]
-enabled = true
-client_id = 'env(APPLE_CLIENT)'
-secret = 'env(APPLE_SECRET)'
-redirect_uri = "http://localhost:54321/auth/v1/callback"
-# Overrides the default auth provider URL. Used to support self-hosted gitlab, single-tenant Azure,
-# or any other third-party OIDC providers.
-url = ""
-
-
 [analytics]
 enabled = false
 port = 54327
