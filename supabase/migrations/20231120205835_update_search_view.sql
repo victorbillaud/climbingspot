@@ -79,4 +79,3 @@ create or replace view "public"."spot_search_view" as  SELECT spots.id,
           WHERE (reviews.spot_id = spots.id));
 
 
-

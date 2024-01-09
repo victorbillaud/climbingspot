@@ -28,6 +28,9 @@ comment on column countries.iso3 is 'ISO 3166-1 alpha-3 code.';
 
 comment on column countries.local_name is 'Local variation of the name.';
 
+alter
+  publication supabase_realtime add table messages;
+
 insert into
     public.countries (name, iso2, iso3, local_name, continent)
 values
@@ -833,7 +836,7 @@ values
     ),
     (
         'Algeria',
-        'DZ',
+        'DZ', 
         'DZA',
         'Al-Jazair/Algerie',
         'Africa'
@@ -1014,3 +1017,45 @@ De St-Antonin suivre la D115 jusqu''au hameau de Amiel, 2 km avant Penne, les ro
 Voies de 10 à 90m. 170 voies environs sont équipées.', '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', 'Remonter un chemin en direction des rochers bien visibles.',
         '{}', '{}', 'Calcaire', 40, (SELECT id FROM new_location)
       );
+
+      -- Insert Statement 1
+INSERT INTO public.events (
+  name, start_at, end_at, spot_id, creator_id, places, description
+) VALUES (
+  'Beginner Bouldering Bash',
+  '2023-06-15 08:00:00+00',
+  '2023-06-15 12:00:00+00',
+  (SELECT id FROM spots ORDER BY RANDOM() LIMIT 1),
+  (SELECT id FROM profiles ORDER BY RANDOM() LIMIT 1),
+  30,
+  'A fun and friendly bouldering event for beginners, focusing on technique and safety.'
+);
+
+-- Insert Statement 2
+INSERT INTO public.events (
+  name, start_at, end_at, spot_id, creator_id, places, description
+) VALUES (
+  'Climb and Yoga Retreat',
+  '2023-09-20 09:00:00+00',
+  '2023-09-22 17:00:00+00',
+  (SELECT id FROM spots ORDER BY RANDOM() LIMIT 1),
+  (SELECT id FROM profiles ORDER BY RANDOM() LIMIT 1),
+  20,
+  'A three-day retreat combining rock climbing sessions with yoga practices, suitable for all levels.'
+);
+
+-- Insert Statement 3
+INSERT INTO public.events (
+  name, start_at, end_at, spot_id, creator_id, places, description
+) VALUES (
+  'Advanced Rock Climbing Workshop',
+  '2023-11-05 10:00:00+00',
+  '2023-11-05 16:00:00+00',
+  (SELECT id FROM spots ORDER BY RANDOM() LIMIT 1),
+  (SELECT id FROM profiles ORDER BY RANDOM() LIMIT 1),
+  15,
+  'A one-day workshop aimed at experienced climbers, focusing on advanced techniques and safety in challenging terrains.'
+);
+
+-- alter
+--   publication supabase_realtime add table messages;
