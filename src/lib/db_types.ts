@@ -102,25 +102,29 @@ export interface Database {
           {
             foreignKeyName: "events_creator_id_fkey"
             columns: ["creator_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_spot_id_fkey"
             columns: ["spot_id"]
-            referencedRelation: "spots"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "events_spot_id_fkey"
-            columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spot_extended_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_spot_id_fkey"
             columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spot_search_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "spots"
             referencedColumns: ["id"]
           }
         ]
@@ -154,30 +158,35 @@ export interface Database {
           {
             foreignKeyName: "events_invitations_event_id_fkey"
             columns: ["event_id"]
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "events_invitations_event_id_fkey"
-            columns: ["event_id"]
+            isOneToOne: false
             referencedRelation: "event_extanded_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_invitations_event_id_fkey"
             columns: ["event_id"]
+            isOneToOne: false
             referencedRelation: "event_search_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_invitations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_invitations_event_participation_id_fkey"
             columns: ["event_participation_id"]
+            isOneToOne: false
             referencedRelation: "events_participations"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_invitations_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -209,24 +218,28 @@ export interface Database {
           {
             foreignKeyName: "events_participations_event_id_fkey"
             columns: ["event_id"]
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "events_participations_event_id_fkey"
-            columns: ["event_id"]
+            isOneToOne: false
             referencedRelation: "event_extanded_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_participations_event_id_fkey"
             columns: ["event_id"]
+            isOneToOne: false
             referencedRelation: "event_search_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_participations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_participations_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -261,18 +274,21 @@ export interface Database {
           {
             foreignKeyName: "friendships_creator_user_id_fkey"
             columns: ["creator_user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "friendships_first_user_id_fkey"
             columns: ["first_user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "friendships_second_user_id_fkey"
             columns: ["second_user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -310,6 +326,7 @@ export interface Database {
           {
             foreignKeyName: "locations_country_fkey"
             columns: ["country"]
+            isOneToOne: false
             referencedRelation: "countries"
             referencedColumns: ["id"]
           }
@@ -341,24 +358,66 @@ export interface Database {
           {
             foreignKeyName: "messages_event_id_fkey"
             columns: ["event_id"]
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "messages_event_id_fkey"
-            columns: ["event_id"]
+            isOneToOne: false
             referencedRelation: "event_extanded_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "messages_event_id_fkey"
             columns: ["event_id"]
+            isOneToOne: false
             referencedRelation: "event_search_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "messages_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      notification: {
+        Row: {
+          body: string
+          created_at: string
+          data: Json | null
+          id: string
+          subtitle: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          data?: Json | null
+          id?: string
+          subtitle?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          data?: Json | null
+          id?: string
+          subtitle?: string | null
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -367,6 +426,7 @@ export interface Database {
       profiles: {
         Row: {
           avatar_url: string | null
+          expo_push_id: string | null
           full_name: string | null
           id: string
           updated_at: string | null
@@ -375,6 +435,7 @@ export interface Database {
         }
         Insert: {
           avatar_url?: string | null
+          expo_push_id?: string | null
           full_name?: string | null
           id: string
           updated_at?: string | null
@@ -383,6 +444,7 @@ export interface Database {
         }
         Update: {
           avatar_url?: string | null
+          expo_push_id?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null
@@ -393,6 +455,7 @@ export interface Database {
           {
             foreignKeyName: "profiles_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -433,25 +496,29 @@ export interface Database {
           {
             foreignKeyName: "reviews_creator_id_fkey"
             columns: ["creator_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_spot_id_fkey"
             columns: ["spot_id"]
-            referencedRelation: "spots"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_spot_id_fkey"
-            columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spot_extended_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_spot_id_fkey"
             columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spot_search_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "spots"
             referencedColumns: ["id"]
           }
         ]
@@ -479,24 +546,28 @@ export interface Database {
           {
             foreignKeyName: "reviews_likes_profile_id_fkey"
             columns: ["profile_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_likes_review_id_fkey"
             columns: ["review_id"]
-            referencedRelation: "reviews"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_likes_review_id_fkey"
-            columns: ["review_id"]
+            isOneToOne: false
             referencedRelation: "detailed_review"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_likes_review_id_fkey"
             columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_likes_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
             referencedRelation: "reviews_with_like_count"
             referencedColumns: ["id"]
           }
@@ -561,18 +632,21 @@ export interface Database {
           {
             foreignKeyName: "spots_creator_fkey"
             columns: ["creator"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "spots_location_fkey"
             columns: ["location"]
+            isOneToOne: false
             referencedRelation: "locations"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "spots_location_fkey"
             columns: ["location"]
+            isOneToOne: false
             referencedRelation: "spot_search_view"
             referencedColumns: ["location_id"]
           }
@@ -612,24 +686,28 @@ export interface Database {
           {
             foreignKeyName: "reviews_creator_id_fkey"
             columns: ["creator_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_spot_id_fkey"
             columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spots"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_spot_id_fkey"
             columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spot_extended_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_spot_id_fkey"
             columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spot_search_view"
             referencedColumns: ["id"]
           }
@@ -662,6 +740,7 @@ export interface Database {
           {
             foreignKeyName: "locations_country_fkey"
             columns: ["country"]
+            isOneToOne: false
             referencedRelation: "countries"
             referencedColumns: ["id"]
           }
@@ -683,24 +762,28 @@ export interface Database {
           {
             foreignKeyName: "reviews_creator_id_fkey"
             columns: ["creator_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_spot_id_fkey"
             columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spots"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_spot_id_fkey"
             columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spot_extended_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "reviews_spot_id_fkey"
             columns: ["spot_id"]
+            isOneToOne: false
             referencedRelation: "spot_search_view"
             referencedColumns: ["id"]
           }
@@ -730,18 +813,21 @@ export interface Database {
           {
             foreignKeyName: "spots_creator_fkey"
             columns: ["creator"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "spots_location_fkey"
             columns: ["location"]
+            isOneToOne: false
             referencedRelation: "locations"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "spots_location_fkey"
             columns: ["location"]
+            isOneToOne: false
             referencedRelation: "spot_search_view"
             referencedColumns: ["location_id"]
           }
@@ -766,6 +852,7 @@ export interface Database {
           {
             foreignKeyName: "locations_country_fkey"
             columns: ["country"]
+            isOneToOne: false
             referencedRelation: "countries"
             referencedColumns: ["id"]
           }
@@ -802,6 +889,17 @@ export interface Database {
         }
         Returns: {
           result: Json
+        }[]
+      }
+      get_user_conversations: {
+        Args: {
+          requested_user_id: string
+        }
+        Returns: {
+          event_id: string
+          event_name: string
+          participants: Json
+          last_message: Json
         }[]
       }
       gtrgm_compress: {
@@ -1003,6 +1101,7 @@ export interface Database {
           id: string
           name: string
           owner: string | null
+          owner_id: string | null
           public: boolean | null
           updated_at: string | null
         }
@@ -1014,6 +1113,7 @@ export interface Database {
           id: string
           name: string
           owner?: string | null
+          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
@@ -1025,17 +1125,11 @@ export interface Database {
           id?: string
           name?: string
           owner?: string | null
+          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "buckets_owner_fkey"
-            columns: ["owner"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       migrations: {
         Row: {
@@ -1067,6 +1161,7 @@ export interface Database {
           metadata: Json | null
           name: string | null
           owner: string | null
+          owner_id: string | null
           path_tokens: string[] | null
           updated_at: string | null
           version: string | null
@@ -1079,6 +1174,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
+          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
@@ -1091,6 +1187,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
+          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
@@ -1099,6 +1196,7 @@ export interface Database {
           {
             foreignKeyName: "objects_bucketId_fkey"
             columns: ["bucket_id"]
+            isOneToOne: false
             referencedRelation: "buckets"
             referencedColumns: ["id"]
           }
@@ -1172,4 +1270,84 @@ export interface Database {
     }
   }
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never
 

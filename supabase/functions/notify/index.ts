@@ -1,60 +1,67 @@
-// Follow this setup guide to integrate the Deno language server with your editor:
-// https://deno.land/manual/getting_started/setup_your_environment
-// This enables autocomplete, go to definition, etc.
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+console.log('Hello from Functions!');
 
-export async function sendPushNotification({
-  expoPushToken: expoPushTokens,
-  title,
-  subtitle,
-  body,
-  data,
-}: {
-  expoPushToken: string[];
+interface Notification {
+  id: string;
+  user_id: string;
   title: string;
   subtitle: string;
   body: string;
-  data: object;
-}) {
-  const message = {
-    to: expoPushTokens,
-    sound: 'default',
-    subtitle: subtitle,
-    title,
-    body,
-    data,
-  };
-
-  await fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Accept-encoding': 'gzip, deflate',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  }).then(async (response) => {
-    console.log(await response.json());
-  });
+  data: string;
 }
 
-serve(async (req) => {
-  try {
-    const message = await req.json();
-    console.log(message);
-    await sendPushNotification({
-      expoPushToken: message.expo_push_ids.filter(
-        (item: string | null) => item !== null,
-      ),
-      title: message.event_detail.name,
-      body: message.message_content,
-      subtitle: message.user_detail.username || message.user_detail.full_name,
-      data: message,
-    });
-    return new Response(JSON.stringify({ message: 'Success', ...message }));
-  } catch (error) {
-    console.error(error);
-    return new Response('Error', { status: 500 });
+interface WebhookPayload {
+  type: 'INSERT' | 'UPDATE' | 'DELETE';
+  table: string;
+  record: Notification;
+  schema: 'public';
+  old_record: null | Notification;
+}
+
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL')!,
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+);
+
+Deno.serve(async (req) => {
+  const payload: WebhookPayload = await req.json();
+
+  const { data } = await supabase
+    .from('profiles')
+    .select('expo_push_id')
+    .eq('id', payload.record.user_id)
+    .single();
+
+  const notification: any = {
+    to: data?.expo_push_id,
+    sound: 'default',
+    title: payload.record.title,
+    body: payload.record.body,
+  };
+
+  if (payload.record.data) {
+    notification.data = payload.record.data;
   }
+
+  if (payload.record.subtitle) {
+    notification.subtitle = payload.record.subtitle;
+  }
+
+  const res = await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Deno.env.get('EXPO_ACCESS_TOKEN')}`,
+    },
+    body: JSON.stringify(notification),
+  }).then((res) => res.json());
+
+  if (res.errors) {
+    console.error(res.errors);
+  }
+
+  return new Response(JSON.stringify(res), {
+    headers: { 'Content-Type': 'application/json' },
+  });
 });

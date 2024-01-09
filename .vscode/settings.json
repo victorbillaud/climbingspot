@@ -1,8 +1,8 @@
 {
   "editor.fontFamily": "JetBrains Mono",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.fixAll.eslint": true
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
   },
   "typescript.tsdk": "node_modules/.pnpm/typescript@4.9.5/node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
@@ -13,5 +13,8 @@
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": true
 }
