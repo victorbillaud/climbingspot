@@ -841,25 +841,28 @@ values
         'Al-Jazair/Algerie',
         'Africa'
     );
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
 
-INSERT INTO auth.users (instance_id,id,aud,"role",email,encrypted_password,email_confirmed_at,last_sign_in_at,raw_app_meta_data,raw_user_meta_data,is_super_admin,created_at,updated_at,phone,phone_confirmed_at,confirmation_token,email_change,email_change_token_new,recovery_token) VALUES
-    ('00000000-0000-0000-0000-000000000000'::uuid,'9a51440b-313d-4a42-98df-3e5b14432793'::uuid,'authenticated','authenticated','admin@example.com', '$2y$10$Bl/azldgMoM.558KDS3clOcocyYeFBOYeXIh7APbmgFaeXIVUSXki', '2022-02-11 21:02:04.547','2022-02-11 22:53:12.520','{"provider": "email", "providers": ["email"]}','{}',FALSE,'2022-02-11 21:02:04.542','2022-02-11 21:02:04.542',NULL,NULL,'','','',''),
-	('00000000-0000-0000-0000-000000000000'::uuid,'f76629c5-a070-4bbc-9918-64beaea48848'::uuid,'authenticated','authenticated','test@example.com','$2a$10$PznXR5VSgzjnAp7T/X7PCu6vtlgzdFt1zIr41IqP0CmVHQtShiXxS','2022-02-11 21:02:04.547','2022-02-11 22:53:12.520','{"provider": "email", "providers": ["email"]}','{}',FALSE,'2022-02-11 21:02:04.542','2022-02-11 21:02:04.542',NULL,NULL,'','','',''),
-	('00000000-0000-0000-0000-000000000000'::uuid,'d9064bb5-1501-4ec9-bfee-21ab74d645b8'::uuid,'authenticated','authenticated','demo@example.com','$2a$10$mOJUAphJbZR4CdM38.bgOeyySurPeFHoH/T1s7HuGdpRb7JgatF7K','2022-02-12 07:40:23.616','2022-02-12 07:40:23.621','{"provider": "email", "providers": ["email"]}','{}',FALSE,'2022-02-12 07:40:23.612','2022-02-12 07:40:23.613',NULL,NULL,'','','','')
-ON CONFLICT (id) DO NOTHING;
+INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at") VALUES
+	('00000000-0000-0000-0000-000000000000', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'authenticated', 'authenticated', 'test@example.com', '$2a$10$A7ASYDJnoxFNhEHKrNERousjWJRjVTCAsEkcsDxwvqfcTr61cB0kW', '2024-01-17 11:00:11.263511+00', NULL, '', NULL, '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2024-01-17 11:00:11.258469+00', '2024-01-17 11:00:11.263608+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
+	('00000000-0000-0000-0000-000000000000', '4a0b0aec-2850-4226-b3e2-53b70cd120f5', 'authenticated', 'authenticated', 'admin@example.com', '$2a$10$kW1fGpDW1yI3trPG3BS0FOH0wJgFVZ9Hx89gJZ7ZnjWbt1Iu.YVOy', '2024-01-17 11:00:22.095435+00', NULL, '', NULL, '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2024-01-17 11:00:22.093388+00', '2024-01-17 11:00:22.095538+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL);
 
-INSERT INTO auth.identities (id,user_id,identity_data,provider,last_sign_in_at,created_at,updated_at) VALUES
-	('f76629c5-a070-4bbc-9918-64beaea48848','f76629c5-a070-4bbc-9918-64beaea48848'::uuid,'{"sub": "f76629c5-a070-4bbc-9918-64beaea48848"}','email','2022-02-11 21:02:04.545','2022-02-11 21:02:04.545','2022-02-11 21:02:04.545'),
-	('d9064bb5-1501-4ec9-bfee-21ab74d645b8','d9064bb5-1501-4ec9-bfee-21ab74d645b8'::uuid,'{"sub": "d9064bb5-1501-4ec9-bfee-21ab74d645b8"}','email','2022-02-12 07:40:23.615','2022-02-12 07:40:23.615','2022-02-12 07:40:23.615'),
-    ('9a51440b-313d-4a42-98df-3e5b14432793','9a51440b-313d-4a42-98df-3e5b14432793'::uuid,'{"sub": "9a51440b-313d-4a42-98df-3e5b14432793"}','email','2022-02-11 21:02:04.545','2022-02-11 21:02:04.545','2022-02-11 21:02:04.545')
-ON CONFLICT (id, provider) DO NOTHING;
 
-UPDATE profiles SET full_name = 'Admin', avatar_url = 'https://avatars.githubusercontent.com/u/10214025?v=4' WHERE id = '9a51440b-313d-4a42-98df-3e5b14432793';
-UPDATE profiles SET full_name = 'Adam Ondra', username = 'adamondra', avatar_url = 'https://ifsc.results.info/athletes/1364/photo' WHERE id = 'd9064bb5-1501-4ec9-bfee-21ab74d645b8';
-UPDATE profiles SET full_name = 'Stephano Ghisolfi', username = 'stephanoghisolfi', avatar_url = 'https://images.thenorthface.com/is/image/TheNorthFaceEU/ss22_stefano_ghisolfi_thumb?' WHERE id = 'f76629c5-a070-4bbc-9918-64beaea48848';
+--
+-- Data for Name: identities; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
 
-INSERT INTO friendships (first_user_id, second_user_id, creator_user_id, status) VALUES ('d9064bb5-1501-4ec9-bfee-21ab74d645b8', '9a51440b-313d-4a42-98df-3e5b14432793', '9a51440b-313d-4a42-98df-3e5b14432793', 'Accepted');
-INSERT INTO friendships (first_user_id, second_user_id, creator_user_id, status) VALUES ('f76629c5-a070-4bbc-9918-64beaea48848', '9a51440b-313d-4a42-98df-3e5b14432793', '9a51440b-313d-4a42-98df-3e5b14432793', 'Accepted');
+INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "provider", "last_sign_in_at", "created_at", "updated_at", "id") VALUES
+	('22b2bb16-eb00-49de-b213-82027ce4f8f1', '22b2bb16-eb00-49de-b213-82027ce4f8f1', '{"sub": "22b2bb16-eb00-49de-b213-82027ce4f8f1", "email": "test@example.com", "email_verified": false, "phone_verified": false}', 'email', '2024-01-17 11:00:11.26056+00', '2024-01-17 11:00:11.260587+00', '2024-01-17 11:00:11.260587+00', 'c2cba108-3a7e-4114-b6fe-b0f94a706d04'),
+	('4a0b0aec-2850-4226-b3e2-53b70cd120f5', '4a0b0aec-2850-4226-b3e2-53b70cd120f5', '{"sub": "4a0b0aec-2850-4226-b3e2-53b70cd120f5", "email": "admin@example.com", "email_verified": false, "phone_verified": false}', 'email', '2024-01-17 11:00:22.094231+00', '2024-01-17 11:00:22.094256+00', '2024-01-17 11:00:22.094256+00', '98264ab0-30e2-47bb-a024-3a5fa6755ae6');
+
+INSERT INTO profiles (id, full_name, username, avatar_url) VALUES ('22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Test User', 'testuser', 'https://avatars.githubusercontent.com/u/10214025?v=4');
+INSERT INTO profiles (id, full_name, username, avatar_url) VALUES ('4a0b0aec-2850-4226-b3e2-53b70cd120f5', 'Admin User', 'adminuser', 'https://ifsc.results.info/athletes/1364/photo');
+
+
+
 
 -- Insert spots 
 
@@ -873,7 +876,7 @@ WITH new_location AS (
         period, orientation, rock_type, cliff_height, location
       )
       VALUES (
-        'Saint Felix de l''héras/pas de l''escalette', NULL, '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', '',
+        'Saint Felix de l''héras/pas de l''escalette', NULL, '{}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', '',
         '{}', '{}', '', NULL, (SELECT id FROM new_location)
       );
     
@@ -887,7 +890,7 @@ WITH new_location AS (
         period, orientation, rock_type, cliff_height, location
       )
       VALUES (
-        'Saint Ferréol', 'Loin des spots sur fréquentés des bords de route, on profite ici autant de l''escalade que du milieu naturel. La vue y est splendide et l''ambiance sauvage.', '{"http://www.montagne-escalade.com/site/uploads/2659.jpg"}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', '(Du parking jusqu’au pied des falaises 30mn)
+        'Saint Ferréol', 'Loin des spots sur fréquentés des bords de route, on profite ici autant de l''escalade que du milieu naturel. La vue y est splendide et l''ambiance sauvage.', '{"http://www.montagne-escalade.com/site/uploads/2659.jpg"}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', '(Du parking jusqu’au pied des falaises 30mn)
 Suivre le chemin agricole jusqu’aux deux ruisseaux que l’on traverse à gué pour prendre pied sur l’autre rive au bord d’un champ de lavande. Longer le champ sur la droite (Nord) jusqu’à son extrémité nord où l’on retrouve un petit sentier qui part en ascendance sur la gauche (au dessus du champ). Ce sentier d’abord peu marqué, rejoint un chemin qui s’élève vers la droite (Nord) et que vous suivrez pendant 5mn environ. Le quitter pour prendre un bon sentier qui revient vers la gauche (Sud) dans des sous-bois de pins à crocher. Après 5mn environ de marche en légère montée, le sentier prend à droite face à la pente en devenant beaucoup plus raide dans un sous-bois de chênes.
 Ensuite, au bout de 10mn de marche et après avoir rencontré un petit pierrier, on arrive à une bifurcation qui se situe sous un petit socle rocheux de dalles inclinées. Le sentier qui part à droite mène en 5mn aux deux secteurs du bas. (”érection aléatoire" droite et gauche). Le sentier qui part à gauche conduit en 5mn aux secteurs du haut (“Dévers” et “Jérusalem-Est”).',
         '{"March","April","May","September","October","November"}', '{"SE"}', 'Calcaire', 25, (SELECT id FROM new_location)
@@ -904,7 +907,7 @@ Ensuite, au bout de 10mn de marche et après avoir rencontré un petit pierrier,
       )
       VALUES (
         'SAINT FLORET', 'Petit site en bordure de la Couze, assez frais en été.
-Belles ballades touristiques dans cette vallée à l''écart des  routes encombrées.', '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', 'Après avoir tourné à gauche, monter par ce chemin de terre entre les maisons puis en descente douce jusqu''au rocher.',
+Belles ballades touristiques dans cette vallée à l''écart des  routes encombrées.', '{}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', 'Après avoir tourné à gauche, monter par ce chemin de terre entre les maisons puis en descente douce jusqu''au rocher.',
         '{"April","May","June","July","August","September","October"}', '{"NW"}', 'Granite', 8, (SELECT id FROM new_location)
       );
     
@@ -920,7 +923,7 @@ Belles ballades touristiques dans cette vallée à l''écart des  routes encombr
       VALUES (
         'Saint Genix', 'SITE NON ENTRETENU ACTUELLEMENT 
 
-Vieux site d''initiation laissé à l''abandon.', '{"http://www.montagne-escalade.com/site/uploads/2919.jpg"}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Easy', '',
+Vieux site d''initiation laissé à l''abandon.', '{"http://www.montagne-escalade.com/site/uploads/2919.jpg"}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Easy', '',
         '{}', '{"SW"}', 'Calcaire', NULL, (SELECT id FROM new_location)
       );
     
@@ -934,7 +937,7 @@ Vieux site d''initiation laissé à l''abandon.', '{"http://www.montagne-escalad
         period, orientation, rock_type, cliff_height, location
       )
       VALUES (
-        'Saint Gilles- Wintzenheim', 'Quelque gros blocs', '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', '',
+        'Saint Gilles- Wintzenheim', 'Quelque gros blocs', '{}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', '',
         '{}', '{}', 'Grés', 1, (SELECT id FROM new_location)
       );
     
@@ -949,7 +952,7 @@ Vieux site d''initiation laissé à l''abandon.', '{"http://www.montagne-escalad
       )
       VALUES (
         'Saint Martin de Queyrière', 'Accès en transport en commun. 
-Falaises de : La vignette, La Casse, Rocher Baron, Ste marguerite, Le Rif d''Oriol', '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', 'Accès en transport en commun.',
+Falaises de : La vignette, La Casse, Rocher Baron, Ste marguerite, Le Rif d''Oriol', '{}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', 'Accès en transport en commun.',
         '{}', '{}', 'Gneiss', 30, (SELECT id FROM new_location)
       );
     
@@ -963,7 +966,7 @@ Falaises de : La vignette, La Casse, Rocher Baron, Ste marguerite, Le Rif d''Ori
         period, orientation, rock_type, cliff_height, location
       )
       VALUES (
-        'Saint Romain', NULL, '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', '',
+        'Saint Romain', NULL, '{}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', '',
         '{}', '{}', '', NULL, (SELECT id FROM new_location)
       );
     
@@ -978,7 +981,7 @@ Falaises de : La vignette, La Casse, Rocher Baron, Ste marguerite, Le Rif d''Ori
       )
       VALUES (
         'Saint-Antonin-Noble-Val', 'Majorité de voies surplombantes, très dures.
-Voir les fiches par site.', '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', 'Une dizaine de groupes de rochers dominant l''Aveyron et la D115b, entre St-Antonin et Bruniquel.
+Voir les fiches par site.', '{}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', 'Une dizaine de groupes de rochers dominant l''Aveyron et la D115b, entre St-Antonin et Bruniquel.
 Depuis la D115 ou ma D115b.
 Voir les fiches par site.',
         '{}', '{}', 'Calcaire', NULL, (SELECT id FROM new_location)
@@ -997,7 +1000,7 @@ Voir les fiches par site.',
         'Saint-Antonin-Noble-Val - Amiel', 'Equipement et rocher de qualités variables.
 garer le véhicule en bordure de route sans gèner. 
 Accès 20 mn de marche. 
-2 secteurs d''escalade. 40 voies environ de 10 à 25m.', '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', 'A 10 km au SSO de St-Antonin, rive gauche de l''Aveyron.
+2 secteurs d''escalade. 40 voies environ de 10 à 25m.', '{}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', 'A 10 km au SSO de St-Antonin, rive gauche de l''Aveyron.
 De St-Antonin suivre la D115 jusqu''au hameau de Amiel, 2 km avant Penne, les rochers sont au-dessus.',
         '{}', '{"S"}', 'Calcaire', 20, (SELECT id FROM new_location)
       );
@@ -1014,7 +1017,7 @@ De St-Antonin suivre la D115 jusqu''au hameau de Amiel, 2 km avant Penne, les ro
       VALUES (
         'Saint-Antonin-Noble-Val - Manjo-Carn', 'Partiellement équipé.
 4 Secteurs d''escalade.Terrain privé, rester au plus près de la falaise.
-Voies de 10 à 90m. 170 voies environs sont équipées.', '{}', 'Outdoor', '9a51440b-313d-4a42-98df-3e5b14432793', 'Medium', 'Remonter un chemin en direction des rochers bien visibles.',
+Voies de 10 à 90m. 170 voies environs sont équipées.', '{}', 'Outdoor', '22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Medium', 'Remonter un chemin en direction des rochers bien visibles.',
         '{}', '{}', 'Calcaire', 40, (SELECT id FROM new_location)
       );
 
