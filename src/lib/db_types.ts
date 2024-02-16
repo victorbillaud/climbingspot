@@ -652,21 +652,6 @@ export interface Database {
           }
         ]
       }
-      test_tenant: {
-        Row: {
-          details: string | null
-          id: number
-        }
-        Insert: {
-          details?: string | null
-          id?: number
-        }
-        Update: {
-          details?: string | null
-          id?: number
-        }
-        Relationships: []
-      }
     }
     Views: {
       detailed_review: {
@@ -754,6 +739,7 @@ export interface Database {
           id: string | null
           like_count: number | null
           note: number | null
+          request_user_liked: boolean | null
           spot_id: string | null
           title: string | null
           updated_at: string | null
@@ -891,6 +877,20 @@ export interface Database {
           result: Json
         }[]
       }
+      get_spot_review_statistics: {
+        Args: {
+          spot_id: string
+        }
+        Returns: {
+          total_reviews: number
+          average_rating: number
+          one_star_count: number
+          two_star_count: number
+          three_star_count: number
+          four_star_count: number
+          five_star_count: number
+        }[]
+      }
       get_user_conversations: {
         Args: {
           requested_user_id: string
@@ -902,41 +902,19 @@ export interface Database {
           last_message: Json
         }[]
       }
-      gtrgm_compress: {
+      get_user_review_statistics: {
         Args: {
-          "": unknown
+          creator_id: string
         }
-        Returns: unknown
-      }
-      gtrgm_decompress: {
-        Args: {
-          "": unknown
-        }
-        Returns: unknown
-      }
-      gtrgm_in: {
-        Args: {
-          "": unknown
-        }
-        Returns: unknown
-      }
-      gtrgm_options: {
-        Args: {
-          "": unknown
-        }
-        Returns: undefined
-      }
-      gtrgm_out: {
-        Args: {
-          "": unknown
-        }
-        Returns: unknown
-      }
-      parse_address: {
-        Args: {
-          "": string
-        }
-        Returns: Record<string, unknown>
+        Returns: {
+          total_reviews: number
+          average_rating: number
+          one_star_count: number
+          two_star_count: number
+          three_star_count: number
+          four_star_count: number
+          five_star_count: number
+        }[]
       }
       search_events: {
         Args: {
@@ -986,59 +964,11 @@ export interface Database {
           longitude: number
         }[]
       }
-      set_limit: {
-        Args: {
-          "": number
-        }
-        Returns: number
-      }
-      show_limit: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      show_trgm: {
-        Args: {
-          "": string
-        }
-        Returns: unknown
-      }
       slugify: {
         Args: {
           value: string
         }
         Returns: string
-      }
-      standardize_address:
-        | {
-            Args: {
-              lextab: string
-              gaztab: string
-              rultab: string
-              address: string
-            }
-            Returns: Database["public"]["CompositeTypes"]["stdaddr"]
-          }
-        | {
-            Args: {
-              lextab: string
-              gaztab: string
-              rultab: string
-              micro: string
-              macro: string
-            }
-            Returns: Database["public"]["CompositeTypes"]["stdaddr"]
-          }
-      unaccent: {
-        Args: {
-          "": string
-        }
-        Returns: string
-      }
-      unaccent_init: {
-        Args: {
-          "": unknown
-        }
-        Returns: unknown
       }
     }
     Enums: {
@@ -1052,7 +982,7 @@ export interface Database {
         | "South America"
       difficulty: "Easy" | "Medium" | "Hard"
       diffulty: "Easy" | "Medium" | "Hard"
-      invitation_status: "Pending" | "Accepted" | "Declined"
+      invitation_status: "Pending" | "Accepted" | "Declined" | "Creator"
       month:
         | "January"
         | "February"
@@ -1070,24 +1000,7 @@ export interface Database {
       type: "Indoor" | "Outdoor"
     }
     CompositeTypes: {
-      stdaddr: {
-        building: string
-        house_num: string
-        predir: string
-        qual: string
-        pretype: string
-        name: string
-        suftype: string
-        sufdir: string
-        ruralroute: string
-        extra: string
-        city: string
-        state: string
-        country: string
-        postcode: string
-        box: string
-        unit: string
-      }
+      [_ in never]: never
     }
   }
   storage: {
