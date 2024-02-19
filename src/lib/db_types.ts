@@ -578,7 +578,7 @@ export interface Database {
           approach: string | null
           cliff_height: number | null
           created_at: string | null
-          creator: string
+          creator: string | null
           description: string | null
           difficulty: Database["public"]["Enums"]["difficulty"]
           id: string
@@ -596,7 +596,7 @@ export interface Database {
           approach?: string | null
           cliff_height?: number | null
           created_at?: string | null
-          creator: string
+          creator?: string | null
           description?: string | null
           difficulty: Database["public"]["Enums"]["difficulty"]
           id?: string
@@ -614,7 +614,7 @@ export interface Database {
           approach?: string | null
           cliff_height?: number | null
           created_at?: string | null
-          creator?: string
+          creator?: string | null
           description?: string | null
           difficulty?: Database["public"]["Enums"]["difficulty"]
           id?: string
@@ -859,6 +859,12 @@ export interface Database {
           spot_id: number
         }
         Returns: boolean
+      }
+      delete_user_account: {
+        Args: {
+          delete_spots: boolean
+        }
+        Returns: undefined
       }
       generate_unique_slug: {
         Args: {

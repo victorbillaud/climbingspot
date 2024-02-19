@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.victorbillaud.mobileclimbingspotexpo",
+      "sha256_cert_fingerprints": [
+        "80:D5:9F:5B:97:4B:0D:DA:CB:F6:6C:67:97:78:87:2B:2A:0D:6A:1C:82:12:F3:BC:62:62:BD:D7:F5:40:C1:DE"
+      ]
+    }
+  }
+]
