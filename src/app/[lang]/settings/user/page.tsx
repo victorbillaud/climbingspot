@@ -4,6 +4,7 @@ import { Database } from '@/lib/db_types';
 import { logger } from '@/lib/logger';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Logout } from './Logout';
 
@@ -59,7 +60,9 @@ export default async function Page() {
               </Text>
             </Flex>
           </Flex>
-          <Logout />
+          <Flex>
+            <Logout />
+          </Flex>
         </Flex>
         <Flex verticalAlign="top" className="w-full px-3">
           <UserForm
@@ -73,6 +76,17 @@ export default async function Page() {
           <Card className="w-full">
             <ThemeSelector />
           </Card>
+        </Flex>
+        <Flex
+          verticalAlign="center"
+          horizontalAlign="center"
+          className="w-full px-3"
+        >
+          <Link href="/settings/user/delete-account">
+            <Text variant="caption" weight={300} className="opacity-40">
+              Delete Account
+            </Text>
+          </Link>
         </Flex>
       </Flex>
     </Flex>
