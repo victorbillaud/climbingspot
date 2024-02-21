@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export interface Database {
+export type Database = {
   graphql_public: {
     Tables: {
       [_ in never]: never;
@@ -391,6 +391,7 @@ export interface Database {
           created_at: string;
           data: Json | null;
           id: string;
+          subtitle: string | null;
           title: string;
           user_id: string | null;
         };
@@ -399,6 +400,7 @@ export interface Database {
           created_at?: string;
           data?: Json | null;
           id?: string;
+          subtitle?: string | null;
           title: string;
           user_id?: string | null;
         };
@@ -407,6 +409,7 @@ export interface Database {
           created_at?: string;
           data?: Json | null;
           id?: string;
+          subtitle?: string | null;
           title?: string;
           user_id?: string | null;
         };
@@ -575,7 +578,7 @@ export interface Database {
           approach: string | null;
           cliff_height: number | null;
           created_at: string | null;
-          creator: string;
+          creator: string | null;
           description: string | null;
           difficulty: Database['public']['Enums']['difficulty'];
           id: string;
@@ -586,6 +589,7 @@ export interface Database {
           period: Database['public']['Enums']['month'][] | null;
           rock_type: string | null;
           slug: string | null;
+          status: Database['public']['Enums']['spot_status'];
           type: Database['public']['Enums']['type'];
           updated_at: string | null;
         };
@@ -593,7 +597,7 @@ export interface Database {
           approach?: string | null;
           cliff_height?: number | null;
           created_at?: string | null;
-          creator: string;
+          creator?: string | null;
           description?: string | null;
           difficulty: Database['public']['Enums']['difficulty'];
           id?: string;
@@ -604,6 +608,7 @@ export interface Database {
           period?: Database['public']['Enums']['month'][] | null;
           rock_type?: string | null;
           slug?: string | null;
+          status?: Database['public']['Enums']['spot_status'];
           type: Database['public']['Enums']['type'];
           updated_at?: string | null;
         };
@@ -611,7 +616,7 @@ export interface Database {
           approach?: string | null;
           cliff_height?: number | null;
           created_at?: string | null;
-          creator?: string;
+          creator?: string | null;
           description?: string | null;
           difficulty?: Database['public']['Enums']['difficulty'];
           id?: string;
@@ -622,6 +627,7 @@ export interface Database {
           period?: Database['public']['Enums']['month'][] | null;
           rock_type?: string | null;
           slug?: string | null;
+          status?: Database['public']['Enums']['spot_status'];
           type?: Database['public']['Enums']['type'];
           updated_at?: string | null;
         };
@@ -648,21 +654,6 @@ export interface Database {
             referencedColumns: ['location_id'];
           },
         ];
-      };
-      test_tenant: {
-        Row: {
-          details: string | null;
-          id: number;
-        };
-        Insert: {
-          details?: string | null;
-          id?: number;
-        };
-        Update: {
-          details?: string | null;
-          id?: number;
-        };
-        Relationships: [];
       };
     };
     Views: {
@@ -751,6 +742,7 @@ export interface Database {
           id: string | null;
           like_count: number | null;
           note: number | null;
+          request_user_liked: boolean | null;
           spot_id: string | null;
           title: string | null;
           updated_at: string | null;
@@ -871,6 +863,12 @@ export interface Database {
         };
         Returns: boolean;
       };
+      delete_user_account: {
+        Args: {
+          delete_spots: boolean;
+        };
+        Returns: undefined;
+      };
       generate_unique_slug: {
         Args: {
           base_slug: string;
@@ -888,6 +886,20 @@ export interface Database {
           result: Json;
         }[];
       };
+      get_spot_review_statistics: {
+        Args: {
+          spot_id: string;
+        };
+        Returns: {
+          total_reviews: number;
+          average_rating: number;
+          one_star_count: number;
+          two_star_count: number;
+          three_star_count: number;
+          four_star_count: number;
+          five_star_count: number;
+        }[];
+      };
       get_user_conversations: {
         Args: {
           requested_user_id: string;
@@ -899,41 +911,19 @@ export interface Database {
           last_message: Json;
         }[];
       };
-      gtrgm_compress: {
+      get_user_review_statistics: {
         Args: {
-          '': unknown;
+          creator_id: string;
         };
-        Returns: unknown;
-      };
-      gtrgm_decompress: {
-        Args: {
-          '': unknown;
-        };
-        Returns: unknown;
-      };
-      gtrgm_in: {
-        Args: {
-          '': unknown;
-        };
-        Returns: unknown;
-      };
-      gtrgm_options: {
-        Args: {
-          '': unknown;
-        };
-        Returns: undefined;
-      };
-      gtrgm_out: {
-        Args: {
-          '': unknown;
-        };
-        Returns: unknown;
-      };
-      parse_address: {
-        Args: {
-          '': string;
-        };
-        Returns: Record<string, unknown>;
+        Returns: {
+          total_reviews: number;
+          average_rating: number;
+          one_star_count: number;
+          two_star_count: number;
+          three_star_count: number;
+          four_star_count: number;
+          five_star_count: number;
+        }[];
       };
       search_events: {
         Args: {
@@ -983,59 +973,11 @@ export interface Database {
           longitude: number;
         }[];
       };
-      set_limit: {
-        Args: {
-          '': number;
-        };
-        Returns: number;
-      };
-      show_limit: {
-        Args: Record<PropertyKey, never>;
-        Returns: number;
-      };
-      show_trgm: {
-        Args: {
-          '': string;
-        };
-        Returns: unknown;
-      };
       slugify: {
         Args: {
           value: string;
         };
         Returns: string;
-      };
-      standardize_address:
-        | {
-            Args: {
-              lextab: string;
-              gaztab: string;
-              rultab: string;
-              address: string;
-            };
-            Returns: Database['public']['CompositeTypes']['stdaddr'];
-          }
-        | {
-            Args: {
-              lextab: string;
-              gaztab: string;
-              rultab: string;
-              micro: string;
-              macro: string;
-            };
-            Returns: Database['public']['CompositeTypes']['stdaddr'];
-          };
-      unaccent: {
-        Args: {
-          '': string;
-        };
-        Returns: string;
-      };
-      unaccent_init: {
-        Args: {
-          '': unknown;
-        };
-        Returns: unknown;
       };
     };
     Enums: {
@@ -1049,7 +991,7 @@ export interface Database {
         | 'South America';
       difficulty: 'Easy' | 'Medium' | 'Hard';
       diffulty: 'Easy' | 'Medium' | 'Hard';
-      invitation_status: 'Pending' | 'Accepted' | 'Declined';
+      invitation_status: 'Pending' | 'Accepted' | 'Declined' | 'Creator';
       month:
         | 'January'
         | 'February'
@@ -1064,27 +1006,11 @@ export interface Database {
         | 'November'
         | 'December';
       orientation: 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW';
+      spot_status: 'Pending' | 'Accepted';
       type: 'Indoor' | 'Outdoor';
     };
     CompositeTypes: {
-      stdaddr: {
-        building: string;
-        house_num: string;
-        predir: string;
-        qual: string;
-        pretype: string;
-        name: string;
-        suftype: string;
-        sufdir: string;
-        ruralroute: string;
-        extra: string;
-        city: string;
-        state: string;
-        country: string;
-        postcode: string;
-        box: string;
-        unit: string;
-      };
+      [_ in never]: never;
     };
   };
   storage: {
@@ -1266,7 +1192,7 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
 
 export type Tables<
   PublicTableNameOrOptions extends
