@@ -57,18 +57,26 @@ export function CustomImage({
         width: fullWidth ? '100%' : `${width}px`,
       }}
     >
-      <Image
-        src={theme.resolvedTheme === 'light' ? src : srcDark || src}
-        alt={alt}
-        fill={true}
-        priority={priority}
-        placeholder={loader ? 'blur' : 'empty'}
-        blurDataURL={`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=`}
-        className={`w-full h-full absolute top-0 left-0 ${className} ${
-          roundedClass[props.rounded || '']
-        } `}
-        {...props}
-      />
+      {src || srcDark ? (
+        <Image
+          src={theme.resolvedTheme === 'light' ? src : srcDark || src}
+          alt={alt}
+          fill={true}
+          priority={priority}
+          placeholder={loader ? 'blur' : 'empty'}
+          blurDataURL={`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=`}
+          className={`w-full h-full absolute top-0 left-0 ${className} ${
+            roundedClass[props.rounded || '']
+          } `}
+          {...props}
+        />
+      ) : (
+        <div
+          className={`w-full h-full bg-gray-300 dark:bg-dark-300 ${
+            roundedClass[props.rounded || '']
+          } `}
+        />
+      )}
     </div>
   );
 }

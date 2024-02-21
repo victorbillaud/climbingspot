@@ -4,10 +4,9 @@ import Footer from '@/components/footer/Footer';
 import {
   listEvents,
   listFriendsEvents,
-  listUserEvents,
+  listUserEvents
 } from '@/features/events';
 import { Database } from '@/lib/db_types';
-import { logger } from '@/lib/logger';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
@@ -49,8 +48,6 @@ export default async function Page() {
       </Flex>
     );
   }
-
-  logger.debug(userEvents?.length);
 
   return (
     <Flex

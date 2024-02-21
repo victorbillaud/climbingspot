@@ -2,9 +2,9 @@
 
 import {
   EventResponseSuccess,
-  JoinEventResponseSuccess,
+  JoinEventResponseSuccess
 } from '@/features/events';
-import { formatDate } from '@/lib/tsUtils';
+import { formatDate, getFirstItem } from '@/lib/tsUtils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -55,9 +55,9 @@ export const EventDetailedCard: React.FC<TEventDetailedCardProps> = ({
               horizontalAlign="left"
               className="h-full w-1/3 relative rounded-t-md"
             >
-              {event?.spot && event.spot.image.length > 0 ? (
+              {event?.spot?.image && event.spot.image.length > 0 ? (
                 <CustomImage
-                  src={event.spot.image[0]}
+                  src={getFirstItem(event.spot.image)}
                   alt="hiking"
                   fullWidth
                   height={130}
