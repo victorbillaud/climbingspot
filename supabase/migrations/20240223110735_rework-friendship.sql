@@ -123,7 +123,7 @@ grant truncate on table "public"."friendship" to "service_role";
 
 grant update on table "public"."friendship" to "service_role";
 
-create policy "Enable delete for users based on user_id"
+create policy "Enable select for users based on user_id"
 on "public"."friendship"
 as permissive
 for select
