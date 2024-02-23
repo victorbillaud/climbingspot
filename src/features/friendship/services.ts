@@ -2,19 +2,18 @@ import {
   addFriendProps,
   answerFriendRequestProps,
   checkFriendshipProps,
-  getFriendsProps,
+  getFriendsProps
 } from './types';
 
 export async function addFriend({ client, friendship }: addFriendProps) {
   const { data, error } = await client
-    .from('friendships')
+    .from('friendship')
     .insert(friendship)
     .select(
       `
             *,
-            first_user:friendships_first_user_id_fkey(avatar_url, full_name, username),
-            second_user:friendships_second_user_id_fkey(avatar_url, full_name, username),
-            creator:friendships_creator_user_id_fkey(avatar_url, full_name, username)
+            sender:profiles!sender_id(id, avatar_url, full_name, username),
+            receiver:profiles!receiver_id(id, avatar_url, full_name, username)
         `,
     )
     .single();
@@ -28,16 +27,15 @@ export async function addFriend({ client, friendship }: addFriendProps) {
 
 export async function getFriends({ client, userId, status }: getFriendsProps) {
   const { data: friendships, error } = await client
-    .from('friendships')
+    .from('friendship')
     .select(
       `
-        *,
-        first_user:friendships_first_user_id_fkey(avatar_url, full_name, username),
-        second_user:friendships_second_user_id_fkey(avatar_url, full_name, username),
-        creator:friendships_creator_user_id_fkey(avatar_url, full_name, username)
+      *,
+      sender:profiles!sender_id(id, avatar_url, full_name, username),
+      receiver:profiles!receiver_id(id, avatar_url, full_name, username)
     `,
     )
-    .or(`second_user_id.eq.${userId},first_user_id.eq.${userId}`)
+    .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
     .filter('status', 'in', status ? `(${status})` : '(Accepted,Pending)');
 
   if (error) {
@@ -49,24 +47,23 @@ export async function getFriends({ client, userId, status }: getFriendsProps) {
 
 export async function checkFriendship({
   client,
-  firstUserId,
-  secondUserId,
+  connectedUserId,
+  requestedUserId,
 }: checkFriendshipProps) {
   const { data: friendship, error } = await client
-    .from('friendships')
+    .from('friendship')
     .select(
       `
-            *,
-            first_user:friendships_first_user_id_fkey(avatar_url, full_name, username),
-            second_user:friendships_second_user_id_fkey(avatar_url, full_name, username),
-            creator:friendships_creator_user_id_fkey(avatar_url, full_name, username)
-        `,
+      *,
+      sender:profiles!sender_id(id, avatar_url, full_name, username),
+      receiver:profiles!receiver_id(id, avatar_url, full_name, username)
+      `,
     )
     .or(
-      `and(second_user_id.eq.${firstUserId},first_user_id.eq.${secondUserId}),and(second_user_id.eq.${secondUserId},first_user_id.eq.${firstUserId})`,
+      `and(sender_id.eq.${connectedUserId},receiver_id.eq.${requestedUserId}),and(sender_id.eq.${requestedUserId},receiver_id.eq.${connectedUserId})`,
     )
     .neq('status', 'Declined')
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error(error);
@@ -81,16 +78,15 @@ export async function answerFriendRequest({
   status,
 }: answerFriendRequestProps) {
   const { data, error } = await client
-    .from('friendships')
+    .from('friendship')
     .update({ status })
     .eq('id', friendshipId)
     .select(
       `
-            *,
-            first_user:friendships_first_user_id_fkey(avatar_url, full_name, username),
-            second_user:friendships_second_user_id_fkey(avatar_url, full_name, username),
-            creator:friendships_creator_user_id_fkey(avatar_url, full_name, username)
-        `,
+      *,
+      sender:profiles!sender_id(id, avatar_url, full_name, username),
+      receiver:profiles!receiver_id(id, avatar_url, full_name, username)
+      `,
     )
     .single();
 

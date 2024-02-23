@@ -1,10 +1,10 @@
-import { Database } from '@/lib/db_types';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { checkFriendship } from './services';
+import { Database } from '../../lib/db_types';
+import { checkFriendship, getFriends } from './services';
 
-export type TFriendship = Database['public']['Tables']['friendships']['Row'];
+export type TFriendship = Database['public']['Tables']['friendship']['Row'];
 export type TInsertFriendship =
-  Database['public']['Tables']['friendships']['Insert'];
+  Database['public']['Tables']['friendship']['Insert'];
 
 export type addFriendProps = {
   client: SupabaseClient<Database>;
@@ -17,10 +17,14 @@ export type getFriendsProps = {
   status?: TFriendship['status'];
 };
 
+type TFriendShip = Awaited<ReturnType<typeof getFriends>>;
+export type TFriendShipResponseSuccess = TFriendShip['friendships'];
+export type TFriendShipResponseError = TFriendShip['error'];
+
 export type checkFriendshipProps = {
   client: SupabaseClient<Database>;
-  firstUserId: string;
-  secondUserId: string;
+  connectedUserId: string;
+  requestedUserId: string;
 };
 
 export type answerFriendRequestProps = {

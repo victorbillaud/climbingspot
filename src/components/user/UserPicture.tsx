@@ -34,8 +34,8 @@ export const UserPicture = ({
 
     const { friendship } = await checkFriendship({
       client: supabase,
-      firstUserId: connectedUser?.id as string,
-      secondUserId: paramsUserId,
+      connectedUserId: connectedUser?.id || '',
+      requestedUserId: paramsUserId,
     });
 
     logger.debug('friendship', getFirstItem(friendship));
@@ -50,10 +50,7 @@ export const UserPicture = ({
     const { friendship, error } = await addFriend({
       client: supabase,
       friendship: {
-        first_user_id: connectedUser?.id as string,
-        second_user_id: paramsUserId,
-        creator_user_id: connectedUser?.id as string,
-        status: 'Pending',
+        receiver_id: paramsUserId,
       },
     });
 

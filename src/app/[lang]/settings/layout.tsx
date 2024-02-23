@@ -28,6 +28,12 @@ export default async function RootLayout({ children }: IProps) {
     status: 'Pending',
   });
 
+  const incomingFriendRequest = friendships?.filter(
+    (friendship) =>
+      friendship.status == 'Pending' &&
+      friendship.receiver_id == connectedUser?.id,
+  );
+
   return (
     <Flex fullSize direction="column" verticalAlign="stretch">
       <div className="w-full h-full gap-0 flex flex-col md:flex-row items-middle justify-start">
@@ -57,7 +63,10 @@ export default async function RootLayout({ children }: IProps) {
                 label: 'Friends',
                 icon: 'user-group',
                 to: '/settings/friends',
-                pins: friendships?.length > 0 ? friendships?.length : undefined,
+                pins:
+                  incomingFriendRequest && incomingFriendRequest.length > 0
+                    ? incomingFriendRequest.length
+                    : undefined,
               },
             ]}
           />

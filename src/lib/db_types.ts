@@ -34,6 +34,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      blocks: {
+        Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          blocked_id: string
+          blocker_id?: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocks_blocked_id_fkey"
+            columns: ["blocked_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blocks_blocker_id_fkey"
+            columns: ["blocker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       countries: {
         Row: {
           continent: Database["public"]["Enums"]["continents"] | null
@@ -245,49 +281,39 @@ export type Database = {
           },
         ]
       }
-      friendships: {
+      friendship: {
         Row: {
-          created_at: string | null
-          creator_user_id: string
-          first_user_id: string
+          created_at: string
           id: string
-          second_user_id: string
+          receiver_id: string
+          sender_id: string
           status: Database["public"]["Enums"]["invitation_status"]
         }
         Insert: {
-          created_at?: string | null
-          creator_user_id: string
-          first_user_id: string
+          created_at?: string
           id?: string
-          second_user_id: string
+          receiver_id: string
+          sender_id?: string
           status?: Database["public"]["Enums"]["invitation_status"]
         }
         Update: {
-          created_at?: string | null
-          creator_user_id?: string
-          first_user_id?: string
+          created_at?: string
           id?: string
-          second_user_id?: string
+          receiver_id?: string
+          sender_id?: string
           status?: Database["public"]["Enums"]["invitation_status"]
         }
         Relationships: [
           {
-            foreignKeyName: "friendships_creator_user_id_fkey"
-            columns: ["creator_user_id"]
+            foreignKeyName: "friendship_receiver_id_fkey"
+            columns: ["receiver_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "friendships_first_user_id_fkey"
-            columns: ["first_user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "friendships_second_user_id_fkey"
-            columns: ["second_user_id"]
+            foreignKeyName: "friendship_sender_id_fkey"
+            columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -426,6 +452,7 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          created_at: string
           expo_push_id: string | null
           full_name: string | null
           id: string
@@ -435,6 +462,7 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          created_at?: string
           expo_push_id?: string | null
           full_name?: string | null
           id: string
@@ -444,6 +472,7 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          created_at?: string
           expo_push_id?: string | null
           full_name?: string | null
           id?: string
@@ -457,6 +486,44 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      report: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          sender: string
+          source: Database["public"]["Enums"]["report_source"]
+          type: Database["public"]["Enums"]["report_type"]
+          uid: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          sender?: string
+          source: Database["public"]["Enums"]["report_source"]
+          type: Database["public"]["Enums"]["report_type"]
+          uid: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          sender?: string
+          source?: Database["public"]["Enums"]["report_source"]
+          type?: Database["public"]["Enums"]["report_type"]
+          uid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_sender_fkey"
+            columns: ["sender"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1006,6 +1073,21 @@ export type Database = {
         | "November"
         | "December"
       orientation: "N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW"
+      report_source: "PROFILE" | "SPOT" | "REVIEW" | "EVENT"
+      report_type:
+        | "Nudity or Sexual Content"
+        | "Violence or Dangerous Behavior"
+        | "Hate Speech or Discrimination"
+        | "Harassment or Bullying"
+        | "False Information or Misleading Content"
+        | "Spam or Malware"
+        | "Intellectual Property Violation"
+        | "Illegal Activities or Content"
+        | "Privacy Violation"
+        | "Offensive Language or Behavior"
+        | "Child Safety"
+        | "Impersonation"
+        | "Other"
       spot_status: "Pending" | "Accepted"
       type: "Indoor" | "Outdoor"
     }

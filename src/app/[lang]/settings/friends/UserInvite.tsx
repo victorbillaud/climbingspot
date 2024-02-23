@@ -4,8 +4,8 @@ import { useSupabase } from '@/components/auth/SupabaseProvider';
 import { Button, Flex, Text } from '@/components/common';
 import { UserPicture } from '@/components/user';
 import {
-  TFriendShipExtended,
   answerFriendRequest,
+  TFriendShipExtended
 } from '@/features/friendship';
 import { getFirstItem } from '@/lib';
 import { useRouter } from 'next/navigation';
@@ -69,15 +69,15 @@ export const UserInvite = ({
         <UserPicture
           user={
             showCreator
-              ? getFirstItem(friendship.creator)
-              : getFirstItem(friendship.first_user)
+              ? getFirstItem(friendship.receiver)
+              : getFirstItem(friendship.sender)
           }
           tooltip={false}
         />
         <Text variant="h4">
           {showCreator
-            ? getFirstItem(friendship.creator)?.full_name
-            : getFirstItem(friendship.first_user)?.full_name}
+            ? getFirstItem(friendship.receiver)?.full_name
+            : getFirstItem(friendship.sender)?.full_name}
         </Text>
       </Flex>
       {showActions && (

@@ -20,6 +20,21 @@ export default async function Page() {
     userId: connectedUser?.id as string,
   });
 
+  const incomingFriendRequest = friendships?.filter(
+    (friendship) =>
+      friendship.status == 'Pending' &&
+      friendship.receiver_id == connectedUser?.id,
+  );
+
+  const outgoingFriendRequest = friendships?.filter(
+    (friendship) =>
+      friendship.status == 'Pending' &&
+      friendship.sender_id == connectedUser?.id,
+  );
+  const acceptedFriendships = friendships?.filter(
+    (friendship) => friendship.status == 'Accepted',
+  );
+
   logger.debug(friendships);
 
   return (
@@ -32,33 +47,59 @@ export default async function Page() {
       >
         <Flex direction="row" gap={3}>
           <Text variant="h4">Friends requests</Text>
-          {friendships &&
-            friendships?.filter((friendship) => friendship.status === 'Pending')
-              .length > 0 && (
-              <Badge
-                color="red"
-                textVariant="caption"
-                text={friendships
-                  ?.filter((friendship) => friendship.status === 'Pending')
-                  .length.toString()}
-              />
-            )}
+          {incomingFriendRequest && incomingFriendRequest.length > 0 && (
+            <Badge
+              color="red"
+              textVariant="caption"
+              text={incomingFriendRequest.length.toString()}
+            />
+          )}
         </Flex>
         <Card className="w-full p-3">
-          {friendships &&
-          friendships?.filter((friendship) => friendship.status === 'Pending')
-            .length > 0 ? (
+          {incomingFriendRequest && incomingFriendRequest.length > 0 ? (
             <Flex>
-              {friendships
-                ?.filter((friendship) => friendship.status === 'Pending')
-                .map((friendship) => (
-                  <UserInvite
-                    key={friendship.id}
-                    friendship={friendship}
-                    showCreator={true}
-                    showActions={true}
-                  />
-                ))}
+              {incomingFriendRequest.map((friendship) => (
+                <UserInvite
+                  key={friendship.id}
+                  friendship={friendship}
+                  showCreator={true}
+                  showActions={true}
+                />
+              ))}
+            </Flex>
+          ) : (
+            <Flex fullSize>
+              <Text variant="caption">No pending requests</Text>
+            </Flex>
+          )}
+        </Card>
+      </Flex>
+      <Flex
+        className="w-full"
+        direction="column"
+        horizontalAlign="left"
+        verticalAlign="top"
+      >
+        <Flex direction="row" gap={3}>
+          <Text variant="h4">Friends requests (sent)</Text>
+          {outgoingFriendRequest && outgoingFriendRequest.length > 0 && (
+            <Badge
+              color="red"
+              textVariant="caption"
+              text={outgoingFriendRequest.length.toString()}
+            />
+          )}
+        </Flex>
+        <Card className="w-full p-3">
+          {outgoingFriendRequest && outgoingFriendRequest.length > 0 ? (
+            <Flex>
+              {outgoingFriendRequest.map((friendship) => (
+                <UserInvite
+                  key={friendship.id}
+                  friendship={friendship}
+                  showCreator={true}
+                />
+              ))}
             </Flex>
           ) : (
             <Flex fullSize>
@@ -75,15 +116,11 @@ export default async function Page() {
       >
         <Text variant="h3">Friends</Text>
         <Card className="w-full p-3">
-          {friendships &&
-          friendships.filter((friendship) => friendship.status === 'Accepted')
-            .length > 0 ? (
+          {acceptedFriendships && acceptedFriendships.length > 0 ? (
             <Flex>
-              {friendships
-                ?.filter((friendship) => friendship.status === 'Accepted')
-                .map((friendship) => (
-                  <UserInvite key={friendship.id} friendship={friendship} />
-                ))}
+              {acceptedFriendships.map((friendship) => (
+                <UserInvite key={friendship.id} friendship={friendship} />
+              ))}
             </Flex>
           ) : (
             <Flex fullSize direction="column" horizontalAlign="center">

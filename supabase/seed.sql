@@ -858,11 +858,6 @@ INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "pro
 	('22b2bb16-eb00-49de-b213-82027ce4f8f1', '22b2bb16-eb00-49de-b213-82027ce4f8f1', '{"sub": "22b2bb16-eb00-49de-b213-82027ce4f8f1", "email": "test@example.com", "email_verified": false, "phone_verified": false}', 'email', '2024-01-17 11:00:11.26056+00', '2024-01-17 11:00:11.260587+00', '2024-01-17 11:00:11.260587+00', 'c2cba108-3a7e-4114-b6fe-b0f94a706d04'),
 	('4a0b0aec-2850-4226-b3e2-53b70cd120f5', '4a0b0aec-2850-4226-b3e2-53b70cd120f5', '{"sub": "4a0b0aec-2850-4226-b3e2-53b70cd120f5", "email": "admin@example.com", "email_verified": false, "phone_verified": false}', 'email', '2024-01-17 11:00:22.094231+00', '2024-01-17 11:00:22.094256+00', '2024-01-17 11:00:22.094256+00', '98264ab0-30e2-47bb-a024-3a5fa6755ae6');
 
-INSERT INTO profiles (id, full_name, username, avatar_url) VALUES ('22b2bb16-eb00-49de-b213-82027ce4f8f1', 'Test User', 'testuser', 'https://avatars.githubusercontent.com/u/10214025?v=4');
-INSERT INTO profiles (id, full_name, username, avatar_url) VALUES ('4a0b0aec-2850-4226-b3e2-53b70cd120f5', 'Admin User', 'adminuser', 'https://ifsc.results.info/athletes/1364/photo');
-
-
-
 
 -- Insert spots 
 
