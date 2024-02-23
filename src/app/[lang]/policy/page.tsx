@@ -87,6 +87,40 @@ export default function Page() {
         contenu.
       </Text>
 
+      <Text variant="h2">Acceptation des Conditions</Text>
+      <Text variant="body">
+        Climbing spot fournit un service, sous réserve de votre conformité avec
+        tous les termes, conditions et avis contenus ou référencés dans le
+        présent document.
+      </Text>
+
+      <Text variant="h2">Conduite de l'utilisateur</Text>
+      <Text variant="body">
+        Vous acceptez de ne pas utiliser le service pour : Publier ou
+        transmettre tout matériel qui est nuisible, menaçant, abusif ou
+        autrement répréhensible. Violer toute loi ou réglementation. Porter
+        atteinte aux droits d'autrui. Tenter de nuire à Climbing Spot.
+      </Text>
+
+      <Text variant="h2">Modération de contenu</Text>
+      <Text variant="body">
+        Nous nous réservons le droit de réviser et de supprimer tout contenu
+        qui, à notre seul jugement, viole nos politiques.
+      </Text>
+
+      <Text variant="h2">Signalement de Contenu Répréhensible</Text>
+      <Text variant="body">
+        Les utilisateurs peuvent signaler le contenu répréhensible grâce à notre
+        mécanisme de signalement. Nous nous engageons à traiter ces signalements
+        dans les 24 heures.
+      </Text>
+
+      <Text variant="h2">Blocage des utilisateurs</Text>
+      <Text variant="body">
+        Les utilisateurs ont le droit de bloquer d'autres utilisateurs pour
+        comportement abusif. Cette fonctionnalité est fournie pour votre
+        sécurité et confort.
+      </Text>
       <Text variant="h2">
         Modification des Conditions Générales d'Utilisation
       </Text>
